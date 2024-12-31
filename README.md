@@ -1,4 +1,4 @@
-## 🧭MBCompass - Compose Compass App [![Android CI](https://github.com/MubarakNative/MBCompass/actions/workflows/ci.yaml/badge.svg)](https://github.com/MubarakNative/MBCompass/actions/workflows/ci.yaml)
+## 🧭MBCompass - Compose Compass App
 
 ![Banner MBCompass](BannerMBCompass.png)
 
@@ -24,8 +24,3 @@
 - Android architecture component (`ViewModel`)
 - Lifecycle compose android.
 - Kotlin `flows`
-
-### Improvements 🚀
-This app is currently in development 🛠️. New features and improvements might be added.
-
-- 🛰️ Currently Working on GNSS based Cardinal Direction by using location bearing.
