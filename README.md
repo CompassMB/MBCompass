@@ -24,3 +24,6 @@
 - Android architecture component (`ViewModel`)
 - Lifecycle compose android.
 - Kotlin `flows`
+
+### License
+Compass Style: MBCompass Style © 2024 by Mubarak Basha is licensed under CC BY-SA 4.0 

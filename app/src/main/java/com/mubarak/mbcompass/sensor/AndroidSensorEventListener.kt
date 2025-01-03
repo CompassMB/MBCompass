@@ -11,7 +11,6 @@ import android.view.WindowManager
 import android.widget.Toast
 import com.mubarak.mbcompass.R
 import com.mubarak.mbcompass.utils.ToDegree
-import kotlin.math.roundToInt
 
 class AndroidSensorEventListener(
     private val context: Context
@@ -31,7 +30,7 @@ class AndroidSensorEventListener(
         fun onAzimuthValueChange(degree: Float) //cohesive approach
     }
 
-    private var azimuthValueListener: AzimuthValueListener?= null
+    private var azimuthValueListener: AzimuthValueListener? = null
 
     override fun onSensorChanged(event: SensorEvent) {
 
