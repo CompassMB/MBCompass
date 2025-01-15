@@ -29,9 +29,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -98,24 +95,18 @@ fun MBCompass(
             contentDescription = stringResource(id = R.string.compass), modifier = imageModifier
         )
 
-        val fontFamily = FontFamily(
-            Font(resId = R.font.dm_sans_18, weight = FontWeight.Bold)
-        )
-
         Column(
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
 
             Text(
                 text = "$degree°",
-                fontFamily = fontFamily,
                 color = Color.White,
                 style = MaterialTheme.typography.displayMedium
             )
             Text(
                 text = stringResource(id = cardinalDirection.dirName),
                 color = Color.White,
-                fontFamily = fontFamily,
                 style = MaterialTheme.typography.titleMedium,
             )
         }
