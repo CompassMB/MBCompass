@@ -1,0 +1,3 @@
+- Clear cardinal direction with degrees
+- Landscape orientation support
+- Dark only theme
