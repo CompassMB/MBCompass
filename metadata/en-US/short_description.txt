@@ -1,2 +1,0 @@
-MBCompass
-A simple, reliable compass app with a sleek design and accurate navigation. Works offline, saves battery, and is perfect for outdoor adventures or everyday use.
