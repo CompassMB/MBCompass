@@ -55,7 +55,7 @@ class AndroidSensorEventListener(
         )
 
         val rotation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            context.display?.rotation
+            context.display.rotation
         } else {
             val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             @Suppress("DEPRECATION") windowManager.defaultDisplay.rotation
