@@ -1,35 +1,55 @@
-## 🧭MBCompass - Compose Compass App
+<p align="center"><img src="fastlane/metadata/android/en-US/images/icon.png" width="150"></p>
+<h1 align="center"><b>🧭MBCompass</b></h1>
+<h4 align="center">A fully functional jetpack compose compass app.</h4>
+<p align="center">
+    <a href="https://www.gnu.org/licenses/gpl-3.0">
+        <img src="https://img.shields.io/badge/license-GPL%20v3-2B6DBE.svg?style=flat">
+    </a>
+    <a href="https://github.com/MubarakNative/MBCompass/releases">
+        <img alt="Downloads" src="https://img.shields.io/github/downloads/MubarakNative/MBCompass/total.svg?color=4B95DE&style=flat">
+    </a>
+<a href="https://apilevels.com/">
+    <img alt="Minimum SDK Version" src="https://img.shields.io/badge/API-21%2B-1450A8?style=flat">
+  </a>
+</p>
+<h4 align="center"><a href="https://mubaraknative.github.io/">Author</a> | <a href="https://github.com/MubarakNative/MBCompass/blob/main/LICENSE">License</a></h4>
+<p align="center">
+    <a href="https://f-droid.org/app/com.mubarak.mbcompass"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" width="170"></a>
+    <a href="https://apt.izzysoft.de/fdroid/index/apk/com.mubarak.mbcompass"><img height=64 src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" /></a>
+</p>
 
-![Banner MBCompass](BannerMBCompass.png)
+## About
 
-### Download
+MBCompass is a simple, modern, and accurate compass app built with Jetpack Compose. It uses the device's magnetometer and accelerometer to provide real-time geomagnetic field updates. Designed with Android Lifecycle in mind, it delivers a simple and efficient app experience. In general, a **simple and efficient compass**
 
-Get it on [IzzyOnDroid](https://apt.izzysoft.de/fdroid/index/apk/com.mubarak.mbcompass)
+## Screenshots
 
-Download it from github [releases](https://github.com/MubarakNative/MbCompass/releases/)
+<p align="center">
+    <img src="https://github.com/MubarakNative/MBCompass/blob/main/MBCompassAppDemo.gif" >
+    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width=300>
+</p>
 
-### A fully functional compose compass app that uses device magnetometer to find cardinal direction
+## Features
 
-![Overview MBCompass](OverviewMBCompass.png)
-
-![MBCompass App](MBCompassAppDemo.gif)
-
-### Features ✨
-
-- True north-based azimuths.
-- Always on display
+- True north-based [azimuths](https://en.wikipedia.org/wiki/Azimuth).
+- Power efficient (Android Lifecycle dependent)
+- Magnetic Strength in µT.
+- Always on display.
 - Landscape orientation support.
-- Clear Cardinal direction degree with custom image.
-- Dark only theme support.
-- No annoying ads and no in app purchase
+- Sensor fusion: Combines (Accelerometer and Magnetometer) for better accuracy.
+- No annoying ads or no in app purchase.
 
-### Tech stack 🧱
+## Permissions
 
-- UI (`Jetpack compose`).
-- Flow Layout
-- Android architecture component (`ViewModel`)
-- Lifecycle compose android.
-- Kotlin `flows`
+- No permission at all (Uses device in-built sensors)
 
-### License
-Compass Style: MBCompass Style © 2024 by Mubarak Basha is licensed under CC BY-SA 4.0 
+## License
+
+[![GNU GPLv3 Image](https://www.gnu.org/graphics/gplv3-127x51.png)](http://www.gnu.org/licenses/gpl-3.0.en.html)
+
+MBCompass is licensed under GPLv3
+
+Read full license text [here](https://github.com/MubarakNative/MBCompass/blob/main/LICENSE).
+
+### Artwork License:
+Compass rose : [MBCompass rose](https://github.com/MubarakNative/MBCompass/blob/main/app/src/main/res/drawable/v2_compass_mb.png) © 2025 by Mubarak Basha is licensed under CC BY-SA 4.0
