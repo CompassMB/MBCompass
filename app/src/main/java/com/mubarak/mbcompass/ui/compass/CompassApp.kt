@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -50,14 +51,19 @@ fun CompassApp(context: Context) {
     var degreeIn by remember {
         mutableFloatStateOf(0F)
     }
+    var magnetic by remember {
+        mutableFloatStateOf(0F)
+    }
     Scaffold { innerPadding ->
-        RegisterListener(
-            lifecycleEventObserver = LocalLifecycleOwner.current,
+        RegisterListener(lifecycleEventObserver = LocalLifecycleOwner.current,
             listener = androidSensorEventListener,
-        ) {
-            degreeIn = it
-        }
-        MBCompass(modifier = Modifier.padding(innerPadding), degreeIn = degreeIn)
+            degree = { degreeIn = it },
+            mStrength = { magnetic = it })
+        MBCompass(
+            modifier = Modifier.padding(innerPadding),
+            degreeIn = degreeIn,
+            magneticStrength = magnetic
+        )
     }
 }
 
@@ -66,36 +72,43 @@ fun CompassApp(context: Context) {
 fun MBCompass(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = viewModel(),
-    degreeIn: Float
+    degreeIn: Float,
+    magneticStrength: Float,
 ) {
 
     val azimuthState by viewModel.azimuth.collectAsStateWithLifecycle()
-    val cardinalDirection = CardinalDirection.getDirectionFromAzimuth(azimuthState)
+    val strength by viewModel.strength.collectAsStateWithLifecycle()
+    val rememberDirection = remember(azimuthState) {
+        CardinalDirection.getDirectionFromAzimuth(azimuthState)
+    }
     val degree = azimuthState.roundToInt()
+    val roundedMagneticStrength = strength.roundToInt()
     viewModel.updateAzimuth(degreeIn)
+    viewModel.updateMagneticStrength(magneticStrength)
 
     FlowColumn(
         modifier = modifier
             .fillMaxSize()
             .background(
                 Color.Black
-            ),
-        verticalArrangement = Arrangement.Center,
-        horizontalArrangement = Arrangement.Center
+            ), verticalArrangement = Arrangement.Center, horizontalArrangement = Arrangement.Center
     ) {
 
         val imageModifier = Modifier
             .size(400.dp)
+            .padding(16.dp)
             .graphicsLayer {
                 rotationZ = -degree.toFloat()
             }
 
         Image(
             painterResource(id = R.drawable.v2_compass_mb),
-            contentDescription = stringResource(id = R.string.compass), modifier = imageModifier
+            contentDescription = stringResource(id = R.string.compass),
+            modifier = imageModifier
         )
-
         Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
 
@@ -105,9 +118,15 @@ fun MBCompass(
                 style = MaterialTheme.typography.displayMedium
             )
             Text(
-                text = stringResource(id = cardinalDirection.dirName),
+                text = stringResource(id = rememberDirection.dirName),
                 color = Color.White,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.headlineSmall,
+            )
+            Text(
+                text = "Magnetic Strength $roundedMagneticStrength µT",
+                textAlign = TextAlign.Center,
+                color = Color.White,
+                style = MaterialTheme.typography.bodyMedium,
             )
         }
 
@@ -120,6 +139,7 @@ fun RegisterListener(
     lifecycleEventObserver: LifecycleOwner,
     listener: AndroidSensorEventListener,
     degree: (Float) -> Unit = {},
+    mStrength: (Float) -> Unit,
 ) {
 
     DisposableEffect(lifecycleEventObserver) {
@@ -141,6 +161,10 @@ fun RegisterListener(
     val list = object : AndroidSensorEventListener.AzimuthValueListener {
         override fun onAzimuthValueChange(degree: Float) {
             degree(degree)
+        }
+
+        override fun onMagneticStrengthChange(strengthInUt: Float) {
+            mStrength(strengthInUt)
         }
     }
 

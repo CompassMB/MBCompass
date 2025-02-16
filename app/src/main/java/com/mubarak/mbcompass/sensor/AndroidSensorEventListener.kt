@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import com.mubarak.mbcompass.R
 import com.mubarak.mbcompass.utils.ToDegree
+import kotlin.math.sqrt
 
 class AndroidSensorEventListener(
     private val context: Context
@@ -28,6 +29,7 @@ class AndroidSensorEventListener(
 
     interface AzimuthValueListener {
         fun onAzimuthValueChange(degree: Float) //cohesive approach
+        fun onMagneticStrengthChange(strengthInUt: Float)
     }
 
     private var azimuthValueListener: AzimuthValueListener? = null
@@ -91,8 +93,11 @@ class AndroidSensorEventListener(
         if (isSuccess) {
             SensorManager.getOrientation(adjustedRotationMatrix, orientationAngles)
             val azimuth = orientationAngles[0]
+            val magneticStrength =
+                sqrt(((magnetometerReading[0] * magnetometerReading[0]) + (magnetometerReading[1] * magnetometerReading[1]) + (magnetometerReading[2] * magnetometerReading[2])))
             val toDegree = ToDegree.toDegree(azimuth)
             azimuthValueListener?.onAzimuthValueChange(toDegree)
+            azimuthValueListener?.onMagneticStrengthChange(magneticStrength)
 
         }
 
