@@ -1,0 +1,2 @@
+- Display Magnetic Strength in µT.
+- UI Improvements.
