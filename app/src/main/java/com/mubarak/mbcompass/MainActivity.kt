@@ -7,10 +7,13 @@ import androidx.activity.enableEdgeToEdge
 import com.mubarak.mbcompass.ui.CompassNavGraph
 import com.mubarak.mbcompass.ui.compass.CompassApp
 import com.mubarak.mbcompass.ui.theme.MBCompassTheme
+import org.maplibre.android.MapLibre
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MapLibre.getInstance(this)
+
         setContent {
             MBCompassTheme {
               CompassNavGraph()

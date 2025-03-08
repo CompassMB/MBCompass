@@ -30,7 +30,7 @@ fun CompassNavGraph(
         }
 
         composable<UserLocation> {
-            UserLocation()
+            UserLocation(navigateUp = { navController.navigateUp() })
         }
     }
 }
