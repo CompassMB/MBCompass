@@ -7,14 +7,20 @@ import android.view.WindowManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -24,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
@@ -54,7 +61,17 @@ fun CompassApp(context: Context) {
     var magnetic by remember {
         mutableFloatStateOf(0F)
     }
-    Scaffold { innerPadding ->
+    Scaffold(
+        floatingActionButton = {
+            SmallFloatingActionButton(
+                onClick = {
+
+                },
+            ) {
+                Icon(Icons.Filled.LocationOn, "Current location")
+            }
+        }
+    ) { innerPadding ->
         RegisterListener(lifecycleEventObserver = LocalLifecycleOwner.current,
             listener = androidSensorEventListener,
             degree = { degreeIn = it },
@@ -124,7 +141,6 @@ fun MBCompass(
             )
             Text(
                 text = "Magnetic Strength $roundedMagneticStrength µT",
-                textAlign = TextAlign.Center,
                 color = Color.White,
                 style = MaterialTheme.typography.bodyMedium,
             )

@@ -75,6 +75,12 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
+    // Compose Navigation
+    implementation(libs.androidx.navigation.compose)
+
+    // KotlinX Serialization
+    implementation(libs.kotlinx.serialization.json)
+
     // MapLibre Native SDK
     implementation (libs.maplibre.android.sdk)
 
