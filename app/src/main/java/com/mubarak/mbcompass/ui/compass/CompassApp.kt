@@ -13,8 +13,12 @@ import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -29,7 +33,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -44,7 +47,7 @@ import com.mubarak.mbcompass.utils.CardinalDirection
 import kotlin.math.roundToInt
 
 @Composable
-fun CompassApp(context: Context) {
+fun CompassApp(context: Context, navigateToMapScreen: () -> Unit) {
     val androidSensorEventListener = AndroidSensorEventListener(context)
 
     KeepScreenOn()
@@ -54,7 +57,15 @@ fun CompassApp(context: Context) {
     var magnetic by remember {
         mutableFloatStateOf(0F)
     }
-    Scaffold { innerPadding ->
+    Scaffold(
+        floatingActionButton = {
+            SmallFloatingActionButton(
+                onClick = navigateToMapScreen,
+            ) {
+                Icon(Icons.Filled.LocationOn, "Current location")
+            }
+        }
+    ) { innerPadding ->
         RegisterListener(lifecycleEventObserver = LocalLifecycleOwner.current,
             listener = androidSensorEventListener,
             degree = { degreeIn = it },
@@ -124,7 +135,6 @@ fun MBCompass(
             )
             Text(
                 text = "Magnetic Strength $roundedMagneticStrength µT",
-                textAlign = TextAlign.Center,
                 color = Color.White,
                 style = MaterialTheme.typography.bodyMedium,
             )

@@ -18,4 +18,6 @@
     <string name="no_dir">N/A</string>
     <string name="compass">Cardinal direction compass</string>
     <string name="calibration_required">Calibration required: rotate the device in figure-8 pattern to recalibrate!</string>
+    <string name="current_location">Current location</string>
+    <string name="permission_rationale">Please grant location permission.</string>
 </resources>

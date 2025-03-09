@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlinSymbolProcessing)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.20"
 }
 
 android {
@@ -47,6 +49,7 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -75,8 +78,16 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
+    // Compose Navigation
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    // KotlinX Serialization
+    implementation(libs.kotlinx.serialization.json)
+
     // MapLibre Native SDK
     implementation (libs.maplibre.android.sdk)
+    implementation(libs.androidx.ui.viewbinding)
 
     // Unit Testing
     testImplementation(libs.junit)

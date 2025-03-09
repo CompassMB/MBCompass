@@ -1,18 +1,19 @@
 package com.mubarak.mbcompass
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import com.mubarak.mbcompass.ui.compass.CompassApp
+import androidx.fragment.app.FragmentActivity
+import com.mubarak.mbcompass.ui.CompassNavGraph
 import com.mubarak.mbcompass.ui.theme.MBCompassTheme
+import org.maplibre.android.MapLibre
 
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MapLibre.getInstance(this)
         setContent {
             MBCompassTheme {
-              CompassApp(context = this)
+                CompassNavGraph()
             }
         }
     }
