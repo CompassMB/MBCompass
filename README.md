@@ -27,12 +27,15 @@ MBCompass is a simple, modern, and accurate compass app built with Jetpack Compo
 <p align="center">
     <img width="200" src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" >
     <img width="200" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width=300>
+    <img width="200" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" >
+    <img width="200" src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" >
 </p>
 
 ## Features
 
 - True north-based [azimuths](https://en.wikipedia.org/wiki/Azimuth).
-- Power efficient (Android Lifecycle dependent)
+- Ability to show user current location using [OpenStreetMap](https://osm.org).
+- Power efficient (Android Lifecycle dependent).
 - Magnetic Strength in µT.
 - Always on display.
 - Landscape orientation support.
@@ -41,7 +44,7 @@ MBCompass is a simple, modern, and accurate compass app built with Jetpack Compo
 
 ## Permissions
 
-- No permission at all (Uses device in-built sensors)
+- Location permission only used to detect current location on map.
 
 ## License
 
