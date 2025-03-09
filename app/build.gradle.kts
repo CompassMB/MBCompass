@@ -49,6 +49,7 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -86,6 +87,7 @@ dependencies {
 
     // MapLibre Native SDK
     implementation (libs.maplibre.android.sdk)
+    implementation(libs.androidx.ui.viewbinding)
 
     // Unit Testing
     testImplementation(libs.junit)
