@@ -90,6 +90,8 @@ dependencies {
 
     // Unit Testing
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.robolectric)
 
     // Instrumentation Test
     androidTestImplementation(libs.androidx.junit)
