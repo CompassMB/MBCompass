@@ -9,6 +9,7 @@ import android.os.Build
 import android.view.Surface
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.annotation.VisibleForTesting
 import com.mubarak.mbcompass.R
 import com.mubarak.mbcompass.utils.ToDegree
 import kotlin.math.sqrt
@@ -17,8 +18,10 @@ class AndroidSensorEventListener(
     private val context: Context
 ) : SensorEventListener {
 
-    private val accelerometerReading = FloatArray(3)
-    private val magnetometerReading = FloatArray(3)
+    @VisibleForTesting
+    val accelerometerReading = FloatArray(3)
+    @VisibleForTesting
+    val magnetometerReading = FloatArray(3)
 
     private val rotationMatrix = FloatArray(9)
     private val adjustedRotationMatrix = FloatArray(9)
@@ -32,7 +35,8 @@ class AndroidSensorEventListener(
         fun onMagneticStrengthChange(strengthInUt: Float)
     }
 
-    private var azimuthValueListener: AzimuthValueListener? = null
+    @VisibleForTesting
+    var azimuthValueListener: AzimuthValueListener? = null
 
     override fun onSensorChanged(event: SensorEvent) {
 
@@ -51,7 +55,8 @@ class AndroidSensorEventListener(
         }
     }
 
-    private fun updateOrientationAngles() {
+    @VisibleForTesting
+    fun updateOrientationAngles() {
         val isSuccess: Boolean = SensorManager.getRotationMatrix(
             rotationMatrix, null, accelerometerReading, magnetometerReading
         )
