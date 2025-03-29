@@ -25,8 +25,7 @@ MBCompass is a simple, modern, and accurate compass app built with Jetpack Compo
 ## Screenshots
 
 <p align="center">
-    <img width="200" src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" >
-    <img width="200" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width=300>
+    <img width="200" src="https://github.com/user-attachments/assets/b1a75c2d-c398-46b9-b408-f4c0f8de93ae" alt="drawing" width="200"/>
     <img width="200" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" >
     <img width="200" src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" >
 </p>
