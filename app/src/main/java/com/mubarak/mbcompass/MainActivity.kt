@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 package com.mubarak.mbcompass
 
 import android.os.Bundle

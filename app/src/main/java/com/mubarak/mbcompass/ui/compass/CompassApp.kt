@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 package com.mubarak.mbcompass.ui.compass
 
 import android.app.Activity
@@ -5,7 +7,6 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.view.WindowManager
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -13,8 +14,6 @@ import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -22,13 +21,14 @@ import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -62,11 +62,12 @@ fun CompassApp(context: Context, navigateToMapScreen: () -> Unit) {
             SmallFloatingActionButton(
                 onClick = navigateToMapScreen,
             ) {
-                Icon(Icons.Filled.LocationOn, "Current location")
+                Icon(painterResource(R.drawable.map_fill_icon_24px), contentDescription = stringResource(R.string.current_location))
             }
         }
     ) { innerPadding ->
-        RegisterListener(lifecycleEventObserver = LocalLifecycleOwner.current,
+        RegisterListener(
+            lifecycleEventObserver = LocalLifecycleOwner.current,
             listener = androidSensorEventListener,
             degree = { degreeIn = it },
             mStrength = { magnetic = it })
@@ -78,6 +79,7 @@ fun CompassApp(context: Context, navigateToMapScreen: () -> Unit) {
     }
 }
 
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MBCompass(
@@ -86,63 +88,60 @@ fun MBCompass(
     degreeIn: Float,
     magneticStrength: Float,
 ) {
-
     val azimuthState by viewModel.azimuth.collectAsStateWithLifecycle()
     val strength by viewModel.strength.collectAsStateWithLifecycle()
-    val rememberDirection = remember(azimuthState) {
+
+    LaunchedEffect(degreeIn, magneticStrength) {
+        viewModel.updateAzimuth(degreeIn)
+        viewModel.updateMagneticStrength(magneticStrength)
+    }
+
+    val degree = azimuthState.roundToInt()
+    val direction = remember(azimuthState) {
         CardinalDirection.getDirectionFromAzimuth(azimuthState)
     }
-    val degree = azimuthState.roundToInt()
-    val roundedMagneticStrength = strength.roundToInt()
-    viewModel.updateAzimuth(degreeIn)
-    viewModel.updateMagneticStrength(magneticStrength)
+    val strengthRounded = strength.roundToInt()
 
     FlowColumn(
-        modifier = modifier
-            .fillMaxSize()
-            .background(
-                Color.Black
-            ), verticalArrangement = Arrangement.Center, horizontalArrangement = Arrangement.Center
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.Center
     ) {
 
-        val imageModifier = Modifier
-            .size(400.dp)
-            .padding(16.dp)
-            .graphicsLayer {
-                rotationZ = -degree.toFloat()
-            }
-
         Image(
-            painterResource(id = R.drawable.v2_compass_mb),
+            painter = painterResource(id = R.drawable.mbcompass_rose),
             contentDescription = stringResource(id = R.string.compass),
-            modifier = imageModifier
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+            modifier = Modifier
+                .size(400.dp) // TODO: FIXME set dynamic size
+                .padding(16.dp)
+                .graphicsLayer {
+                    rotationZ = -degree.toFloat()
+                }
         )
+
+
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
-
             Text(
                 text = "$degree°",
-                color = Color.White,
                 style = MaterialTheme.typography.displayMedium
             )
             Text(
-                text = stringResource(id = rememberDirection.dirName),
-                color = Color.White,
-                style = MaterialTheme.typography.headlineSmall,
+                text = stringResource(id = direction.dirName),
+                style = MaterialTheme.typography.headlineSmall
             )
             Text(
-                text = "Magnetic Strength $roundedMagneticStrength µT",
-                color = Color.White,
-                style = MaterialTheme.typography.bodyMedium,
+                text = "Magnetic Strength $strengthRounded µT",
+                style = MaterialTheme.typography.bodyMedium
             )
         }
-
     }
-
 }
+
 
 @Composable
 fun RegisterListener(

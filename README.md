@@ -25,21 +25,26 @@ MBCompass is a simple, modern, and accurate compass app built with Jetpack Compo
 ## Screenshots
 
 <p align="center">
-    <img width="200" src="https://github.com/user-attachments/assets/b1a75c2d-c398-46b9-b408-f4c0f8de93ae" alt="drawing" width="200"/>
-    <img width="200" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" >
-    <img width="200" src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" >
+    <img width="200" src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" >
+    <img width="200" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" >
+    <img width="200" src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" >
 </p>
 
 ## Features
 
-- True north-based [azimuths](https://en.wikipedia.org/wiki/Azimuth).
-- Ability to show user current location using [OpenStreetMap](https://osm.org).
-- Power efficient (Android Lifecycle dependent).
-- Magnetic Strength in µT.
-- Always on display.
+- Magnetic north-based [azimuths](https://en.wikipedia.org/wiki/Azimuth).
+- Ability to show user current location using [OpenStreetMap](https://osm.org) (BETA).
+- Light / Dark Theme support.
+- Display Magnetic Strength in µT.
+- Keep screen on support.
 - Landscape orientation support.
-- Sensor fusion: Combines (Accelerometer and Magnetometer) for better accuracy.
-- No annoying ads or no in app purchase.
+- Smooth compass rotation.
+- Sensor fusion: Combines (Accelerometer, Magnetometer and Gyroscope) for better accuracy.
+- No annoying ads or no in-app purchase.
+
+## Improvement
+
+> This app currently in development stage 🚧🚧🚧 there are new features like location info, redesigning the maps are currently in development See: [Requested features](https://github.com/MubarakNative/MBCompass/issues/52). If you find any bugs or any enhancement needed feel free to file an issue.
 
 ## Permissions
 
@@ -54,4 +59,5 @@ MBCompass is licensed under GPLv3
 Read full license text [here](https://github.com/MubarakNative/MBCompass/blob/main/LICENSE).
 
 ### Artwork License:
-Compass rose : [MBCompass rose](https://github.com/MubarakNative/MBCompass/blob/main/app/src/main/res/drawable/v2_compass_mb.png) © 2025 by Mubarak Basha is licensed under CC BY-SA 4.0
+Compass rose : [MBCompass rose](https://github.com/MubarakNative/MBCompass/blob/main/app/src/main/res/drawable/mbcompass_rose.xml) © 2025 by Mubarak Basha is licensed under CC BY-SA 4.0
+
