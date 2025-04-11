@@ -12,4 +12,6 @@
     <string name="calibration_required">Calibration required: rotate the device in figure-8 pattern to recalibrate!</string>
     <string name="current_location">Current location</string>
     <string name="permission_rationale">Please grant location permission.</string>
+    <string name="rotation_sensor_not_available">Rotational Vector Sensor not available</string>
+    <string name="magnetometer_not_available">Magnetometer not available</string>
 </resources>

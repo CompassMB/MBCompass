@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 package com.mubarak.mbcompass.sensor
 
 import android.content.Context
@@ -118,13 +120,14 @@ class AndroidSensorEventListener(
             registerRotationVectorSensor(sensorManager, rotationVector)
         } ?: run {
             Log.d(TAG, "ROTATION_VECTOR not available")
-            // Display alert dialog to user
+            Toast.makeText(context, R.string.rotation_sensor_not_available, Toast.LENGTH_LONG).show()
         }
 
         sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also { magneticFieldSensor ->
             registerMagneticFieldSensor(sensorManager, magneticFieldSensor)
         } ?: run {
             Log.d(TAG, "Magnetometer not available")
+            Toast.makeText(context, R.string.magnetometer_not_available, Toast.LENGTH_LONG).show()
             // Display alert dialog to user
         }
 

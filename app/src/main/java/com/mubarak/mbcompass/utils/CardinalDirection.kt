@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 package com.mubarak.mbcompass.utils
 
 import androidx.annotation.StringRes
@@ -18,7 +20,7 @@ object CardinalDirection {
 
 }
 
-enum class DIRECTION(@StringRes val dirName: Int) { // true north-based azimuths
+enum class DIRECTION(@StringRes val dirName: Int) {
     NORTH(R.string.north),
     NORTHEAST(R.string.northeast),
     EAST(R.string.east),
