@@ -1,0 +1,4 @@
+- Smooth Compass Implementation
+- Updated Compass rose
+- Light and Dark theme supported
+- FIX performance issues

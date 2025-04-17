@@ -1,4 +1,1 @@
-- Smooth Compass Implementation
-- Updated Compass rose
-- Light and Dark theme supported
-- FIX performance issues
+- Added Map Screen to show user current location on map.
