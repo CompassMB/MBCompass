@@ -6,10 +6,10 @@
         <img src="https://img.shields.io/badge/license-GPL%20v3-2B6DBE.svg?style=flat">
     </a>
     <a href="https://github.com/MubarakNative/MBCompass/releases">
-        <img alt="Downloads" src="https://img.shields.io/github/downloads/MubarakNative/MBCompass/total.svg?color=4B95DE&style=flat">
+        <img alt="Latest Release" src="https://img.shields.io/github/v/release/MubarakNative/MBCompass?include_prereleases&color=4B95DE&style=flat">
     </a>
-<a href="https://apilevels.com/">
-    <img alt="Minimum SDK Version" src="https://img.shields.io/badge/API-21%2B-1450A8?style=flat">
+    <a href="https://apilevels.com/">
+        <img alt="Minimum SDK Version" src="https://img.shields.io/badge/API-21%2B-1450A8?style=flat">
   </a>
 </p>
 <h4 align="center"><a href="https://mubaraknative.github.io/">Author</a> | <a href="https://github.com/MubarakNative/MBCompass/blob/main/LICENSE">License</a></h4>
@@ -60,3 +60,4 @@ Read full license text [here](https://github.com/MubarakNative/MBCompass/blob/ma
 
 ### Artwork License:
 Compass rose : [MBCompass rose](https://github.com/MubarakNative/MBCompass/blob/main/app/src/main/res/drawable/mbcompass_rose.xml) © 2025 by Mubarak Basha is licensed under CC BY-SA 4.0
+
