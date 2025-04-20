@@ -84,8 +84,7 @@ dependencies {
     // KotlinX Serialization
     implementation(libs.kotlinx.serialization.json)
 
-    // MapLibre Native SDK
-    implementation (libs.maplibre.android.sdk)
+    // Android UI ViewBinding
     implementation(libs.androidx.ui.viewbinding)
 
     // Unit Testing
