@@ -62,7 +62,7 @@ fun CompassApp(context: Context, navigateToMapScreen: () -> Unit) {
             SmallFloatingActionButton(
                 onClick = navigateToMapScreen,
             ) {
-                Icon(painterResource(R.drawable.map_fill_icon_24px), contentDescription = stringResource(R.string.current_location))
+                Icon(painterResource(R.drawable.map_fill_icon_24px), contentDescription = stringResource(R.string.map))
             }
         }
     ) { innerPadding ->

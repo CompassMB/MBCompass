@@ -10,8 +10,10 @@
     <string name="northwest">Northwest</string>
     <string name="compass">Cardinal direction compass</string>
     <string name="calibration_required">Calibration required: rotate the device in figure-8 pattern to recalibrate!</string>
-    <string name="current_location">Current location</string>
+    <string name="map">Map</string>
     <string name="permission_rationale">Please grant location permission.</string>
     <string name="rotation_sensor_not_available">Rotational Vector Sensor not available</string>
     <string name="magnetometer_not_available">Magnetometer not available</string>
+    <string name="nav_back">Navigate up</string>
+    <string name="location_progress">Fetching location...</string>
 </resources>
