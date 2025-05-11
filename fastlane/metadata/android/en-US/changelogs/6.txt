@@ -1,1 +1,3 @@
-- App Size reduced significantly
+- App size reduced significantly
+- Uses lightweight map rendering for showing current location
+- App performance and bug fixes
