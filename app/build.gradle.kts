@@ -84,8 +84,13 @@ dependencies {
     // KotlinX Serialization
     implementation(libs.kotlinx.serialization.json)
 
+    // Fragment KTX
     implementation("androidx.activity:activity-ktx:1.10.1")
     implementation("androidx.fragment:fragment-ktx:1.8.6")
+
+    // OSMDroid
+    implementation ("org.osmdroid:osmdroid-android:6.1.20")
+
     // Android UI ViewBinding
     implementation(libs.androidx.ui.viewbinding)
 

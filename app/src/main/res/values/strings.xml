@@ -15,5 +15,4 @@
     <string name="rotation_sensor_not_available">Rotational Vector Sensor not available</string>
     <string name="magnetometer_not_available">Magnetometer not available</string>
     <string name="nav_back">Navigate up</string>
-    <string name="location_progress">Fetching location...</string>
 </resources>
