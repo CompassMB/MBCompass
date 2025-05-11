@@ -37,13 +37,13 @@ fun UserLocation(
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 title = {
-                    Text(stringResource(R.string.current_location))
+                    Text(stringResource(R.string.map))
                 },
                 navigationIcon = {
                     IconButton(onClick = navigateUp) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Localized description"
+                            contentDescription = stringResource(R.string.nav_back)
                         )
                     }
                 },
