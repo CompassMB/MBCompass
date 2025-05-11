@@ -20,20 +20,25 @@
 
 ## About
 
-MBCompass is a simple, modern, and accurate compass app built with Jetpack Compose. It uses the device's magnetometer and accelerometer to provide real-time geomagnetic field updates. Designed with Android Lifecycle in mind, it delivers a simple and efficient app experience. In general, a **simple and efficient compass**
+MBCompass is a simple yet featurish compass app built with Jetpack Compose. It uses the device's magnetometer and accelerometer to provide real-time geomagnetic field updates. Designed with Android Lifecycle in mind, it delivers a simple and efficient app experience. In general, a **simple and efficient compass**
+
+> Most compass apps are either too basic or bloated with ads.  
+> **MBCompass** was created to fix that — lightweight, accurate, and totally ad-free.
+
+---
 
 ## Screenshots
 
 <p align="center">
-    <img width="200" src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" >
-    <img width="200" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" >
-    <img width="200" src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" >
+    <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" >
+    <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" >
+    <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" >
 </p>
 
-## Features
+## ✨Features
 
 - Magnetic north-based [azimuths](https://en.wikipedia.org/wiki/Azimuth).
-- Ability to show user current location using [OpenStreetMap](https://osm.org) (BETA).
+- Ability to show user current location using [OpenStreetMap](https://openstreetmap.org).
 - Light / Dark Theme support.
 - Display Magnetic Strength in µT.
 - Keep screen on support.
@@ -42,22 +47,20 @@ MBCompass is a simple, modern, and accurate compass app built with Jetpack Compo
 - Sensor fusion: Combines (Accelerometer, Magnetometer and Gyroscope) for better accuracy.
 - No annoying ads or no in-app purchase.
 
-## Improvement
-
-> This app currently in development stage 🚧🚧🚧 there are new features like location info, redesigning the maps are currently in development See: [Requested features](https://github.com/MubarakNative/MBCompass/issues/52). If you find any bugs or any enhancement needed feel free to file an issue.
-
-## Permissions
+## 🔐 Permissions
 
 - Location permission only used to detect current location on map.
 
-## License
+## 🤝 Contributing
 
-[![GNU GPLv3 Image](https://www.gnu.org/graphics/gplv3-127x51.png)](http://www.gnu.org/licenses/gpl-3.0.en.html)
+Contributions are welcome! If you encounter bugs or have feature suggestions, please open an issue or submit a pull request.
 
-MBCompass is licensed under GPLv3
+## 📄License
 
-Read full license text [here](https://github.com/MubarakNative/MBCompass/blob/main/LICENSE).
+MBCompass is Free Software: You can use, study share and improve it at your will. Specifically you can redistribute and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-### Artwork License:
-Compass rose : [MBCompass rose](https://github.com/MubarakNative/MBCompass/blob/main/app/src/main/res/drawable/mbcompass_rose.xml) © 2025 by Mubarak Basha is licensed under CC BY-SA 4.0
+See more information about [here](https://github.com/MubarakNative/MBCompass/blob/main/LICENSE).
+
+### 🎨 Artwork License:
+Compass rose : [MBCompass rose](https://github.com/MubarakNative/MBCompass/blob/main/app/src/main/res/drawable/mbcompass_rose.xml) © 2025 by [Mubarak Basha](https://mubaraknative.github.io) is licensed under CC BY-SA 4.0
 
