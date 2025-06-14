@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowColumn
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -58,9 +60,12 @@ fun CompassApp(context: Context, navigateToMapScreen: () -> Unit) {
         mutableFloatStateOf(0F)
     }
     Scaffold(
+        contentWindowInsets = WindowInsets(0,0,0,0),
         floatingActionButton = {
             SmallFloatingActionButton(
                 onClick = navigateToMapScreen,
+                modifier = Modifier
+                   .navigationBarsPadding()
             ) {
                 Icon(painterResource(R.drawable.map_fill_icon_24px), contentDescription = stringResource(R.string.map))
             }
