@@ -1,21 +1,56 @@
-<p align="center"><img src="fastlane/metadata/android/en-US/images/icon.png" width="150"></p>
-<h1 align="center"><b>🧭MBCompass</b></h1>
-<h4 align="center">A fully functional jetpack compose compass app.</h4>
 <p align="center">
-    <a href="https://www.gnu.org/licenses/gpl-3.0">
-        <img src="https://img.shields.io/badge/license-GPL%20v3-2B6DBE.svg?style=flat">
-    </a>
-    <a href="https://github.com/MubarakNative/MBCompass/releases">
-        <img alt="Latest Release" src="https://img.shields.io/github/v/release/MubarakNative/MBCompass?include_prereleases&color=4B95DE&style=flat">
-    </a>
-    <a href="https://apilevels.com/">
-        <img alt="Minimum SDK Version" src="https://img.shields.io/badge/API-21%2B-1450A8?style=flat">
+  <img src="fastlane/metadata/android/en-US/images/icon.png" width="150" />
+</p>
+
+<h1 align="center"><b>🧭 MBCompass</b></h1>
+<h4 align="center">A featurish, ad-free compass app built with Jetpack Compose</h4>
+
+<p align="center"> 
+  <a href="https://news.ycombinator.com/item?id=44155741" title="Hit #1 on Hacker News">
+    <img src="https://img.shields.io/badge/%231-Hacker%20News-orange?style=for-the-badge&logo=ycombinator&logoColor=white" alt="#1 on Hacker News" />
+  </a>
+  <br/><br/>
+  <a href="https://www.gnu.org/licenses/gpl-3.0">
+    <img src="https://img.shields.io/badge/license-GPL%20v3-2B6DBE.svg?style=for-the-badge" alt="GPLv3 License"/>
+  </a>
+  <a href="https://github.com/MubarakNative/MBCompass/releases">
+    <img src="https://img.shields.io/github/v/release/MubarakNative/MBCompass?include_prereleases&color=4B95DE&style=for-the-badge" alt="Latest Release"/>
+  </a>
+  <a href="https://apilevels.com/">
+    <img src="https://img.shields.io/badge/API-21%2B-1450A8?style=for-the-badge" alt="Min API"/>
   </a>
 </p>
-<h4 align="center"><a href="https://mubaraknative.github.io/">Author</a> | <a href="https://github.com/MubarakNative/MBCompass/blob/main/LICENSE">License</a></h4>
+
 <p align="center">
-    <a href="https://f-droid.org/app/com.mubarak.mbcompass"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" width="170"></a>
-    <a href="https://apt.izzysoft.de/fdroid/index/apk/com.mubarak.mbcompass"><img height=64 src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" /></a>
+  <a href="https://x.com/MubarakNative">
+    <img src="https://img.shields.io/twitter/follow/MubarakNative?label=Follow&style=social" alt="Follow on X"/>
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/MubarakNative/MBCompass/stargazers">
+    <img src="https://img.shields.io/github/stars/MubarakNative/MBCompass?style=social" alt="GitHub Stars"/>
+  </a>
+  <a href="https://github.com/MubarakNative/MBCompass/network/members">
+    <img src="https://img.shields.io/github/forks/MubarakNative/MBCompass?style=social" alt="GitHub Forks"/>
+  </a>
+  <a href="https://github.com/MubarakNative/MBCompass/watchers">
+    <img src="https://img.shields.io/github/watchers/MubarakNative/MBCompass?style=social" alt="GitHub Watchers"/>
+  </a>
+</p>
+
+<h4 align="center">
+  <a href="https://mubaraknative.github.io/">Author</a> | 
+  <a href="https://github.com/MubarakNative/MBCompass/blob/main/LICENSE">License</a>
+</h4>
+
+<p align="center">
+  <a href="https://f-droid.org/app/com.mubarak.mbcompass">
+    <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" width="170" alt="Get it on F-Droid"/>
+  </a>
+  <a href="https://apt.izzysoft.de/fdroid/index/apk/com.mubarak.mbcompass">
+    <img height="64" src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" />
+  </a>
 </p>
 
 ## About
@@ -27,12 +62,19 @@ MBCompass is a simple yet featurish compass app built with Jetpack Compose. It u
 
 ---
 
-## Screenshots
+## Screenshots 📸
 
 <p align="center">
-    <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" >
-    <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" >
-    <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" >
+  <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" />
+  <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" />
+</p>
+<p align="center">
+  <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" />
+  <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" />
+</p>
+<p align="center">
+  <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" />
+  <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" />
 </p>
 
 ## Features ✨

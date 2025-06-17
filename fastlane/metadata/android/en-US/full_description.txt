@@ -5,5 +5,5 @@ Key Features:
 - Accurate Navigation: Get precise cardinal directional with degrees.
 - Minimalist Design: Enjoy a clean, distraction-free interface that's easy to use.
 - Works Offline: No external dependencies, Uses device sensors.
-- Sensor fusion: Combines (Accelerometer and  Magnetometer) for better accuracy.
+- Sensor fusion: Combines (Accelerometer, Gyroscope and Magnetometer) for better accuracy.
 - Power efficient: Designed to be efficient and lightweight.
