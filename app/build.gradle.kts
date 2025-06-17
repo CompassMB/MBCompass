@@ -108,9 +108,3 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.ui.tooling.preview)
 }
-
-task("printVersionName"){
-    doLast {
-        println(android.defaultConfig.versionName)
-    }
-}
