@@ -1,0 +1,1 @@
+- Implemented Edge to Edge for android 15
