@@ -22,7 +22,7 @@
 </p>
 
 <p align="center">
-  <a href="https://x.com/MubarakNative">
+  <a href="https://twitter.com/intent/follow?screen_name=MubarakNative">
     <img src="https://img.shields.io/twitter/follow/MubarakNative?label=Follow&style=social" alt="Follow on X"/>
   </a>
 </p>
@@ -44,14 +44,17 @@
   <a href="https://github.com/MubarakNative/MBCompass/blob/main/LICENSE">License</a>
 </h4>
 
-<p align="center">
+<div align="center" style="display: flex; justify-content: center; align-items: flex-start; gap: 12px; flex-wrap: wrap;">
+  <a href="https://www.producthunt.com/products/mbcompass?embed=true..." target="_blank">
+    <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=980786&theme=light&t=1750390503058" width="250" height="54" alt="MBCompass on Product Hunt" />
+  </a>
   <a href="https://f-droid.org/app/com.mubarak.mbcompass">
     <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" width="170" alt="Get it on F-Droid"/>
   </a>
   <a href="https://apt.izzysoft.de/fdroid/index/apk/com.mubarak.mbcompass">
-    <img height="64" src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" />
+    <img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" height="64" alt="Get it on IzzyOnDroid" />
   </a>
-</p>
+</div>
 
 ## About
 
