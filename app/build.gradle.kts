@@ -14,9 +14,9 @@ android {
     defaultConfig {
         applicationId = "com.mubarak.mbcompass"
         minSdk = 21
-        targetSdk = 35
-        versionCode = 8
-        versionName = "1.1.7"
+        targetSdk = 36
+        versionCode = 9
+        versionName = "1.1.8"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
