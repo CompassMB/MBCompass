@@ -25,9 +25,7 @@ fun CompassNavGraph(
         startDestination = Compass
     ) {
         composable<Compass> {
-            val context = LocalContext.current
             CompassApp(
-                context,
                 navigateToMapScreen = { navController.navigateWithBackStack(UserLocation) })
         }
 

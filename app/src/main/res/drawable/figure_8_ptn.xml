@@ -1,0 +1,20 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later-->
+<!-- This icon is specially designed for MBCompass by Mubarak Basha-->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="160dp"
+    android:height="90dp"
+    android:viewportWidth="16"
+    android:viewportHeight="9">
+  <path
+      android:pathData="M10.053,4.875L8.633,7.148L11.13,7.128L10.053,4.875Z"
+      android:fillColor="#000000"/>
+  <path
+      android:pathData="M2.82,2.009C4.17,1.889 6,3.029 7.92,4.349C9.81,3.089 11.58,1.949 12.93,2.009C14.01,2.069 15.63,2.939 15.63,5.099C15.63,7.198 14.04,8.098 12.99,8.188H12.81C12.51,8.188 12.052,8.048 11.584,7.869L12.314,6.787C12.571,6.878 12.766,6.929 12.87,6.929C13.38,6.899 14.37,6.448 14.37,5.099C14.37,3.719 13.38,3.298 12.84,3.268C11.97,3.209 10.47,4.139 9.03,5.099C9.283,5.269 9.552,5.433 9.823,5.591L9.118,6.635C8.726,6.385 8.325,6.121 7.92,5.849C6.03,7.078 4.35,8.188 3,8.188C2.34,8.188 1.62,7.919 1.08,7.499C0.6,7.079 0,6.358 0,5.099C0,3.029 1.71,2.099 2.82,2.009ZM2.91,3.268C2.46,3.298 1.26,3.719 1.26,5.099C1.26,6.598 2.37,6.869 3.03,6.929C3.9,7.018 5.37,6.028 6.81,5.099C5.31,4.169 3.9,3.268 3,3.268H2.91Z"
+      android:fillColor="#000000"/>
+  <path
+      android:pathData="M4.442,0.199l2.056,0.959l-2.243,4.809l-2.056,-0.959z"
+      android:strokeWidth="0.3"
+      android:fillColor="#000000"
+      android:strokeColor="#000000"/>
+</vector>

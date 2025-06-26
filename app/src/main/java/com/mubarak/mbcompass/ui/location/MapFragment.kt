@@ -4,7 +4,6 @@ package com.mubarak.mbcompass.ui.location
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -59,7 +58,7 @@ class MapFragment : Fragment() {
         val mapController = mapView.controller
 
         mapController.setZoom(20.1)
-        mapController.setCenter(GeoPoint(48.8583, 2.2944)) // Default location
+        mapController.setCenter(GeoPoint(48.8583, 2.2944)) // Default location (Eiffel tower)
 
         val mCopyrightOverlay = CopyrightOverlay(context)
         mapView.overlays.add(mCopyrightOverlay)
