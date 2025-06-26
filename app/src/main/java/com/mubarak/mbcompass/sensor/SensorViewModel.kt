@@ -91,14 +91,7 @@ class SensorViewModel : ViewModel() {
     // Called when the user clicks the sensor icon in the AppBar
     fun sensorStatusIconClicked() {
         val currentAccuracy = _sensorStatusIcon.value.accuracy
-        if (currentAccuracy != null &&
-            (currentAccuracy == SensorManager.SENSOR_STATUS_ACCURACY_LOW ||
-                    currentAccuracy == SensorManager.SENSOR_STATUS_UNRELIABLE ||
-                    currentAccuracy == SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM ||
-                    currentAccuracy == SensorManager.SENSOR_STATUS_ACCURACY_HIGH ||
-                    currentAccuracy == SensorManager.SENSOR_STATUS_ACCURACY_LOW)
-        ) {
-            // Show dialog if accuracy is low/unreliable, regardless of auto-show
+        if (currentAccuracy != null) {
             _accuracyAlertDialogState.value =
                 AccuracyDialogState(show = true, accuracyForDialog = currentAccuracy)
         }
