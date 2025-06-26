@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later-->
+
 <resources>
     <string name="app_name">MBCompass</string>
     <string name="north">North</string>
@@ -15,4 +17,14 @@
     <string name="rotation_sensor_not_available">Rotational Vector Sensor not available</string>
     <string name="magnetometer_not_available">Magnetometer not available</string>
     <string name="nav_back">Navigate up</string>
+    <string name="calibration_required_message">Compass accuracy is <b>%1$s</b>.\n\nTo improve accuracy, wave your device in a figure-eight pattern.</string>
+    <string name="accuracy_unreliable">UNRELIABLE</string>
+    <string name="accuracy_low">LOW</string>
+    <string name="accuracy_unknown">Unknown</string>
+    <string name="calibration_title">Compass Accuracy</string>
+    <string name="ok_button">OK</string>
+    <string name="settings_content_description">Open settings</string>
+    <string name="accuracy_medium">MEDIUM</string>
+    <string name="accuracy_high">HIGH</string>
+    <string name="figure_8_pattern">Figure-eight motion</string>
 </resources>

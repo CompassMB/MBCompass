@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlinSymbolProcessing)
@@ -34,7 +36,10 @@ android {
     buildTypes {
         release {
             isDebuggable = false
+            // Enables code-related app optimization.
             isMinifyEnabled = true
+            // Enables resource shrinking.
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

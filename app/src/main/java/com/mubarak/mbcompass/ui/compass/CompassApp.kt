@@ -5,6 +5,7 @@ package com.mubarak.mbcompass.ui.compass
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.hardware.SensorManager
 import android.view.WindowManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -16,16 +17,25 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -45,37 +55,82 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mubarak.mbcompass.MainViewModel
 import com.mubarak.mbcompass.R
 import com.mubarak.mbcompass.sensor.AndroidSensorEventListener
+import com.mubarak.mbcompass.sensor.SensorViewModel
 import com.mubarak.mbcompass.utils.CardinalDirection
 import kotlin.math.roundToInt
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CompassApp(context: Context, navigateToMapScreen: () -> Unit) {
-    val androidSensorEventListener = AndroidSensorEventListener(context)
+fun CompassApp(
+    sensorViewModel: SensorViewModel = viewModel(),
+    navigateToMapScreen: () -> Unit
+) {
+
+    val context = LocalContext.current // Get context once
+
+    var sensorEventListener by remember { mutableStateOf<AndroidSensorEventListener?>(null) }
+
+    val sensorIconState by sensorViewModel.sensorStatusIcon.collectAsStateWithLifecycle()
+
+    val dialogState by sensorViewModel.accuracyAlertDialogState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        sensorEventListener = AndroidSensorEventListener(
+            context = context, // Use application context for sensors
+            onAccuracyUpdate = { accuracy ->
+                sensorViewModel.updateSensorAccuracy(accuracy)
+            },)
+    }
+
+    // Show AlertDialog based on dialogState
+    if (dialogState.show && dialogState.accuracyForDialog != null) {
+        ShowAccuracyAlertDialog(
+            context = context,
+            accuracy = dialogState.accuracyForDialog!!, onDismiss = {
+                sensorViewModel.accuracyDialogDismissed()
+            })
+    }
 
     KeepScreenOn()
-    var degreeIn by remember {
-        mutableFloatStateOf(0F)
-    }
-    var magnetic by remember {
-        mutableFloatStateOf(0F)
-    }
-    Scaffold(
-        contentWindowInsets = WindowInsets(0,0,0,0),
-        floatingActionButton = {
-            SmallFloatingActionButton(
-                onClick = navigateToMapScreen,
-                modifier = Modifier
-                   .navigationBarsPadding()
-            ) {
-                Icon(painterResource(R.drawable.map_fill_icon_24px), contentDescription = stringResource(R.string.map))
-            }
+    var degreeIn by remember { mutableFloatStateOf(0F) }
+    var magnetic by remember { mutableFloatStateOf(0F) }
+
+    Scaffold(contentWindowInsets = WindowInsets(0, 0, 0, 0), topBar = {
+        TopAppBar(
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                titleContentColor = MaterialTheme.colorScheme.primary,
+            ), title = { Text(stringResource(R.string.app_name)) }, actions = {
+                IconButton(onClick = { sensorViewModel.sensorStatusIconClicked() }) {
+                    Icon(
+                        painter = painterResource(id = sensorIconState.iconResId),
+                        contentDescription = sensorIconState.contentDescription
+                    )
+                }
+                IconButton(onClick = { /* TODO: Implement settings action */ }) {
+                    Icon(
+                        imageVector = Icons.Filled.Settings,
+                        contentDescription = stringResource(R.string.settings_content_description)
+                    )
+                }
+            })
+    }, floatingActionButton = {
+        SmallFloatingActionButton(
+            onClick = navigateToMapScreen, modifier = Modifier.navigationBarsPadding()
+        ) {
+            Icon(
+                painterResource(R.drawable.map_fill_icon_24px),
+                contentDescription = stringResource(R.string.map)
+            )
         }
-    ) { innerPadding ->
-        RegisterListener(
-            lifecycleEventObserver = LocalLifecycleOwner.current,
-            listener = androidSensorEventListener,
-            degree = { degreeIn = it },
-            mStrength = { magnetic = it })
+    }) { innerPadding ->
+        sensorEventListener?.let { listener ->
+            RegisterListener(
+                lifecycleEventObserver = LocalLifecycleOwner.current,
+                listener = listener, // Pass the correctly scoped listener
+                degree = { degreeIn = it },
+                mStrength = { magnetic = it })
+        }
         MBCompass(
             modifier = Modifier.padding(innerPadding),
             degreeIn = degreeIn,
@@ -85,7 +140,6 @@ fun CompassApp(context: Context, navigateToMapScreen: () -> Unit) {
 }
 
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MBCompass(
     modifier: Modifier = Modifier,
@@ -96,7 +150,9 @@ fun MBCompass(
     val azimuthState by viewModel.azimuth.collectAsStateWithLifecycle()
     val strength by viewModel.strength.collectAsStateWithLifecycle()
 
-    LaunchedEffect(degreeIn, magneticStrength) {
+    LaunchedEffect(
+        degreeIn, magneticStrength
+    ) { // if something changes in this case degreeIn, magneticStrength -> notify to the vm
         viewModel.updateAzimuth(degreeIn)
         viewModel.updateMagneticStrength(magneticStrength)
     }
@@ -122,8 +178,7 @@ fun MBCompass(
                 .padding(16.dp)
                 .graphicsLayer {
                     rotationZ = -degree.toFloat()
-                }
-        )
+                })
 
 
         Column(
@@ -132,8 +187,7 @@ fun MBCompass(
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             Text(
-                text = "$degree°",
-                style = MaterialTheme.typography.displayMedium
+                text = "$degree°", style = MaterialTheme.typography.displayMedium
             )
             Text(
                 text = stringResource(id = direction.dirName),
@@ -155,8 +209,18 @@ fun RegisterListener(
     degree: (Float) -> Unit = {},
     mStrength: (Float) -> Unit,
 ) {
+    DisposableEffect(listener, lifecycleEventObserver) {
+        val azimuthListener = object : AndroidSensorEventListener.AzimuthValueListener {
+            override fun onAzimuthValueChange(degreeValue: Float) {
+                degree(degreeValue)
+            }
 
-    DisposableEffect(lifecycleEventObserver) {
+            override fun onMagneticStrengthChange(strengthInUt: Float) {
+                mStrength(strengthInUt)
+            }
+        }
+        listener.setAzimuthListener(azimuthListener) // Assuming setAzimuthListener is still present
+
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 listener.registerSensor()
@@ -171,18 +235,37 @@ fun RegisterListener(
             listener.unregisterSensorListener()
         }
     }
+}
 
-    val list = object : AndroidSensorEventListener.AzimuthValueListener {
-        override fun onAzimuthValueChange(degree: Float) {
-            degree(degree)
-        }
 
-        override fun onMagneticStrengthChange(strengthInUt: Float) {
-            mStrength(strengthInUt)
-        }
+@Composable
+fun ShowAccuracyAlertDialog(context: Context, accuracy: Int, onDismiss: () -> Unit) {
+    val accuracyString = when (accuracy) {
+        SensorManager.SENSOR_STATUS_UNRELIABLE -> context.getString(R.string.accuracy_unreliable)
+        SensorManager.SENSOR_STATUS_ACCURACY_LOW -> context.getString(R.string.accuracy_low)
+        SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM -> context.getString(R.string.accuracy_medium)
+        SensorManager.SENSOR_STATUS_ACCURACY_HIGH -> context.getString(R.string.accuracy_high)
+        else -> context.getString(R.string.accuracy_unknown)
     }
 
-    listener.setAzimuthListener(list)
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(context.getString(R.string.calibration_title)) }, text = {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(
+                    painter = painterResource(id = R.drawable.figure_8_ptn),
+                    contentDescription = stringResource(R.string.figure_8_pattern),
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                )
+                Text(context.getString(R.string.calibration_required_message, accuracyString))
+            }
+        }, confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text(context.getString(R.string.ok_button))
+            }
+        })
 }
 
 @Composable

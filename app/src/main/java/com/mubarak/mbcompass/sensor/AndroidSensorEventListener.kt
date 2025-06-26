@@ -19,7 +19,8 @@ import kotlin.math.sqrt
 private const val TAG = "SensorListener"
 
 class AndroidSensorEventListener(
-    private val context: Context
+    private val context: Context,
+    private val onAccuracyUpdate: (accuracy: Int) -> Unit
 ) : SensorEventListener {
 
     private val rotationMatrix = FloatArray(9)
@@ -87,7 +88,7 @@ class AndroidSensorEventListener(
                 val toDegree = ToDegree.toDegree(azimuth)
                 azimuthValueListener?.onAzimuthValueChange(toDegree)
             }
-        }else if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD){
+        } else if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) {
             System.arraycopy(event.values, 0, magnetometerReading, 0, magnetometerReading.size)
         }
         findMagneticStrength()
@@ -96,16 +97,11 @@ class AndroidSensorEventListener(
     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
         when (sensor.type) {
             Sensor.TYPE_MAGNETIC_FIELD -> {
-                if (accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE ||
-                    accuracy == SensorManager.SENSOR_STATUS_ACCURACY_LOW
-                ) {
-                    Toast.makeText(context, R.string.calibration_required, Toast.LENGTH_LONG).show()
-                }
+                onAccuracyUpdate(accuracy)
             }
 
             Sensor.TYPE_ROTATION_VECTOR -> Log.d(TAG, "Rotational Vector Sensor @$accuracy")
         }
-
     }
 
     private fun findMagneticStrength() {
@@ -119,16 +115,14 @@ class AndroidSensorEventListener(
         sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)?.also { rotationVector ->
             registerRotationVectorSensor(sensorManager, rotationVector)
         } ?: run {
-            Log.d(TAG, "ROTATION_VECTOR not available")
-            Toast.makeText(context, R.string.rotation_sensor_not_available, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, R.string.rotation_sensor_not_available, Toast.LENGTH_LONG)
+                .show()
         }
 
         sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also { magneticFieldSensor ->
             registerMagneticFieldSensor(sensorManager, magneticFieldSensor)
         } ?: run {
-            Log.d(TAG, "Magnetometer not available")
             Toast.makeText(context, R.string.magnetometer_not_available, Toast.LENGTH_LONG).show()
-            // Display alert dialog to user
         }
 
     }

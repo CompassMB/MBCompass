@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later-->
+
 <vector xmlns:android="http://schemas.android.com/apk/res/android" android:autoMirrored="true" android:height="24dp" android:viewportHeight="960" android:viewportWidth="960" android:width="24dp">
       
     <path android:fillColor="#e8eaed" android:pathData="m600,840 l-240,-84 -186,72q-20,8 -37,-4.5T120,790v-560q0,-13 7.5,-23t20.5,-15l212,-72 240,84 186,-72q20,-8 37,4.5t17,33.5v560q0,13 -7.5,23T812,768l-212,72ZM560,742v-468l-160,-56v468l160,56Z"/>
