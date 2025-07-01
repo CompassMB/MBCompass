@@ -27,4 +27,5 @@
     <string name="accuracy_medium">MEDIUM</string>
     <string name="accuracy_high">HIGH</string>
     <string name="figure_8_pattern">Figure-eight motion</string>
+    <string name="show_my_location">Show My Location</string>
 </resources>
