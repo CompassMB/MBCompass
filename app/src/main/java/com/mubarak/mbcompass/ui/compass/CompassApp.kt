@@ -66,7 +66,7 @@ fun CompassApp(
     navigateToMapScreen: () -> Unit
 ) {
 
-    val context = LocalContext.current // Get context once
+    val context = LocalContext.current
 
     var sensorEventListener by remember { mutableStateOf<AndroidSensorEventListener?>(null) }
 
@@ -76,7 +76,7 @@ fun CompassApp(
 
     LaunchedEffect(Unit) {
         sensorEventListener = AndroidSensorEventListener(
-            context = context, // Use application context for sensors
+            context = context,
             onAccuracyUpdate = { accuracy ->
                 sensorViewModel.updateSensorAccuracy(accuracy)
             },)

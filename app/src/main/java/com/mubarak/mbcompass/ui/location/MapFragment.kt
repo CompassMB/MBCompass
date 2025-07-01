@@ -114,7 +114,7 @@ class MapFragment : Fragment() {
         } else {
             // If it already exists, just ensure it's enabled
             myLocationOverlay?.enableMyLocation()
-            myLocationOverlay?.enableFollowLocation() // If you want to recenter
+            myLocationOverlay?.enableFollowLocation() // center the map on the user's location
         }
         mapView.invalidate()
     }
@@ -146,5 +146,6 @@ class MapFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        mapView.onDetach()
     }
 }
