@@ -1,10 +1,37 @@
-*.iml
-.gradle
-/local.properties
+# Android Studio / IntelliJ
 .idea/
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+*.iml
+.gradle/
 local.properties
+.DS_Store
+
+# Build files
+/build/
+.cxx/
+.externalNativeBuild/
+captures/
+*.apk
+*.aab
+output.json
+
+# Jetpack Compose
+.compose-cache/
+.kotlinc/
+
+# Kotlin/Java
+*.class
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Gradle
+gradle-app.setting
+gradle.lockfile
+
+# Other IDE junk
+*.ctxt
+.mtj.tmp/
