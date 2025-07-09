@@ -3,7 +3,7 @@
 [versions]
 agp = "8.10.1"
 fragmentKtx = "1.8.8"
-kotlin = "2.1.10"
+kotlin = "2.2.0"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 hiltNavigationCompose = "1.2.0"
@@ -47,3 +47,5 @@ osmdroid-android = { module = "org.osmdroid:osmdroid-android", version.ref = "os
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlinSymbolProcessing ={ id = "com.google.devtools.ksp",  version.ref = "kspVersion"}
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
