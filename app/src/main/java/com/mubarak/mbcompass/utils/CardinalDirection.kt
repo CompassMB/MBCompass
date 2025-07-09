@@ -20,7 +20,7 @@ object CardinalDirection {
 
 }
 
-enum class DIRECTION(@StringRes val dirName: Int) {
+enum class DIRECTION(@param:StringRes val dirName: Int) {
     NORTH(R.string.north),
     NORTHEAST(R.string.northeast),
     EAST(R.string.east),
