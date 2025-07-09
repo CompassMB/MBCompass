@@ -11,7 +11,7 @@ plugins {
 
 android {
     namespace = "com.mubarak.mbcompass"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.mubarak.mbcompass"
