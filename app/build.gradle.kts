@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
-
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -99,6 +99,17 @@ dependencies {
 
     // OSMDroid
     implementation (libs.osmdroid.android)
+
+    // Preference Datastore
+    implementation(libs.androidx.datastore.preferences)
+
+    // ViewModel
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+
+    // Dagger Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
 
     // Android UI ViewBinding
     implementation(libs.androidx.ui.viewbinding)

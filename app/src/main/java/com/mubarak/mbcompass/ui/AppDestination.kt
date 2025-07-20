@@ -9,3 +9,6 @@ data object Compass
 
 @Serializable
 data object UserLocation
+
+@Serializable
+data object Settings

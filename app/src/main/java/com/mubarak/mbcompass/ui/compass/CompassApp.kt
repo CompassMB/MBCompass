@@ -10,7 +10,6 @@ import android.view.WindowManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -63,7 +62,8 @@ import kotlin.math.roundToInt
 @Composable
 fun CompassApp(
     sensorViewModel: SensorViewModel = viewModel(),
-    navigateToMapScreen: () -> Unit
+    navigateToMapScreen: () -> Unit,
+    navigateToSettingsScreen: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -79,7 +79,8 @@ fun CompassApp(
             context = context,
             onAccuracyUpdate = { accuracy ->
                 sensorViewModel.updateSensorAccuracy(accuracy)
-            },)
+            },
+        )
     }
 
     // Show AlertDialog based on dialogState
@@ -107,7 +108,7 @@ fun CompassApp(
                         contentDescription = sensorIconState.contentDescription
                     )
                 }
-                IconButton(onClick = { /* TODO: Implement settings action */ }) {
+                IconButton(onClick = navigateToSettingsScreen) {
                     Icon(
                         imageVector = Icons.Filled.Settings,
                         contentDescription = stringResource(R.string.settings_content_description)

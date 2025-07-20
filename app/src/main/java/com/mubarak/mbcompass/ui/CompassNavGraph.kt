@@ -4,7 +4,6 @@ package com.mubarak.mbcompass.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -13,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mubarak.mbcompass.ui.compass.CompassApp
 import com.mubarak.mbcompass.ui.location.UserLocation
+import com.mubarak.mbcompass.ui.settings.SettingsScreen
 
 @Composable
 fun CompassNavGraph(
@@ -26,11 +26,16 @@ fun CompassNavGraph(
     ) {
         composable<Compass> {
             CompassApp(
-                navigateToMapScreen = { navController.navigateWithBackStack(UserLocation) })
+                navigateToMapScreen = { navController.navigateWithBackStack(UserLocation) },
+                navigateToSettingsScreen = { navController.navigateWithBackStack(Settings) })
         }
 
         composable<UserLocation> {
             UserLocation(navigateUp = { navController.navigateUp() })
+        }
+
+        composable<Settings> {
+            SettingsScreen()
         }
     }
 }
