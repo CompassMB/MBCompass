@@ -26,8 +26,8 @@ fun CompassNavGraph(
     ) {
         composable<Compass> {
             CompassApp(
-                navigateToMapScreen = { navController.navigateWithBackStack(UserLocation) },
-                navigateToSettingsScreen = { navController.navigateWithBackStack(Settings) })
+                navigateToMap = { navController.navigateWithBackStack(UserLocation) },
+                navigateToSettings = { navController.navigateWithBackStack(Settings) })
         }
 
         composable<UserLocation> {
@@ -35,7 +35,7 @@ fun CompassNavGraph(
         }
 
         composable<Settings> {
-            SettingsScreen()
+            SettingsScreen(onLicensesClicked = {}, onBack = { navController.navigateUp() })
         }
     }
 }
