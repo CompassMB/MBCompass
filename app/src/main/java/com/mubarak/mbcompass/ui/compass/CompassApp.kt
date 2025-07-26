@@ -62,8 +62,8 @@ import kotlin.math.roundToInt
 @Composable
 fun CompassApp(
     sensorViewModel: SensorViewModel = viewModel(),
-    navigateToMapScreen: () -> Unit,
-    navigateToSettingsScreen: () -> Unit
+    navigateToMap: () -> Unit,
+    navigateToSettings: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -101,14 +101,16 @@ fun CompassApp(
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 titleContentColor = MaterialTheme.colorScheme.primary,
-            ), title = { Text(stringResource(R.string.app_name)) }, actions = {
+            ),
+            title = { Text(stringResource(R.string.app_name)) },
+            actions = {
                 IconButton(onClick = { sensorViewModel.sensorStatusIconClicked() }) {
                     Icon(
                         painter = painterResource(id = sensorIconState.iconResId),
                         contentDescription = sensorIconState.contentDescription
                     )
                 }
-                IconButton(onClick = navigateToSettingsScreen) {
+                IconButton(onClick = navigateToSettings) {
                     Icon(
                         imageVector = Icons.Filled.Settings,
                         contentDescription = stringResource(R.string.settings_content_description)
@@ -117,7 +119,7 @@ fun CompassApp(
             })
     }, floatingActionButton = {
         SmallFloatingActionButton(
-            onClick = navigateToMapScreen, modifier = Modifier.navigationBarsPadding()
+            onClick = navigateToMap, modifier = Modifier.navigationBarsPadding()
         ) {
             Icon(
                 painterResource(R.drawable.map_fill_icon_24px),
