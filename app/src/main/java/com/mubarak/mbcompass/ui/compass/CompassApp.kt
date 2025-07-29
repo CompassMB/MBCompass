@@ -98,10 +98,6 @@ fun CompassApp(
 
     Scaffold(contentWindowInsets = WindowInsets(0, 0, 0, 0), topBar = {
         TopAppBar(
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                titleContentColor = MaterialTheme.colorScheme.primary,
-            ),
             title = { Text(stringResource(R.string.app_name)) },
             actions = {
                 IconButton(onClick = { sensorViewModel.sensorStatusIconClicked() }) {
