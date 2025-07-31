@@ -38,6 +38,3 @@ class HostViewModel @Inject constructor(
         val darkThemeConfig: ThemeConfig = ThemeConfig.FOLLOW_SYSTEM,
     )
 }
-
-
-

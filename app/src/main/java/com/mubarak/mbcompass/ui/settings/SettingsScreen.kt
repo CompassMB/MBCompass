@@ -2,7 +2,13 @@
 
 package com.mubarak.mbcompass.ui.settings
 
+import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,10 +49,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mubarak.mbcompass.R
@@ -55,20 +64,37 @@ import com.mubarak.mbcompass.ui.theme.iconDefaultSize
 import com.mubarak.mbcompass.ui.theme.spacingLarge
 import com.mubarak.mbcompass.ui.theme.spacingMedium
 import com.mubarak.mbcompass.ui.theme.spacingSmall
+import com.mubarak.mbcompass.utils.Const.APP_PAGE
+import com.mubarak.mbcompass.utils.Const.AUTHOR_EMAIL
+import com.mubarak.mbcompass.utils.Const.LICENSE_PAGE
 import com.mubarak.mbcompass.utils.ThemeConfig
 
 @Composable
 fun SettingsScreen(
-    onLicensesClicked: () -> Unit,
     onBack: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = {}
+    )
     SettingsScreen(
         uiState = uiState,
         onBackClicked = onBack,
         onThemeOptionClicked = viewModel::setTheme,
-        onLicensesClicked = onLicensesClicked,
+        onAuthorPageClicked = {
+            sendMail(context, launcher)
+        },
+        onLicensesClicked = {
+            uriHandler.openUri(LICENSE_PAGE)
+        },
+        onSourceClicked = {
+            uriHandler.openUri(APP_PAGE)
+        }
     )
 }
 
@@ -78,7 +104,9 @@ fun SettingsScreen(
     uiState: SettingsViewModel.SettingsUiState,
     onBackClicked: () -> Unit,
     onThemeOptionClicked: (String) -> Unit,
-    onLicensesClicked: () -> Unit, // TODO navigate to the license page and author page
+    onAuthorPageClicked: () -> Unit,
+    onLicensesClicked: () -> Unit,
+    onSourceClicked: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
@@ -102,6 +130,9 @@ fun SettingsScreen(
             uiState = uiState,
             modifier = Modifier.padding(paddingValues),
             onThemeItemClicked = { isThemeDialogVisible = true },
+            onLicensesClicked = onLicensesClicked,
+            onAuthorPageClicked = onAuthorPageClicked,
+            onSourceClicked = onSourceClicked
         )
         ThemeDialog(
             isDialogVisible = isThemeDialogVisible,
@@ -118,8 +149,8 @@ private fun SettingsList(
     modifier: Modifier = Modifier,
     uiState: SettingsViewModel.SettingsUiState,
     onThemeItemClicked: () -> Unit,
-    onLicensesClicked: () -> Unit = {},
     onAuthorPageClicked: () -> Unit = {},
+    onLicensesClicked: () -> Unit = {},
     onSourceClicked: () -> Unit = {},
 ) {
     Box(
@@ -302,6 +333,17 @@ fun getThemeName(option: String): String {
     }
 }
 
+fun sendMail(context: Context, launcher: ActivityResultLauncher<Intent>) {
+    val intent = Intent(Intent.ACTION_SENDTO).apply {
+        data = "mailto:$AUTHOR_EMAIL".toUri()
+    }
+    if (intent.resolveActivity(context.packageManager) != null) {
+        launcher.launch(intent)
+    } else {
+        Toast.makeText(context, "No email app found", Toast.LENGTH_SHORT).show()
+    }
+}
+
 @Preview(showSystemUi = false, showBackground = false, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun SettingsScreenPreview() {
@@ -311,6 +353,8 @@ fun SettingsScreenPreview() {
             onBackClicked = {},
             onThemeOptionClicked = {},
             onLicensesClicked = {},
+            onAuthorPageClicked = {},
+            onSourceClicked = {}
         )
     }
 }
