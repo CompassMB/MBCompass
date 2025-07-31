@@ -59,7 +59,7 @@ fun CompassNavGraph(
             }, popExitTransition = {
                 fadeThroughExit()
             }) {
-            SettingsScreen(onLicensesClicked = {}, onBack = { navController.navigateUp() })
+            SettingsScreen(onBack = { navController.navigateUp() })
         }
     }
 }

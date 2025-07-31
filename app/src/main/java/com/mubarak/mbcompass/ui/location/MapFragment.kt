@@ -3,6 +3,7 @@
 package com.mubarak.mbcompass.ui.location
 
 import android.Manifest
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -63,6 +64,15 @@ class MapFragment : Fragment() {
         mapView.minZoomLevel = 3.coerceAtLeast(TileSourceFactory.MAPNIK.minimumZoomLevel).toDouble()
         mapView.maxZoomLevel = TileSourceFactory.MAPNIK.maximumZoomLevel.toDouble()
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // TODO: Just a temporary solution to fix remap execute after config changes
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         val mapController = mapView.controller
 
         mapController.setZoom(20.1)
@@ -82,11 +92,6 @@ class MapFragment : Fragment() {
             checkAndEnableLocation()
         }
 
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         checkAndEnableLocation()
     }
 
@@ -145,6 +150,8 @@ class MapFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        // just only lock portrait only for MapView not for entire Activity
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         _binding = null
         mapView.onDetach()
     }
