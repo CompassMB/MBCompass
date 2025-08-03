@@ -2,19 +2,27 @@
 
 Thank you for your interest in contributing!
 
-We welcome improvements of all kinds — features, bug fixes, improvements, or documentation.  
-All contributions must comply with the **GPLv3 license**.
+We always welcome improvements of all kinds - features, feature request, bug fixes, or improvements.
 
-## Contribution Guidelines
+## Reporting bugs and requesting new features
 
-- Fork the repo and create a branch (e.g., `feature/xyz` or `improvement/abc`).
-- Make changes and submit a pull request to the appropriate branch (feature or improvement).
+To report bugs or request new features, please use
+the **[GitHub issue tracker](https://github.com/MubarakNative/MBCompass/issues)**.
+
+Before you report a bug or request a new feature, check if the bug is already present of if the
+feature has been requested and potentially was rejected in the past.
+
+Please **use the bug and feature templates** provided by the GitHub issue tracker.
+
+## Code Contribution Guidelines
+
+- Fork the repository and create a branch (e.g., `feature_xyz` or `improvement_xyz`).
+- Make changes and submit a pull request.
 - Describe your changes clearly in the PR.
 
 ## Notes
 
 - For larger changes, please open an Issue in github first to discuss.
-- Follow Android best practices — clean code, no tracking, and no proprietary dependencies.
 - All derivative work must remain open-source under GPLv3.
 
-Thanks for helping improve MBCompass!
+Thanks for helping to improve MBCompass!
