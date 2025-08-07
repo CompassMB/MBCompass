@@ -44,4 +44,6 @@
     <string name="developer">Mubarak Basha</string>
     <string name="source_code">Source code</string>
     <string name="github">GitHub</string>
+    <string name="support">Support Us</string>
+    <string name="donate">Donate to keep this app free and ad-free</string>
 </resources>
