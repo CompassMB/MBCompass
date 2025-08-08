@@ -212,7 +212,7 @@ private fun SettingsList(
             item(key = "__supportItem") {
                 SettingsItem(
                     title = stringResource(R.string.support),
-                    icon = R.drawable.license_icon24px,
+                    icon = R.drawable.icon_support_24,
                     subtitle = stringResource(R.string.donate),
                     onClick = onSupportClicked,
                 )

@@ -35,9 +35,6 @@
 </h4>
 
 <div align="center" style="display: flex; justify-content: center; align-items: flex-start; gap: 12px; flex-wrap: wrap;">
-  <a href="https://www.producthunt.com/products/mbcompass?embed=true..." target="_blank">
-    <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=980786&theme=dark&t=1750390503058" width="250" height="54" alt="MBCompass on Product Hunt" />
-  </a>
   <a href="https://f-droid.org/app/com.mubarak.mbcompass">
     <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" width="170" alt="Get it on F-Droid"/>
   </a>
@@ -48,10 +45,11 @@
 
 ## About
 
-MBCompass is a simple yet feature-rich compass app for Android, built with Jetpack Compose. It uses the device’s magnetometer and accelerometer to provide real-time geomagnetic field updates. Designed with Android Lifecycle in mind, In general, a **modern and efficient compass**.
+**MBCompass** is a modern, free, and open-source compass and navigation app without **ads**, **IAP**, or **tracking**. Built with **Jetpack Compose**, it supports compass and navigation features while being **lightweight** and simple.
 
-> Most compass apps are either too basic or bloated with ads.  
-> **MBCompass** was created to fix that: lightweight, accurate, and ad-free.
+> Not just a compass. Not a map app.
+>
+> MBCompass bridges the gap between a **compass** and a **full navigation app** - shows direction and live location without using hundreds of MBs of storage or privacy trade-offs.
 
 ---
 
@@ -65,22 +63,31 @@ MBCompass is a simple yet feature-rich compass app for Android, built with Jetpa
   <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" />
   <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" />
 </p>
-<p align="center">
-  <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" />
-  <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" />
-</p>
 
 ## Features ✨
 
-- Magnetic north-based [azimuths](https://en.wikipedia.org/wiki/Azimuth).
-- Ability to show the user's current location using [OpenStreetMap](https://openstreetmap.org).
-- Light / Dark Theme support.
-- Display Magnetic Strength in µT.
-- Keep the screen on support.
+- Shows clear cardinal direction and magnetic azimuths.
+- Displays magnetic strength in µT.
+- Live GPS location tracking on OpenStreetMap.
+- Sensor fusion for improved accuracy (accelerometer, magnetometer, gyroscope).
+- Light and dark theme support controlled via Settings.
+- Keeps screen on during navigation.
 - Landscape orientation support.
-- Smooth compass rotation.
-- Sensor fusion: Combines (Accelerometer, Magnetometer, and Gyroscope) for better accuracy.
-- No annoying ads or in-app purchases.
+- Built with Jetpack Compose and Material Design.
+- Runs on Android 5.0+
+- No ads, no in-app purchases, no tracking.
+- [Find more on the website](https://compassmb.github.io/MBCompass-site/#features)
+
+## Recognition 🌟
+
+MBCompass has gained recognition from the global developer community:
+
+-  #13 Product of the Day on Product Hunt
+-  Featured in two consecutive issues of Android Weekly
+-  Reached the front page of Hacker News
+
+[See full highlights](./Featured.md)
+
 
 ##  Permissions 🔐
 
@@ -89,6 +96,17 @@ MBCompass is a simple yet feature-rich compass app for Android, built with Jetpa
 ##  Contributing 🤝
 
 Contributions are welcome! If you encounter bugs or have feature suggestions, please open an issue or submit a pull request. See [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+## Support 💖
+
+Open-source projects couldn't survive in the long run without donations or funding.
+
+MBCompass is a fully open-source project - free of ads, trackers, or in-app purchases.
+If you find it useful, consider supporting its continued development and maintenance:
+
+Find more info on [MBCompass page](https://compassmb.github.io/MBCompass-site/donate.html)
+
+Your support helps ensure the project stays sustainable and continues to improve for everyone. Thank you!
 
 ## License 📄
 
