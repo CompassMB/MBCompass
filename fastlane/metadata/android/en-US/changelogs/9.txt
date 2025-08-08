@@ -1,0 +1,8 @@
+* Added sensor status indicator to the top app bar, with an alert dialog to notify users of compass accuracy changes.
+* Introduced a settings screen to manage user preferences, including theme selection.
+* Added a "Current Location" button on the map to manually center the map on your current position.
+* Implemented smooth animations when navigating between screens.
+* Improved visibility of the current location arrow on the map.
+* Fixed transparency issues with edge-to-edge content on three-button navigation bars.
+* Fixed map reloading after screen rotation.
+* Fixed map drifting to unknown locations when location fetch is interrupted.

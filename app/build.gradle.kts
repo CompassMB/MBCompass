@@ -19,8 +19,8 @@ android {
         applicationId = "com.mubarak.mbcompass"
         minSdk = 21
         targetSdk = 36
-        versionCode = 9
-        versionName = "1.1.8"
+        versionCode = 10
+        versionName = "1.1.9"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
