@@ -67,6 +67,7 @@ import com.mubarak.mbcompass.ui.theme.spacingSmall
 import com.mubarak.mbcompass.utils.Const.APP_PAGE
 import com.mubarak.mbcompass.utils.Const.AUTHOR_EMAIL
 import com.mubarak.mbcompass.utils.Const.LICENSE_PAGE
+import com.mubarak.mbcompass.utils.Const.SUPPORT_PAGE
 import com.mubarak.mbcompass.utils.ThemeConfig
 
 @Composable
@@ -92,6 +93,9 @@ fun SettingsScreen(
         onLicensesClicked = {
             uriHandler.openUri(LICENSE_PAGE)
         },
+        onSupportClicked = {
+            uriHandler.openUri(SUPPORT_PAGE)
+        },
         onSourceClicked = {
             uriHandler.openUri(APP_PAGE)
         }
@@ -105,6 +109,7 @@ fun SettingsScreen(
     onBackClicked: () -> Unit,
     onThemeOptionClicked: (String) -> Unit,
     onAuthorPageClicked: () -> Unit,
+    onSupportClicked: () -> Unit,
     onLicensesClicked: () -> Unit,
     onSourceClicked: () -> Unit
 ) {
@@ -132,6 +137,7 @@ fun SettingsScreen(
             onThemeItemClicked = { isThemeDialogVisible = true },
             onLicensesClicked = onLicensesClicked,
             onAuthorPageClicked = onAuthorPageClicked,
+            onSupportClicked = onSupportClicked,
             onSourceClicked = onSourceClicked
         )
         ThemeDialog(
@@ -151,6 +157,7 @@ private fun SettingsList(
     onThemeItemClicked: () -> Unit,
     onAuthorPageClicked: () -> Unit = {},
     onLicensesClicked: () -> Unit = {},
+    onSupportClicked: () -> Unit = {},
     onSourceClicked: () -> Unit = {},
 ) {
     Box(
@@ -200,6 +207,14 @@ private fun SettingsList(
                     icon = R.drawable.license_icon24px,
                     subtitle = stringResource(R.string.app_license),
                     onClick = onLicensesClicked,
+                )
+            }
+            item(key = "__supportItem") {
+                SettingsItem(
+                    title = stringResource(R.string.support),
+                    icon = R.drawable.icon_support_24,
+                    subtitle = stringResource(R.string.donate),
+                    onClick = onSupportClicked,
                 )
             }
             item(key = "__sourcecodeItem") {
@@ -353,6 +368,7 @@ fun SettingsScreenPreview() {
             onBackClicked = {},
             onThemeOptionClicked = {},
             onLicensesClicked = {},
+            onSupportClicked = {},
             onAuthorPageClicked = {},
             onSourceClicked = {}
         )
