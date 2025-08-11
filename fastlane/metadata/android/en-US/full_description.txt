@@ -1,9 +1,28 @@
-<b>MBCompass</b> is a simple, reliable compass app with a sleek design and accurate navigation. Works offline, saves battery, and is perfect for outdoor adventures or everyday use.
+<b>MBCompass</b> is a modern, free, and open-source compass and navigation app without <b>ads</b>, <b>in-app purchases</b>, or <b>tracking</b>. It supports both <b>compass and navigation features</b> while remaining lightweight and simple!
 
-Key Features:
+<b>Main Features:</b>
+<ul>
+  <li>Shows clear cardinal direction and magnetic azimuths.</li>
+  <li>Displays magnetic strength in µT.</li>
+  <li>Live GPS location tracking on OpenStreetMap.</li>
+  <li>Sensor fusion for improved accuracy (accelerometer, magnetometer, gyroscope).</li>
+  <li>Light and dark theme support controlled via Settings.</li>
+  <li>Keeps screen on during navigation.</li>
+  <li>Landscape orientation support.</li>
+  <li>Built with Jetpack Compose and Material Design.</li>
+  <li>Runs on Android 5.0+</li>
+  <li>No ads, no in-app purchases, no tracking.</li>
+  <li>Find more on the <b><i>website</i></b>: https://compassmb.github.io/MBCompass-site/</li>
+</ul>
 
-- Accurate Navigation: Get precise cardinal directional with degrees.
-- Minimalist Design: Enjoy a clean, distraction-free interface that's easy to use.
-- Works Offline: No external dependencies, Uses device sensors.
-- Sensor fusion: Combines (Accelerometer, Gyroscope and Magnetometer) for better accuracy.
-- Power efficient: Designed to be efficient and lightweight.
+<b>Why choose MBCompass?</b>
+
+<blockquote>
+
+<b>Not just a compass. Not a map app.</b>
+
+MBCompass bridges the gap between a compass and a full navigation app - shows direction and live location without using hundreds of MBs of storage or privacy trade-offs.
+</blockquote>
+
+<b>The navigation starts from here</b>
+Lightweight, privacy-first compass and navigation - because navigation starts here.

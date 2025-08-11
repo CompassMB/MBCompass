@@ -1,0 +1,1 @@
+- Updated Android Gradle Plugin to fix F-Droid build compatibility (no user-facing changes)
