@@ -2,8 +2,8 @@
   <img src="fastlane/metadata/android/en-US/images/icon.png" width="150" />
 </p>
 
-<h1 align="center"><b>🧭 MBCompass - Android Compass App</b></h1>
-<h3 align="center">A feature-rich, ad-free compass app for Android</h3>
+<h1 align="center"><b>🧭 MBCompass</b></h1>
+<h3 align="center">Modern FOSS Compass and Navigation app for Android</h3>
 
 <p align="center"> 
   <a href="https://www.gnu.org/licenses/gpl-3.0">
@@ -17,18 +17,6 @@
   </a>
 </p>
 
-<p align="center">
-  <a href="https://github.com/MubarakNative/MBCompass/stargazers">
-    <img src="https://img.shields.io/github/stars/MubarakNative/MBCompass?style=social" alt="GitHub Stars"/>
-  </a>
-  <a href="https://github.com/MubarakNative/MBCompass/network/members">
-    <img src="https://img.shields.io/github/forks/MubarakNative/MBCompass?style=social" alt="GitHub Forks"/>
-  </a>
-  <a href="https://github.com/MubarakNative/MBCompass/watchers">
-    <img src="https://img.shields.io/github/watchers/MubarakNative/MBCompass?style=social" alt="GitHub Watchers"/>
-  </a>
-</p>
-
 <h4 align="center">
   <a href="https://mubaraknative.github.io/">Author</a> | 
   <a href="https://github.com/MubarakNative/MBCompass/blob/main/LICENSE">License</a>
@@ -38,7 +26,7 @@
   <a href="https://f-droid.org/app/com.mubarak.mbcompass">
     <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" width="170" alt="Get it on F-Droid"/>
   </a>
-  <a href="https://apt.izzysoft.de/fdroid/index/apk/com.mubarak.mbcompass">
+  <a href="https://android.izzysoft.de/repo/apk/com.mubarak.mbcompass">
     <img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" height="64" alt="Get it on IzzyOnDroid" />
   </a>
 </div>
