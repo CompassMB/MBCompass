@@ -9,6 +9,7 @@ import android.hardware.SensorManager
 import android.view.WindowManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.WindowInsets
@@ -28,10 +29,10 @@ import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -41,9 +42,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -86,8 +90,7 @@ fun CompassApp(
     // Show AlertDialog based on dialogState
     if (dialogState.show && dialogState.accuracyForDialog != null) {
         ShowAccuracyAlertDialog(
-            context = context,
-            accuracy = dialogState.accuracyForDialog!!, onDismiss = {
+            context = context, accuracy = dialogState.accuracyForDialog!!, onDismiss = {
                 sensorViewModel.accuracyDialogDismissed()
             })
     }
@@ -97,22 +100,20 @@ fun CompassApp(
     var magnetic by remember { mutableFloatStateOf(0F) }
 
     Scaffold(contentWindowInsets = WindowInsets(0, 0, 0, 0), topBar = {
-        TopAppBar(
-            title = { Text(stringResource(R.string.app_name)) },
-            actions = {
-                IconButton(onClick = { sensorViewModel.sensorStatusIconClicked() }) {
-                    Icon(
-                        painter = painterResource(id = sensorIconState.iconResId),
-                        contentDescription = sensorIconState.contentDescription
-                    )
-                }
-                IconButton(onClick = navigateToSettings) {
-                    Icon(
-                        imageVector = Icons.Filled.Settings,
-                        contentDescription = stringResource(R.string.settings_content_description)
-                    )
-                }
-            })
+        TopAppBar(title = { Text(stringResource(R.string.app_name)) }, actions = {
+            IconButton(onClick = { sensorViewModel.sensorStatusIconClicked() }) {
+                Icon(
+                    painter = painterResource(id = sensorIconState.iconResId),
+                    contentDescription = sensorIconState.contentDescription
+                )
+            }
+            IconButton(onClick = navigateToSettings) {
+                Icon(
+                    imageVector = Icons.Filled.Settings,
+                    contentDescription = stringResource(R.string.settings_content_description)
+                )
+            }
+        })
     }, floatingActionButton = {
         SmallFloatingActionButton(
             onClick = navigateToMap, modifier = Modifier.navigationBarsPadding()
@@ -156,11 +157,17 @@ fun MBCompass(
         viewModel.updateMagneticStrength(magneticStrength)
     }
 
-    val degree = azimuthState.roundToInt()
-    val direction = remember(azimuthState) {
-        CardinalDirection.getDirectionFromAzimuth(azimuthState)
+    val degree by remember {
+        derivedStateOf { azimuthState.roundToInt() }
     }
-    val strengthRounded = strength.roundToInt()
+
+    val direction by remember {
+        derivedStateOf { CardinalDirection.getDirectionFromAzimuth(azimuthState) }
+    }
+
+    val strengthRounded by remember {
+        derivedStateOf { strength.roundToInt() }
+    }
 
     FlowColumn(
         modifier = modifier.fillMaxSize(),
@@ -168,17 +175,7 @@ fun MBCompass(
         horizontalArrangement = Arrangement.Center
     ) {
 
-        Image(
-            painter = painterResource(id = R.drawable.mbcompass_rose),
-            contentDescription = stringResource(id = R.string.compass),
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-            modifier = Modifier
-                .size(400.dp) // TODO: FIXME set dynamic size
-                .padding(16.dp)
-                .graphicsLayer {
-                    rotationZ = -degree.toFloat()
-                })
-
+        CompassView(azimuth = { degree })
 
         Column(
             verticalArrangement = Arrangement.Center,
@@ -197,6 +194,29 @@ fun MBCompass(
                 style = MaterialTheme.typography.bodyMedium
             )
         }
+    }
+}
+
+@Composable
+fun CompassView(
+    azimuth: () -> Int,
+) {
+    val image = rememberVectorPainter(image = ImageVector.vectorResource(R.drawable.mbcompass_rose))
+
+    Box(
+        modifier = Modifier
+            .size(400.dp)
+            .padding(16.dp)
+            .graphicsLayer {
+                rotationZ = -azimuth().toFloat()
+            }, contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = image,
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+            modifier = Modifier.fillMaxSize()
+        )
     }
 }
 
@@ -249,18 +269,19 @@ fun ShowAccuracyAlertDialog(context: Context, accuracy: Int, onDismiss: () -> Un
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(context.getString(R.string.calibration_title)) }, text = {
+        title = { Text(context.getString(R.string.calibration_title)) },
+        text = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(
                     painter = painterResource(id = R.drawable.figure_8_ptn),
                     contentDescription = stringResource(R.string.figure_8_pattern),
                     tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier
-                        .padding(bottom = 8.dp)
+                    modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Text(context.getString(R.string.calibration_required_message, accuracyString))
             }
-        }, confirmButton = {
+        },
+        confirmButton = {
             TextButton(onClick = onDismiss) {
                 Text(context.getString(R.string.ok_button))
             }

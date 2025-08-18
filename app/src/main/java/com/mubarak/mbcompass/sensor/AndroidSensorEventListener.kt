@@ -131,24 +131,32 @@ class AndroidSensorEventListener(
         sensorManager: SensorManager,
         rotationVectorSensor: Sensor
     ) {
-        sensorManager.registerListener(
+        val success = sensorManager.registerListener(
             this,
             rotationVectorSensor,
-            SensorManager.SENSOR_DELAY_NORMAL,
-            SensorManager.SENSOR_DELAY_UI
+            SensorManager.SENSOR_DELAY_FASTEST
         )
+        if (success){
+            Log.d(TAG, "RotationVectorSensor is registered")
+        }else{
+            Log.w(TAG, "Unable to register RotationalVectorSensor")
+        }
     }
 
     private fun registerMagneticFieldSensor(
         sensorManager: SensorManager,
         magneticFieldSensor: Sensor
     ) {
-        sensorManager.registerListener(
+        val result = sensorManager.registerListener(
             this,
             magneticFieldSensor,
-            SensorManager.SENSOR_DELAY_NORMAL,
-            SensorManager.SENSOR_DELAY_UI
+            SensorManager.SENSOR_DELAY_NORMAL
         )
+        if (result){
+            Log.d(TAG, "Magnetometer is registered")
+        }else{
+            Log.w(TAG, "Unable to register Magnetometer")
+        }
     }
 
     fun unregisterSensorListener() {
