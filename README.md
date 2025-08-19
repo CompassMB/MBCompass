@@ -26,7 +26,7 @@
   <a href="https://f-droid.org/app/com.mubarak.mbcompass">
     <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" width="170" alt="Get it on F-Droid"/>
   </a>
-  <a href="https://android.izzysoft.de/repo/apk/com.mubarak.mbcompass">
+  <a href="https://apt.izzysoft.de/fdroid/index/apk/com.mubarak.mbcompass">
     <img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" height="64" alt="Get it on IzzyOnDroid" />
   </a>
 </div>
