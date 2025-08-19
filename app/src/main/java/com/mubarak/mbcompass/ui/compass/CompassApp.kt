@@ -230,8 +230,8 @@ fun RegisterListener(
 ) {
     DisposableEffect(listener, lifecycleEventObserver) {
         val azimuthListener = object : AndroidSensorEventListener.AzimuthValueListener {
-            override fun onAzimuthValueChange(degreeValue: Float) {
-                degree(degreeValue)
+            override fun onAzimuthValueChange(degree: Float) {
+                degree(degree)
             }
 
             override fun onMagneticStrengthChange(strengthInUt: Float) {
