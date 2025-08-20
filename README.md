@@ -22,9 +22,12 @@
   <a href="https://github.com/MubarakNative/MBCompass/blob/main/LICENSE">License</a>
 </h4>
 
-<div align="center" style="display: flex; justify-content: center; align-items: flex-start; gap: 12px; flex-wrap: wrap;">
+<div align="center" style="display: flex; justify-content: center; align-items: flex-start; flex-wrap: wrap;">
   <a href="https://f-droid.org/app/com.mubarak.mbcompass">
     <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" width="170" alt="Get it on F-Droid"/>
+  </a>
+  <a href="https://github.com/CompassMB/MBCompass/wiki/Installing-MBCompass-from-GitHub-using-Obtainium">
+    <img src="https://raw.githubusercontent.com/MubarakNative/mb-icons-pack/refs/heads/main/obt_badge.png" width="170" alt="Get it on Obtainium" />
   </a>
   <a href="https://apt.izzysoft.de/fdroid/index/apk/com.mubarak.mbcompass">
     <img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" height="64" alt="Get it on IzzyOnDroid" />
@@ -41,18 +44,16 @@
 
 ---
 
-## Screenshots 📸
-
 <p align="center">
-  <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" />
-  <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" />
+  <img width="400" src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" />
+  <img width="400" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" />
 </p>
 <p align="center">
-  <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" />
-  <img width="250" src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" />
+  <img width="400" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" />
+  <img width="400" src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" />
 </p>
 
-## Features ✨
+## Features
 
 - Shows clear cardinal direction and magnetic azimuths.
 - Displays magnetic strength in µT.
@@ -66,7 +67,7 @@
 - No ads, no in-app purchases, no tracking.
 - [Find more on the website](https://compassmb.github.io/MBCompass-site/#features)
 
-## Recognition 🌟
+## Recognition
 
 MBCompass has gained recognition from the global developer community:
 
@@ -77,15 +78,15 @@ MBCompass has gained recognition from the global developer community:
 [See full highlights](./Featured.md)
 
 
-##  Permissions 🔐
+##  Permissions
 
 - Location permission is only used to detect the current location on the map.
 
-##  Contributing 🤝
+##  Contributing
 
 Contributions are welcome! If you encounter bugs or have feature suggestions, please open an issue or submit a pull request. See [Contributing Guidelines](CONTRIBUTING.md) for details.
 
-## Support 💖
+## Support
 
 Open-source projects couldn't survive in the long run without donations or funding.
 
@@ -96,7 +97,7 @@ Find more info on [MBCompass page](https://compassmb.github.io/MBCompass-site/do
 
 Your support helps ensure the project stays sustainable and continues to improve for everyone. Thank you!
 
-## License 📄
+## License
 
 [![GNU GPLv3 Image](https://www.gnu.org/graphics/gplv3-127x51.png)](http://www.gnu.org/licenses/gpl-3.0.en.html)
 
@@ -106,5 +107,5 @@ MBCompass is Free Software: you can use, study, share, and improve it at your wi
 
 See more information [here](https://github.com/MubarakNative/MBCompass/blob/main/LICENSE).
 
-###  Artwork License: 🎨
+###  Artwork License:
 Compass rose : [MBCompass rose](https://github.com/MubarakNative/MBCompass/blob/main/app/src/main/res/drawable/mbcompass_rose.xml) © 2025 by [Mubarak Basha](https://mubaraknative.github.io) is licensed under CC BY-SA 4.0
