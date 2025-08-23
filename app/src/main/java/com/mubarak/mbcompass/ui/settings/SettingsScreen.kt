@@ -24,14 +24,16 @@ import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
@@ -41,6 +43,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -60,8 +63,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mubarak.mbcompass.R
 import com.mubarak.mbcompass.ui.theme.MBCompassTheme
+import com.mubarak.mbcompass.ui.theme.MBShapeDefaults.bottomListItemShape
+import com.mubarak.mbcompass.ui.theme.MBShapeDefaults.middleListItemShape
+import com.mubarak.mbcompass.ui.theme.MBShapeDefaults.singleListItemShape
+import com.mubarak.mbcompass.ui.theme.MBShapeDefaults.topListItemShape
 import com.mubarak.mbcompass.ui.theme.iconDefaultSize
-import com.mubarak.mbcompass.ui.theme.spacingLarge
 import com.mubarak.mbcompass.ui.theme.spacingMedium
 import com.mubarak.mbcompass.ui.theme.spacingSmall
 import com.mubarak.mbcompass.utils.Const.APP_PAGE
@@ -80,9 +86,8 @@ fun SettingsScreen(
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult(),
-        onResult = {}
-    )
+        contract = ActivityResultContracts.StartActivityForResult(), onResult = {})
+
     SettingsScreen(
         uiState = uiState,
         onBackClicked = onBack,
@@ -98,8 +103,7 @@ fun SettingsScreen(
         },
         onSourceClicked = {
             uriHandler.openUri(APP_PAGE)
-        }
-    )
+        })
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -116,17 +120,14 @@ fun SettingsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.settings)) },
-                navigationIcon = {
-                    IconButton(onClick = onBackClicked) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Localized description"
-                        )
-                    }
+            TopAppBar(title = { Text(stringResource(R.string.settings)) }, navigationIcon = {
+                IconButton(onClick = onBackClicked) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Localized description"
+                    )
                 }
-            )
+            })
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { paddingValues ->
@@ -155,10 +156,10 @@ private fun SettingsList(
     modifier: Modifier = Modifier,
     uiState: SettingsViewModel.SettingsUiState,
     onThemeItemClicked: () -> Unit,
-    onAuthorPageClicked: () -> Unit = {},
-    onLicensesClicked: () -> Unit = {},
-    onSupportClicked: () -> Unit = {},
-    onSourceClicked: () -> Unit = {},
+    onAuthorPageClicked: () -> Unit,
+    onLicensesClicked: () -> Unit,
+    onSupportClicked: () -> Unit,
+    onSourceClicked: () -> Unit,
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
@@ -166,6 +167,7 @@ private fun SettingsList(
         val listState = rememberLazyListState()
         LazyColumn(
             contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
             state = listState,
         ) {
             item(key = "__displayHeader") {
@@ -178,10 +180,11 @@ private fun SettingsList(
             }
             item(key = "__themeItem") {
                 SettingsItem(
-                    title = stringResource(R.string.theme),
                     icon = R.drawable.theme_icon24px,
-                    subtitle = getThemeName(option = uiState.theme),
-                    onClick = onThemeItemClicked,
+                    shape = singleListItemShape,
+                    headlineText = stringResource(R.string.theme),
+                    supportingText = getThemeName(option = uiState.theme),
+                    onItemClicked = onThemeItemClicked
                 )
             }
             item(key = "__aboutHeader") {
@@ -195,34 +198,38 @@ private fun SettingsList(
             }
             item(key = "__aboutItem") {
                 SettingsItem(
-                    title = stringResource(R.string.author),
                     icon = R.drawable.person_icon24px,
-                    subtitle = stringResource(R.string.developer),
-                    onClick = onAuthorPageClicked,
+                    shape = topListItemShape,
+                    headlineText = stringResource(R.string.author),
+                    supportingText = stringResource(R.string.developer),
+                    onItemClicked = onAuthorPageClicked
                 )
             }
             item(key = "__licenseItem") {
                 SettingsItem(
-                    title = stringResource(R.string.licenses),
                     icon = R.drawable.license_icon24px,
-                    subtitle = stringResource(R.string.app_license),
-                    onClick = onLicensesClicked,
+                    shape = middleListItemShape,
+                    headlineText = stringResource(R.string.licenses),
+                    supportingText = stringResource(R.string.app_license),
+                    onItemClicked = onLicensesClicked
                 )
             }
             item(key = "__supportItem") {
                 SettingsItem(
-                    title = stringResource(R.string.support),
                     icon = R.drawable.icon_support_24,
-                    subtitle = stringResource(R.string.donate),
-                    onClick = onSupportClicked,
+                    shape = middleListItemShape,
+                    headlineText = stringResource(R.string.support),
+                    supportingText = stringResource(R.string.donate),
+                    onItemClicked = onSupportClicked
                 )
             }
             item(key = "__sourcecodeItem") {
                 SettingsItem(
-                    title = stringResource(R.string.source_code),
                     icon = R.drawable.code_icon24px,
-                    subtitle = stringResource(R.string.github),
-                    onClick = onSourceClicked,
+                    shape = bottomListItemShape,
+                    headlineText = stringResource(R.string.source_code),
+                    supportingText = stringResource(R.string.github),
+                    onItemClicked = onSourceClicked
                 )
             }
         }
@@ -230,54 +237,35 @@ private fun SettingsList(
 }
 
 @Composable
-private fun SettingsItem(
-    title: String,
-    onClick: () -> Unit,
-    subtitle: String? = null,
-    @DrawableRes icon: Int? = null,
+fun SettingsItem(
+    modifier: Modifier = Modifier,
+    @DrawableRes icon: Int,
+    shape: RoundedCornerShape,
+    headlineText: String,
+    supportingText: String,
+    onItemClicked: () -> Unit
 ) {
-
-    ElevatedCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 6.dp)
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(spacingSmall),
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(MaterialTheme.shapes.large)
-                .clickable(onClick = onClick)
-                .padding(vertical = spacingMedium)
-                .padding(start = spacingLarge),
-        ) {
-
-            if (icon != null) {
-                Icon(
-                    painter = painterResource(icon),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.requiredSize(iconDefaultSize),
-                )
-            }
-            Column {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-                subtitle?.let {
-                    Text(
-                        text = it,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            }
-        }
-    }
+    ListItem(
+        leadingContent = {
+            Icon(
+                painter = painterResource(icon),
+                contentDescription = headlineText,
+                modifier = Modifier.requiredSize(iconDefaultSize)
+            )
+        }, colors = ListItemDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
+            headlineColor = MaterialTheme.colorScheme.onSurface,
+            supportingColor = MaterialTheme.colorScheme.onSurfaceVariant
+        ), headlineContent = {
+            Text(headlineText)
+        }, supportingContent = {
+            Text(supportingText)
+        }, modifier = modifier
+            .clip(shape)
+            .clickable(onClick = onItemClicked)
+    )
 }
+
 
 @Composable
 private fun ThemeDialog(
@@ -331,7 +319,7 @@ private fun ThemeDialog(
                 TextButton(
                     onClick = onDismissRequest,
                 ) {
-                    Text(text = stringResource(R.string.cancel))
+                    Text(text = stringResource(R.string.dismiss))
                 }
             },
         )
@@ -370,7 +358,6 @@ fun SettingsScreenPreview() {
             onLicensesClicked = {},
             onSupportClicked = {},
             onAuthorPageClicked = {},
-            onSourceClicked = {}
-        )
+            onSourceClicked = {})
     }
 }

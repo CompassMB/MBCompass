@@ -36,7 +36,7 @@
     <string name="light_theme">Light</string>
     <string name="dark_theme">Dark</string>
     <string name="choose_theme">Choose theme</string>
-    <string name="cancel">Cancel</string>
+    <string name="dismiss">Dismiss</string>
     <string name="app_license">GNU GPLv3</string>
     <string name="settings_about">About</string>
     <string name="display">Display</string>
