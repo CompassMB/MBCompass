@@ -90,8 +90,8 @@ class AndroidSensorEventListener(
             }
         } else if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) {
             System.arraycopy(event.values, 0, magnetometerReading, 0, magnetometerReading.size)
+            findMagneticStrength()
         }
-        findMagneticStrength()
     }
 
     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
