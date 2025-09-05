@@ -1,0 +1,107 @@
+{
+  "version": "v1.0.0",
+  "entity": {
+    "type": "organisation",
+    "role": "owner",
+    "name": "Mubarak Basha",
+    "email": "dev.mubarakbasha@gmail.com",
+    "description": "MBCompass is a modern, free, and open-source compass and navigation app without ads, IAP, or tracking.",
+    "webpageUrl": {
+      "url": "https://compassmb.github.io/MBCompass-site/",
+      "wellKnown": "https://compassmb.github.io/MBCompass-site/.well-known/funding-manifest-urls"
+    }
+  },
+  "projects": [
+    {
+      "guid": "mbcompass-android-app",
+      "name": "MBCompass",
+      "description": "MBCompass is a modern, free, and open-source compass and navigation app without ads, IAP, or tracking. Built with Jetpack Compose, it supports compass and navigation features while being lightweight and simple.",
+      "webpageUrl": {
+        "url": "https://compassmb.github.io/MBCompass-site/",
+        "wellKnown": "https://compassmb.github.io/MBCompass-site/.well-known/funding-manifest-urls"
+      },
+      "repositoryUrl": {
+        "url": "https://github.com/CompassMB/MBCompass"
+      },
+      "licenses": [
+        "spdx:GPL-3.0"
+      ],
+      "tags": [
+        "android",
+        "foss",
+        "navigation",
+        "compass",
+        "openstreetmap",
+        "mobile-app",
+        "privacy"
+      ]
+    }
+  ],
+  "funding": {
+    "channels": [
+      {
+        "guid": "github-sponsors",
+        "type": "payment-provider",
+        "address": "https://github.com/sponsors/CompassMB",
+        "description": "Support development of MBCompass via GitHub Sponsors."
+      },
+      {
+        "guid": "liberapay-mbcompass",
+        "type": "payment-provider",
+        "address": "https://liberapay.com/MBCompass",
+        "description": "Make a one-time or recurring contribution via LiberaPay."
+      }
+    ],
+    "plans": [
+      {
+        "guid": "android-publishing-mbcompass",
+        "status": "active",
+        "name": "Support MBCompass to be available on Google Play",
+        "description": "Help MBCompass reach Google Play and ensure ongoing maintenance with new features such as GPS speedometer, location waypoints, and more.",
+        "amount": 10000,
+        "currency": "INR",
+        "frequency": "one-time",
+        "channels": [
+          "github-sponsors",
+          "liberapay-mbcompass"
+        ]
+      },
+      {
+        "guid": "ios-publishing-mbcompass",
+        "status": "active",
+        "name": "Support MBCompass to be available on iOS",
+        "description": "Bring MBCompass to iOS by leveraging the existing technologies the app is built with: Jetpack Compose + Kotlin, extending them to iOS through KMP + CMP.",
+        "amount": 50000,
+        "currency": "INR",
+        "frequency": "one-time",
+        "channels": [
+          "github-sponsors",
+          "liberapay-mbcompass"
+        ]
+      },
+      {
+        "guid": "oc-sponsor",
+        "status": "active",
+        "name": "Larger contribution for developers",
+        "description": "Funds 1 hour of developer work per month.",
+        "amount": 10,
+        "currency": "USD",
+        "frequency": "monthly",
+        "channels": [
+          "github-sponsors",
+          "liberapay-mbcompass"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "year": 2024,
+        "income": 0,
+        "expenses": 0,
+        "taxes": 0,
+        "currency": "USD",
+        "description": "MBCompass wasn't seeking funding in 2024"
+      }
+    ]
+  }
+}
