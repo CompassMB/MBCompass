@@ -1,0 +1,3 @@
+- Implemented an intuitive settings screen with color scheme.
+- Fixed significant performant issue on Compass Rose due to unnecessary re-execution.
+- Added feature flag in the manifest.
