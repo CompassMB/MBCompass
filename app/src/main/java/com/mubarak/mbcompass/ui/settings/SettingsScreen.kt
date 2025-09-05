@@ -124,7 +124,7 @@ fun SettingsScreen(
                 IconButton(onClick = onBackClicked) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Localized description"
+                        contentDescription = stringResource(R.string.nav_back)
                     )
                 }
             })
