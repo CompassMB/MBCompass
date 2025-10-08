@@ -1,8 +1,7 @@
 <p align="center">
-  <img src="fastlane/metadata/android/en-US/images/icon.png" width="150" />
+  <img src="/mbcompass_txt.png" width="700"  alt="MBCompass Logo Text"/>
 </p>
 
-<h1 align="center"><b>🧭 MBCompass</b></h1>
 <h3 align="center">Modern FOSS Compass and Navigation app for Android</h3>
 
 <p align="center"> 
@@ -67,6 +66,18 @@
 - No ads, no in-app purchases, no tracking.
 - [Find more on the website](https://compassmb.github.io/MBCompass-site/#features)
 
+---
+
+MBCompass v2.0 Design Proposal (Upcoming)
+
+<p align="center">
+  <img width="600" src="/mbcompass_v2.0_dsn_proposal.png"  alt="MBCompass new design proposal v2"/>
+</p>
+
+MBCompass v1.1.12 Redesign Proposal, featuring a refreshed UI with a __GPS Speedometer__, __True AMOLED Dark Mode__, and more visual improvements for a better Android experience.
+
+_(Note: The design is a reference concept; actual implementation may vary to ensure optimal performance and Android best practices.)_
+
 ## Recognition
 
 MBCompass has gained recognition from the global developer community:
@@ -76,7 +87,6 @@ MBCompass has gained recognition from the global developer community:
 -  Reached the front page of Hacker News
 
 [See full highlights](./Featured.md)
-
 
 ##  Permissions
 
