@@ -46,4 +46,6 @@
     <string name="github">GitHub</string>
     <string name="support">Support Us</string>
     <string name="donate">Donate to keep this app free and ad-free</string>
+    <string name="error">Enable Location!</string>
+    <string name="location_disabled">Your device location is disabled. Tap Settings to turn it on.</string>
 </resources>

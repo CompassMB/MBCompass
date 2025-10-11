@@ -3,15 +3,19 @@
 package com.mubarak.mbcompass.ui.location
 
 import android.Manifest
+import android.app.AlertDialog
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.mubarak.mbcompass.R
@@ -117,6 +121,9 @@ class MapFragment : Fragment() {
                 }
             mapView.overlays.add(myLocationOverlay)
         } else {
+            if (!myLocationOverlay!!.isMyLocationEnabled) {
+                showDialog(R.string.location_disabled)
+            }
             // If it already exists, just ensure it's enabled
             myLocationOverlay?.enableMyLocation()
             myLocationOverlay?.enableFollowLocation() // center the map on the user's location
@@ -135,6 +142,20 @@ class MapFragment : Fragment() {
             enableLocationOverlay()
         }
     }
+
+    private fun showDialog(@StringRes errMessage: Int) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.error)
+            .setIcon(R.drawable.error_icon24px)
+            .setMessage(getString(errMessage))
+            .setPositiveButton(R.string.ok_button) { dialog, _ -> dialog.dismiss() }
+            .setNegativeButton(R.string.settings) { _, _ ->
+                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivity(intent)
+            }
+            .show()
+    }
+
 
     override fun onResume() {
         super.onResume()
