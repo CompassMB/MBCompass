@@ -10,7 +10,7 @@
     <string name="southwest">Southwest</string>
     <string name="west">West</string>
     <string name="northwest">Northwest</string>
-    <string name="compass">Cardinal direction compass</string>
+    <string name="compass">Compass</string>
     <string name="calibration_required">Calibration required: rotate the device in figure-8 pattern to recalibrate!</string>
     <string name="map">Map</string>
     <string name="permission_rationale">Please grant location permission.</string>
@@ -48,4 +48,6 @@
     <string name="donate">Donate to keep this app free and ad-free</string>
     <string name="error">Enable Location!</string>
     <string name="location_disabled">Your device location is disabled. Tap Settings to turn it on.</string>
+    <string name="true_north">True North</string>
+    <string name="tn_desc">Correct Magnetic Declination</string>
 </resources>

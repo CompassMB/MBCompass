@@ -15,4 +15,8 @@ class UserPreferencesRepositoryImpl(
     override suspend fun setTheme(theme: String) {
         dataStore.setValue(UserPreferences.KEY_THEME, theme)
     }
+
+    override suspend fun setTrueNorthState(boolean: Boolean) {
+        dataStore.setValue(UserPreferences.TRUE_NORTH,boolean)
+    }
 }
