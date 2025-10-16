@@ -3,23 +3,19 @@
 package com.mubarak.mbcompass
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.mubarak.mbcompass.utils.Azimuth
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
-import kotlin.math.roundToInt
 
 class MainViewModel : ViewModel() {
-    private val _azimuth = MutableStateFlow(0F)
-    val azimuth: StateFlow<Float> = _azimuth.asStateFlow()
+    private var _azimuth = MutableStateFlow(Azimuth(0f))
+    var azimuth: StateFlow<Azimuth> = _azimuth.asStateFlow()
 
     private val _strength = MutableStateFlow(0F)
     val strength: StateFlow<Float> = _strength.asStateFlow()
 
-    fun updateAzimuth(azimuth: Float) {
+    fun updateAzimuth(azimuth: Azimuth) {
         _azimuth.value = azimuth
     }
 

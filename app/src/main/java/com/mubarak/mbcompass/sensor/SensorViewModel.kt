@@ -3,6 +3,7 @@
 package com.mubarak.mbcompass.sensor
 
 import android.hardware.SensorManager
+import android.location.Location
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.ViewModel
 import com.mubarak.mbcompass.R
@@ -23,18 +24,22 @@ data class AccuracyDialogState(
 
 class SensorViewModel : ViewModel() {
 
+    var _trueNorthEnabled = MutableStateFlow(false)
+    val trueNorthEnabled: StateFlow<Boolean> = _trueNorthEnabled.asStateFlow()
+
+    private val _location = MutableStateFlow<Location?>(null)
+    val location: StateFlow<Location?> = _location.asStateFlow()
+
     // StateFlow for the dynamic sensor status icon
     private val _sensorStatusIcon = MutableStateFlow(
         SensorStatusIconState(R.drawable.outline_question_mark_24, "Sensor status unknown")
     )
     val sensorStatusIcon: StateFlow<SensorStatusIconState> = _sensorStatusIcon.asStateFlow()
 
-    // StateFlow to control the visibility and content of the accuracy dialog
     private val _accuracyAlertDialogState = MutableStateFlow(AccuracyDialogState(show = false))
     val accuracyAlertDialogState: StateFlow<AccuracyDialogState> =
         _accuracyAlertDialogState.asStateFlow()
 
-    // Keep track if the dialog was shown automatically for a given low accuracy
     private var autoDialogShownForCurrentLowState: Boolean = false
 
     fun updateSensorAccuracy(accuracy: Int) {
@@ -49,7 +54,7 @@ class SensorViewModel : ViewModel() {
             }
 
             SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM -> {
-                autoDialogShownForCurrentLowState = false // Reset when accuracy is good/medium
+                autoDialogShownForCurrentLowState = false
                 SensorStatusIconState(
                     R.drawable.signal_medium_24x,
                     "Sensor accuracy medium",
@@ -88,7 +93,16 @@ class SensorViewModel : ViewModel() {
         }
     }
 
-    // Called when the user clicks the sensor icon in the AppBar
+    fun provideLocation(location: Location?) {
+        location?.let {
+            _location.value = it
+        }
+    }
+
+    fun setTrueNorthState(boolean: Boolean){
+        _trueNorthEnabled.value = boolean
+    }
+
     fun sensorStatusIconClicked() {
         val currentAccuracy = _sensorStatusIcon.value.accuracy
         if (currentAccuracy != null) {
@@ -97,7 +111,6 @@ class SensorViewModel : ViewModel() {
         }
     }
 
-    // Called when the dialog is dismissed
     fun accuracyDialogDismissed() {
         _accuracyAlertDialogState.value = AccuracyDialogState(show = false)
     }
