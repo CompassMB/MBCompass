@@ -5,6 +5,7 @@ package com.mubarak.mbcompass.data.local
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -41,13 +42,21 @@ class PreferenceLocalDataStore @Inject constructor(context: Context) : Preferenc
         }
     }
 
+    override suspend fun setValue(key: String, value: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[booleanPreferencesKey(key)] = value
+        }
+    }
+
     private fun mapUserPreferences(preferences: Preferences): UserPreferences {
         return UserPreferences(
             theme = preferences[PreferencesKeys.THEME] ?: ThemeConfig.FOLLOW_SYSTEM.prefName,
+            isTrueNorthEnabled = preferences[PreferencesKeys.TRUE_NORTH] ?: false
         )
     }
 
     private object PreferencesKeys {
         val THEME = stringPreferencesKey(UserPreferences.KEY_THEME)
+        val TRUE_NORTH = booleanPreferencesKey(UserPreferences.TRUE_NORTH)
     }
 }

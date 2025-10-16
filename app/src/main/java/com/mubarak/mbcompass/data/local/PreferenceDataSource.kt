@@ -10,4 +10,5 @@ interface PreferenceDataSource {
     val preferenceFlow: Flow<UserPreferences>
 
     suspend fun setValue(key: String, value: String)
+    suspend fun setValue(key: String, value: Boolean)
 }

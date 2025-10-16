@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
@@ -28,6 +29,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -40,6 +42,8 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -91,6 +95,7 @@ fun SettingsScreen(
     SettingsScreen(
         uiState = uiState,
         onBackClicked = onBack,
+        onTrueNorthStateChange = viewModel::setTrueNorthState,
         onThemeOptionClicked = viewModel::setTheme,
         onAuthorPageClicked = {
             sendMail(context, launcher)
@@ -111,6 +116,7 @@ fun SettingsScreen(
 fun SettingsScreen(
     uiState: SettingsViewModel.SettingsUiState,
     onBackClicked: () -> Unit,
+    onTrueNorthStateChange: (Boolean) -> Unit,
     onThemeOptionClicked: (String) -> Unit,
     onAuthorPageClicked: () -> Unit,
     onSupportClicked: () -> Unit,
@@ -135,6 +141,7 @@ fun SettingsScreen(
         SettingsList(
             uiState = uiState,
             modifier = Modifier.padding(paddingValues),
+            onTrueNorthStateChange = onTrueNorthStateChange,
             onThemeItemClicked = { isThemeDialogVisible = true },
             onLicensesClicked = onLicensesClicked,
             onAuthorPageClicked = onAuthorPageClicked,
@@ -155,6 +162,7 @@ fun SettingsScreen(
 private fun SettingsList(
     modifier: Modifier = Modifier,
     uiState: SettingsViewModel.SettingsUiState,
+    onTrueNorthStateChange: (Boolean) -> Unit,
     onThemeItemClicked: () -> Unit,
     onAuthorPageClicked: () -> Unit,
     onLicensesClicked: () -> Unit,
@@ -170,6 +178,26 @@ private fun SettingsList(
             verticalArrangement = Arrangement.spacedBy(2.dp),
             state = listState,
         ) {
+            item(key = "__trueNorthHeader") {
+                Text(
+                    text = stringResource(R.string.compass),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.tertiary,
+                )
+                Spacer(modifier = Modifier.requiredSize(spacingMedium))
+            }
+            item(key = "__trueNorthItem") {
+                SettingsItem(
+                    isChecked = uiState.isTrueNorthEnabled,
+                    onCheckedStateChange = { onTrueNorthStateChange(it) },
+                    icon = R.drawable.true_north_24px,
+                    headlineText = stringResource(R.string.true_north),
+                    shape = singleListItemShape,
+                    supportingText = stringResource(R.string.tn_desc),
+                )
+                Spacer(modifier = Modifier.requiredSize(spacingMedium))
+
+            }
             item(key = "__displayHeader") {
                 Text(
                     text = stringResource(R.string.display),
@@ -266,6 +294,58 @@ fun SettingsItem(
     )
 }
 
+@Composable
+fun SettingsItem(
+    modifier: Modifier = Modifier,
+    isChecked: Boolean = false,
+    onCheckedStateChange: ((Boolean) -> Unit),
+    shape: RoundedCornerShape,
+    @DrawableRes
+    icon: Int,
+    headlineText: String,
+    supportingText: String,
+) {
+
+    var checked by remember { mutableStateOf(false) }
+    ListItem(
+        trailingContent = {
+            Switch(
+                checked = isChecked,
+                onCheckedChange = { onCheckedStateChange(it) },
+                thumbContent = if (checked) {
+                    {
+                        Icon(
+                            imageVector = Icons.Filled.Check,
+                            contentDescription = null,
+                            modifier = Modifier.size(SwitchDefaults.IconSize),
+                        )
+                    }
+                } else {
+                    null
+                }
+
+            )
+        },
+        leadingContent = {
+            Icon(
+                painter = painterResource(icon),
+                contentDescription = headlineText,
+                modifier = Modifier.requiredSize(iconDefaultSize)
+            )
+
+        }, colors = ListItemDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
+            headlineColor = MaterialTheme.colorScheme.onSurface,
+            supportingColor = MaterialTheme.colorScheme.onSurfaceVariant
+        ), headlineContent = {
+            Text(headlineText)
+        }, supportingContent = {
+            Text(supportingText)
+        }, modifier = modifier
+            .clip(shape)
+    )
+}
+
 
 @Composable
 private fun ThemeDialog(
@@ -354,10 +434,25 @@ fun SettingsScreenPreview() {
         SettingsScreen(
             uiState = SettingsViewModel.SettingsUiState(),
             onBackClicked = {},
+            onTrueNorthStateChange = {},
             onThemeOptionClicked = {},
             onLicensesClicked = {},
             onSupportClicked = {},
             onAuthorPageClicked = {},
             onSourceClicked = {})
+    }
+}
+
+@Preview(showSystemUi = false, showBackground = false, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun SettingsItemPreview() {
+    MBCompassTheme {
+        SettingsItem(
+            icon = R.drawable.true_north_24px,
+            headlineText = stringResource(R.string.true_north),
+            shape = singleListItemShape,
+            supportingText = stringResource(R.string.tn_desc),
+            onItemClicked = {}
+        )
     }
 }

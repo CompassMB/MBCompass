@@ -10,4 +10,5 @@ interface UserPreferenceRepository {
     val getUserPreferenceStream: Flow<UserPreferences>
 
     suspend fun setTheme(theme: String)
+    suspend fun setTrueNorthState(boolean: Boolean)
 }

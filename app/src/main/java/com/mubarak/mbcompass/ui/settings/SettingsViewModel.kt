@@ -24,6 +24,7 @@ class SettingsViewModel @Inject constructor(
         .map { userPreferences ->
             SettingsUiState(
                 theme = userPreferences.theme,
+                isTrueNorthEnabled = userPreferences.isTrueNorthEnabled
             )
         }.catch {
             Log.d("SettingsViewModel", "Error getting user preference", it)
@@ -36,8 +37,15 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun setTrueNorthState(isTrueNorthEnabled: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.setTrueNorthState(isTrueNorthEnabled)
+        }
+    }
+
     data class SettingsUiState(
         val theme: String = ThemeConfig.FOLLOW_SYSTEM.prefName,
+        val isTrueNorthEnabled: Boolean = false,
         val themeDialogOptions: List<String> = listOf(
             ThemeConfig.FOLLOW_SYSTEM.prefName,
             ThemeConfig.LIGHT.prefName,

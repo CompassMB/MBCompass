@@ -13,6 +13,7 @@ import android.view.Surface
 import android.view.WindowManager
 import android.widget.Toast
 import com.mubarak.mbcompass.R
+import com.mubarak.mbcompass.utils.Azimuth
 import com.mubarak.mbcompass.utils.ToDegree
 import kotlin.math.sqrt
 
@@ -33,7 +34,7 @@ class AndroidSensorEventListener(
         context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
     interface AzimuthValueListener {
-        fun onAzimuthValueChange(degree: Float)
+        fun onAzimuthValueChange(degree: Azimuth)
         fun onMagneticStrengthChange(strengthInUt: Float)
     }
 
@@ -85,8 +86,9 @@ class AndroidSensorEventListener(
 
                 SensorManager.getOrientation(adjustedRotationMatrix, orientationAngles)
                 val azimuth = orientationAngles[0]
-                val toDegree = ToDegree.toDegree(azimuth)
-                azimuthValueListener?.onAzimuthValueChange(toDegree)
+               val toDegree = ToDegree.radiansToDegrees360(azimuth)
+
+                azimuthValueListener?.onAzimuthValueChange(Azimuth(toDegree))
             }
         } else if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) {
             System.arraycopy(event.values, 0, magnetometerReading, 0, magnetometerReading.size)
@@ -99,7 +101,6 @@ class AndroidSensorEventListener(
             Sensor.TYPE_MAGNETIC_FIELD -> {
                 onAccuracyUpdate(accuracy)
             }
-
             Sensor.TYPE_ROTATION_VECTOR -> Log.d(TAG, "Rotational Vector Sensor @$accuracy")
         }
     }

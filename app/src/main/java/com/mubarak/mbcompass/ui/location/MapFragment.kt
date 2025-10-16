@@ -122,7 +122,7 @@ class MapFragment : Fragment() {
             mapView.overlays.add(myLocationOverlay)
         } else {
             if (!myLocationOverlay!!.isMyLocationEnabled) {
-                showDialog(R.string.location_disabled)
+                showDialog(R.string.location_disabled, R.string.location_disabled_rationale)
             }
             // If it already exists, just ensure it's enabled
             myLocationOverlay?.enableMyLocation()
@@ -143,9 +143,9 @@ class MapFragment : Fragment() {
         }
     }
 
-    private fun showDialog(@StringRes errMessage: Int) {
+    private fun showDialog(@StringRes title: Int, @StringRes errMessage: Int) {
         AlertDialog.Builder(requireContext())
-            .setTitle(R.string.error)
+            .setTitle(title)
             .setIcon(R.drawable.error_icon24px)
             .setMessage(getString(errMessage))
             .setPositiveButton(R.string.ok_button) { dialog, _ -> dialog.dismiss() }
@@ -171,7 +171,6 @@ class MapFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // just only lock portrait only for MapView not for entire Activity
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         _binding = null
         mapView.onDetach()
