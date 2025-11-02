@@ -3,18 +3,18 @@
 package com.mubarak.mbcompass.ui.compass
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.hardware.SensorManager
-import android.location.Location
 import android.net.Uri
 import android.provider.Settings
 import android.util.Log
-import android.view.WindowManager
 import androidx.annotation.StringRes
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,15 +22,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,7 +47,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -56,12 +59,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -81,13 +81,14 @@ import com.mubarak.mbcompass.sensor.SensorViewModel
 import com.mubarak.mbcompass.ui.settings.SettingsViewModel
 import com.mubarak.mbcompass.utils.Azimuth
 import com.mubarak.mbcompass.utils.CardinalDirection
-import com.mubarak.mbcompass.utils.getMagneticDeclination
+import com.mubarak.mbcompass.utils.KeepScreenOn
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CompassApp(
     sensorViewModel: SensorViewModel = viewModel(),
+    mainViewModel: MainViewModel = viewModel(),
     settingsViewModel: SettingsViewModel = hiltViewModel(),
     navigateToMap: () -> Unit,
     navigateToSettings: () -> Unit
@@ -101,9 +102,16 @@ fun CompassApp(
 
     val dialogState by sensorViewModel.accuracyAlertDialogState.collectAsStateWithLifecycle()
 
+    val androidLocationManager = remember {
+        AndroidLocationManager(context) { location ->
+            sensorViewModel.provideLocation(location)
+        }
+    }
+
     LaunchedEffect(Unit) {
         sensorEventListener = AndroidSensorEventListener(
             context = context,
+            sensorViewModel = sensorViewModel,
             onAccuracyUpdate = { accuracy ->
                 sensorViewModel.updateSensorAccuracy(accuracy)
             },
@@ -119,8 +127,11 @@ fun CompassApp(
     }
 
     KeepScreenOn()
-    var degreeIn by remember { mutableStateOf<Azimuth>(Azimuth(0F)) }
-    var magnetic by remember { mutableFloatStateOf(0F) }
+    var magneticStrength by remember { mutableFloatStateOf(0F) }
+
+    val azimuthSensor by mainViewModel.azimuth.collectAsStateWithLifecycle()
+    val settingsState by settingsViewModel.uiState.collectAsStateWithLifecycle()
+
 
     Scaffold(contentWindowInsets = WindowInsets(0, 0, 0, 0), topBar = {
         TopAppBar(title = {
@@ -161,22 +172,22 @@ fun CompassApp(
             )
         }
     }) { innerPadding ->
-        val context = LocalContext.current
 
         sensorEventListener?.let { listener ->
             RegisterListener(
-                lifecycleEventObserver = LocalLifecycleOwner.current,
+                lifecycleOwner = LocalLifecycleOwner.current,
                 listener = listener,
-                settingsViewModel = settingsViewModel,
-                context = context,
+                androidLocationManager = androidLocationManager,
                 sensorViewModel = sensorViewModel,
-                degree = { degreeIn = it },
-                mStrength = { magnetic = it })
+                settingsUiState = settingsState,
+                mainViewModel = mainViewModel,
+                mStrength = { magneticStrength = it })
         }
         MBCompass(
             modifier = Modifier.padding(innerPadding),
-            degreeIn = degreeIn,
-            magneticStrength = magnetic
+            degreeIn = azimuthSensor,
+            androidLocationManager = androidLocationManager,
+            magneticStrength = magneticStrength
         )
     }
 }
@@ -186,6 +197,7 @@ fun MBCompass(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = viewModel(),
     sensorViewModel: SensorViewModel = viewModel(),
+    androidLocationManager: AndroidLocationManager,
     degreeIn: Azimuth,
     magneticStrength: Float,
 ) {
@@ -193,7 +205,7 @@ fun MBCompass(
     val strength by viewModel.strength.collectAsStateWithLifecycle()
 
     val location by sensorViewModel.location.collectAsStateWithLifecycle()
-    val trueNorthEnabled by sensorViewModel.trueNorthEnabled.collectAsState()
+    val trueNorthEnabled by sensorViewModel.trueNorthEnabled.collectAsStateWithLifecycle()
 
     LaunchedEffect(
         degreeIn, magneticStrength
@@ -203,7 +215,7 @@ fun MBCompass(
     }
 
     val degree by remember {
-        derivedStateOf { azimuthState.wrapAzimuth(azimuthState.roundedDegrees) }
+        derivedStateOf { azimuthState.roundedDegrees }
     }
 
     val direction by remember {
@@ -215,7 +227,6 @@ fun MBCompass(
     }
 
     val context = LocalContext.current
-    remember { mutableStateOf(false) }
 
     Box(modifier = modifier.fillMaxSize()) {
         FlowColumn(
@@ -223,18 +234,7 @@ fun MBCompass(
             verticalArrangement = Arrangement.Center,
             horizontalArrangement = Arrangement.Center
         ) {
-
-            if (trueNorthEnabled) {
-                Log.e(TAG, "True North Enabled")
-                val magneticDec = getMagneticDeclination(context = context, azimuthState)
-                val trueAzimuth = degreeIn.add(magneticDec)
-                setAzimuth(trueAzimuth, mainViewModel = viewModel)
-            } else {
-                Log.e(TAG, "True North Disabled")
-                setAzimuth(degreeIn, mainViewModel = viewModel)
-            }
-
-            CompassView(azimuth = { degreeIn })
+            CompassView(azimuth = degreeIn)
 
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -267,55 +267,13 @@ fun MBCompass(
             if (trueNorthEnabled && location == null) {
                 Button(
                     onClick = {
-                        val hasFineLocation = ContextCompat.checkSelfPermission(
-                            context,
-                            android.Manifest.permission.ACCESS_FINE_LOCATION
-                        ) == android.content.pm.PackageManager.PERMISSION_GRANTED
-
-                        val hasCoarseLocation = ContextCompat.checkSelfPermission(
-                            context,
-                            android.Manifest.permission.ACCESS_COARSE_LOCATION
-                        ) == android.content.pm.PackageManager.PERMISSION_GRANTED
-
-                        if (hasFineLocation || hasCoarseLocation) {
-                            Log.d(TAG, "MBCompass: Location Permission granted ")
-
-                            val androidLocationManager = AndroidLocationManager(context) { loc ->
-                                sensorViewModel.provideLocation(loc)
-                            }
-                            androidLocationManager.registerLocationListener()
-
-                            // No location permission, show Alertdialog
-                            if (!LocationManagerCompat.isLocationEnabled(
-                                    context.getSystemService(
-                                        Context.LOCATION_SERVICE
-                                    ) as android.location.LocationManager
-                                )
-                            ) {
-                                Log.d(TAG, "MBCompass: Location is disabled ")
-
-                                locationRequestDialog(
-                                    title = R.string.location_disabled,
-                                    message = R.string.location_disabled_rationale,
-                                    actionIntent = Settings.ACTION_LOCATION_SOURCE_SETTINGS,
-                                    context = context
-                                )
-                            }
-
-                        } else {
-                            locationRequestDialog(
-                                title = R.string.permission_required,
-                                message = R.string.permission_rationale,
-                                actionIntent = Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                context = context
-                            )
-                        }
+                        handleLocationRequest(context, androidLocationManager)
                     },
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .padding(16.dp)
                 ) {
-                    Icon(painter = painterResource(id = R.drawable.icon_support_24), null)
+                    LocationRequestProgress()
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(stringResource(R.string.reload_location))
                 }
@@ -324,68 +282,125 @@ fun MBCompass(
     }
 }
 
-private fun getMagneticDeclination(context: Context, azimuth: Azimuth): Float {
-    var location: Location = Location("")
-    AndroidLocationManager(context, location = { location = it })
+@Composable
+fun LocationRequestProgress(modifier: Modifier = Modifier) {
 
-    Log.d(TAG, "getMagneticDeclination: Location:$location")
-    return azimuth.add(getMagneticDeclination(location)).roundedDegrees
+    CircularProgressIndicator(
+        modifier = modifier.size(24.dp),
+        color = MaterialTheme.colorScheme.secondary,
+        trackColor = MaterialTheme.colorScheme.surfaceVariant,
+    )
 }
 
-@Composable
-fun CompassView(
-    azimuth: () -> Azimuth,
+private fun handleLocationRequest(
+    context: Context,
+    androidLocationManager: AndroidLocationManager
 ) {
-    val image = rememberVectorPainter(image = ImageVector.vectorResource(R.drawable.mbcompass_rose))
+    val hasFineLocation = ContextCompat.checkSelfPermission(
+        context,
+        android.Manifest.permission.ACCESS_FINE_LOCATION
+    ) == PackageManager.PERMISSION_GRANTED
 
-    Box(
-        modifier = Modifier
-            .size(400.dp)
-            .padding(16.dp)
-            .graphicsLayer {
-                rotationZ = -azimuth().roundedDegrees
-            }, contentAlignment = Alignment.Center
-    ) {
-        Image(
-            painter = image,
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-            modifier = Modifier.fillMaxSize()
+    val hasCoarseLocation = ContextCompat.checkSelfPermission(
+        context,
+        android.Manifest.permission.ACCESS_COARSE_LOCATION
+    ) == PackageManager.PERMISSION_GRANTED
+
+    if (hasFineLocation || hasCoarseLocation) {
+        Log.d("CompassApp", "Location Permission granted")
+
+        androidLocationManager.registerLocationListener()
+
+        val locationManager = context.getSystemService(Context.LOCATION_SERVICE)
+                as android.location.LocationManager
+
+        if (!LocationManagerCompat.isLocationEnabled(locationManager)) {
+            Log.d("CompassApp", "Location is disabled")
+            locationRequestDialog(
+                title = R.string.location_disabled,
+                message = R.string.location_disabled_rationale,
+                actionIntent = Settings.ACTION_LOCATION_SOURCE_SETTINGS,
+                context = context
+            )
+        }
+    } else {
+        // No location permission, show AlertDialog
+        locationRequestDialog(
+            title = R.string.permission_required,
+            message = R.string.permission_rationale,
+            actionIntent = Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            context = context
         )
     }
 }
 
-internal fun setAzimuth(azimuth: Azimuth, mainViewModel: MainViewModel) {
-    Log.v(TAG, "Azimuth $azimuth")
-    mainViewModel.updateAzimuth(azimuth)
+@Composable
+fun CompassView(
+    azimuth: Azimuth,
+    modifier: Modifier = Modifier,
+) {
+    val targetRotation = azimuth.roundedDegrees
+
+    // shortest rotation path logic
+    var previousRotation by remember { mutableFloatStateOf(targetRotation) }
+    var adjustedRotation by remember { mutableFloatStateOf(targetRotation) }
+
+    LaunchedEffect(targetRotation) {
+        val diff = targetRotation - previousRotation
+        adjustedRotation += when {
+            diff > 180 -> diff - 360
+            diff < -180 -> diff + 360
+            else -> diff
+        }
+        previousRotation = targetRotation
+    }
+
+    val animatedRotation by animateFloatAsState(
+        targetValue = -adjustedRotation, // negative to rotate compass needle correctly
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        ),
+        label = "CompassRotation"
+    )
+
+    Box(
+        modifier = modifier
+            .aspectRatio(1f)
+            .padding(16.dp)
+            .graphicsLayer {
+                rotationZ = animatedRotation
+            },
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.mbcompass_rose),
+            contentDescription = "Compass Rose",
+            modifier = Modifier.fillMaxSize(),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+        )
+    }
 }
 
 @SuppressLint("MissingPermission")
 @Composable
 fun RegisterListener(
-    lifecycleEventObserver: LifecycleOwner,
+    lifecycleOwner: LifecycleOwner,
+    androidLocationManager: AndroidLocationManager,
     sensorViewModel: SensorViewModel,
-    settingsViewModel: SettingsViewModel,
+    settingsUiState: SettingsViewModel.SettingsUiState,
     listener: AndroidSensorEventListener,
-    context: Context,
-    degree: (Azimuth) -> Unit = {},
+    mainViewModel: MainViewModel,
     mStrength: (Float) -> Unit,
 ) {
 
-    val androidLocationManager = remember {
-        AndroidLocationManager(context) { location ->
-            sensorViewModel.provideLocation(location)
-        }
-    }
-
-    val settingsState by settingsViewModel.uiState.collectAsState()
-    val trueNorthState = settingsState.isTrueNorthEnabled
+    val trueNorthState = settingsUiState.isTrueNorthEnabled
 
     LaunchedEffect(trueNorthState) {
         sensorViewModel.setTrueNorthState(trueNorthState)
     }
 
-    val location by sensorViewModel.location.collectAsState()
+    val location by sensorViewModel.location.collectAsStateWithLifecycle()
     LaunchedEffect(trueNorthState, location) {
 
         if (trueNorthState && location == null) {
@@ -395,11 +410,13 @@ fun RegisterListener(
         }
     }
 
-    Log.d(TAG, "TN State: ${settingsViewModel.uiState.collectAsState().value.isTrueNorthEnabled}")
 
-    DisposableEffect(listener, lifecycleEventObserver) {
+    DisposableEffect(listener, lifecycleOwner) {
         val azimuthListener = object : AndroidSensorEventListener.AzimuthValueListener {
-            override fun onAzimuthValueChange(degree: Azimuth) = degree(degree)
+            override fun onAzimuthValueChange(degree: Azimuth) {
+                mainViewModel.updateAzimuth(degree)
+            }
+
             override fun onMagneticStrengthChange(strengthInUt: Float) = mStrength(strengthInUt)
         }
         listener.setAzimuthListener(azimuthListener)
@@ -411,10 +428,10 @@ fun RegisterListener(
                 else -> {}
             }
         }
-        lifecycleEventObserver.lifecycle.addObserver(observer)
+        lifecycleOwner.lifecycle.addObserver(observer)
 
         onDispose {
-            lifecycleEventObserver.lifecycle.removeObserver(observer)
+            lifecycleOwner.lifecycle.removeObserver(observer)
             listener.unregisterSensorListener()
         }
     }
@@ -458,7 +475,10 @@ fun ShowAccuracyAlertDialog(context: Context, accuracy: Int, onDismiss: () -> Un
         onDismissRequest = onDismiss,
         title = { Text(context.getString(R.string.calibration_title)) },
         text = {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Icon(
                     painter = painterResource(id = R.drawable.figure_8_ptn),
                     contentDescription = stringResource(R.string.figure_8_pattern),
@@ -473,25 +493,4 @@ fun ShowAccuracyAlertDialog(context: Context, accuracy: Int, onDismiss: () -> Un
                 Text(context.getString(R.string.ok_button))
             }
         })
-}
-
-@Composable
-fun KeepScreenOn() {
-    val context = LocalContext.current
-    DisposableEffect(Unit) {
-        val window = context.findActivity()?.window
-        window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        onDispose {
-            window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        }
-    }
-}
-
-fun Context.findActivity(): Activity? {
-    var context = this
-    while (context is ContextWrapper) {
-        if (context is Activity) return context
-        context = context.baseContext
-    }
-    return null
 }

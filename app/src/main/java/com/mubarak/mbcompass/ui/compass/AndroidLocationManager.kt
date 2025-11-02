@@ -90,10 +90,10 @@ class AndroidLocationManager(
 
 
     private fun getPreferredProviders(): List<String> {
-        val preferredProviders = mutableListOf<String>()
+        val locationProviders = mutableListOf<String>()
 
         if (VERSION.SDK_INT >= VERSION_CODES.S) {
-            preferredProviders.add(LocationManager.FUSED_PROVIDER)
+            locationProviders.add(LocationManager.FUSED_PROVIDER)
         }
 
         if (ContextCompat.checkSelfPermission(
@@ -101,7 +101,7 @@ class AndroidLocationManager(
                 ACCESS_FINE_LOCATION
             ) == PERMISSION_GRANTED
         ) {
-            preferredProviders.add(LocationManager.GPS_PROVIDER)
+            locationProviders.add(LocationManager.GPS_PROVIDER)
         }
 
         if (ContextCompat.checkSelfPermission(
@@ -109,10 +109,10 @@ class AndroidLocationManager(
                 ACCESS_COARSE_LOCATION
             ) == PERMISSION_GRANTED
         ) {
-            preferredProviders.add(LocationManager.NETWORK_PROVIDER)
+            locationProviders.add(LocationManager.NETWORK_PROVIDER)
         }
 
-        return preferredProviders
+        return locationProviders
     }
 
 

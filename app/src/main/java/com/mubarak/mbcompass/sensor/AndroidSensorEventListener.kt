@@ -15,12 +15,14 @@ import android.widget.Toast
 import com.mubarak.mbcompass.R
 import com.mubarak.mbcompass.utils.Azimuth
 import com.mubarak.mbcompass.utils.ToDegree
+import com.mubarak.mbcompass.utils.getMagneticDeclination
 import kotlin.math.sqrt
 
 private const val TAG = "SensorListener"
 
 class AndroidSensorEventListener(
     private val context: Context,
+    private val sensorViewModel: SensorViewModel,
     private val onAccuracyUpdate: (accuracy: Int) -> Unit
 ) : SensorEventListener {
 
@@ -86,9 +88,27 @@ class AndroidSensorEventListener(
 
                 SensorManager.getOrientation(adjustedRotationMatrix, orientationAngles)
                 val azimuth = orientationAngles[0]
-               val toDegree = ToDegree.radiansToDegrees360(azimuth)
+                val toDegree = ToDegree.radiansToDegrees360(azimuth)
 
-                azimuthValueListener?.onAzimuthValueChange(Azimuth(toDegree))
+                val magneticAzimuth = Azimuth(toDegree)
+
+                val isTrueNorth = sensorViewModel.trueNorthEnabled.value
+                val location = sensorViewModel.location.value
+
+                val finalAzimuth = if (isTrueNorth && location != null) {
+                    val declination = getMagneticDeclination(location)
+                    magneticAzimuth.add(declination)
+                } else {
+                    magneticAzimuth
+                }
+
+                Log.e(
+                    "SensorListener",
+                    "TrueNorth=$isTrueNorth, Azimuth=${finalAzimuth.roundedDegrees}"
+                )
+
+                azimuthValueListener?.onAzimuthValueChange(finalAzimuth)
+
             }
         } else if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) {
             System.arraycopy(event.values, 0, magnetometerReading, 0, magnetometerReading.size)
@@ -101,6 +121,7 @@ class AndroidSensorEventListener(
             Sensor.TYPE_MAGNETIC_FIELD -> {
                 onAccuracyUpdate(accuracy)
             }
+
             Sensor.TYPE_ROTATION_VECTOR -> Log.d(TAG, "Rotational Vector Sensor @$accuracy")
         }
     }
@@ -137,9 +158,9 @@ class AndroidSensorEventListener(
             rotationVectorSensor,
             SensorManager.SENSOR_DELAY_FASTEST
         )
-        if (success){
+        if (success) {
             Log.d(TAG, "RotationVectorSensor is registered")
-        }else{
+        } else {
             Log.w(TAG, "Unable to register RotationalVectorSensor")
         }
     }
@@ -153,9 +174,9 @@ class AndroidSensorEventListener(
             magneticFieldSensor,
             SensorManager.SENSOR_DELAY_NORMAL
         )
-        if (result){
+        if (result) {
             Log.d(TAG, "Magnetometer is registered")
-        }else{
+        } else {
             Log.w(TAG, "Unable to register Magnetometer")
         }
     }
