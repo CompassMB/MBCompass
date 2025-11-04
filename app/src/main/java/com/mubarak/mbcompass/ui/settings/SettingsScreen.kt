@@ -423,7 +423,7 @@ fun sendMail(context: Context, launcher: ActivityResultLauncher<Intent>) {
     if (intent.resolveActivity(context.packageManager) != null) {
         launcher.launch(intent)
     } else {
-        Toast.makeText(context, "No email app found", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, context.getString(R.string.no_email_app), Toast.LENGTH_SHORT).show()
     }
 }
 

@@ -67,6 +67,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat
+import androidx.core.text.HtmlCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -251,14 +252,16 @@ fun MBCompass(
                 )
 
                 Text(
-                    text = if (trueNorthEnabled) "True North" else "Magnetic North",
+                    text = if (trueNorthEnabled) stringResource(R.string.true_north) else stringResource(
+                        R.string.magnetic_north
+                    ),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(top = 4.dp)
                 )
 
                 Text(
-                    text = "Magnetic Strength $strengthRounded µT",
+                    text = context.getString(R.string.magnetic_strength,strengthRounded),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(top = 8.dp)
                 )
@@ -375,7 +378,7 @@ fun CompassView(
     ) {
         Image(
             painter = painterResource(id = R.drawable.mbcompass_rose),
-            contentDescription = "Compass Rose",
+            contentDescription = stringResource(R.string.compass_rose),
             modifier = Modifier.fillMaxSize(),
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
         )
