@@ -24,6 +24,7 @@ class SettingsViewModel @Inject constructor(
         .map { userPreferences ->
             SettingsUiState(
                 theme = userPreferences.theme,
+                isTrueDarkThemeEnabled = userPreferences.isTrueDarkThemeEnabled,
                 isTrueNorthEnabled = userPreferences.isTrueNorthEnabled
             )
         }.catch {
@@ -37,6 +38,12 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun setTrueDarkState(isTrueDarkThemeEnabled: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.setTrueDarkState(isTrueDarkThemeEnabled)
+        }
+    }
+
     fun setTrueNorthState(isTrueNorthEnabled: Boolean) {
         viewModelScope.launch {
             userPreferencesRepository.setTrueNorthState(isTrueNorthEnabled)
@@ -46,6 +53,7 @@ class SettingsViewModel @Inject constructor(
     data class SettingsUiState(
         val theme: String = ThemeConfig.FOLLOW_SYSTEM.prefName,
         val isTrueNorthEnabled: Boolean = false,
+        val isTrueDarkThemeEnabled: Boolean = false,
         val themeDialogOptions: List<String> = listOf(
             ThemeConfig.FOLLOW_SYSTEM.prefName,
             ThemeConfig.LIGHT.prefName,

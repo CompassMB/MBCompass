@@ -42,7 +42,13 @@ class PreferenceLocalDataStore @Inject constructor(context: Context) : Preferenc
         }
     }
 
-    override suspend fun setValue(key: String, value: Boolean) {
+    override suspend fun setTrueDarkValue(key: String, value: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[booleanPreferencesKey(key)] = value
+        }
+    }
+
+    override suspend fun setTrueNorthValue(key: String, value: Boolean) {
         dataStore.edit { preferences ->
             preferences[booleanPreferencesKey(key)] = value
         }
@@ -51,12 +57,14 @@ class PreferenceLocalDataStore @Inject constructor(context: Context) : Preferenc
     private fun mapUserPreferences(preferences: Preferences): UserPreferences {
         return UserPreferences(
             theme = preferences[PreferencesKeys.THEME] ?: ThemeConfig.FOLLOW_SYSTEM.prefName,
+            isTrueDarkThemeEnabled = preferences[PreferencesKeys.TRUE_DARK] ?: false,
             isTrueNorthEnabled = preferences[PreferencesKeys.TRUE_NORTH] ?: false
         )
     }
 
     private object PreferencesKeys {
         val THEME = stringPreferencesKey(UserPreferences.KEY_THEME)
+        val TRUE_DARK = booleanPreferencesKey(UserPreferences.TRUE_DARK)
         val TRUE_NORTH = booleanPreferencesKey(UserPreferences.TRUE_NORTH)
     }
 }

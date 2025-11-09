@@ -10,7 +10,9 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -95,6 +97,7 @@ fun SettingsScreen(
     SettingsScreen(
         uiState = uiState,
         onBackClicked = onBack,
+        onTrueDarkStateChange = viewModel::setTrueDarkState,
         onTrueNorthStateChange = viewModel::setTrueNorthState,
         onThemeOptionClicked = viewModel::setTheme,
         onAuthorPageClicked = {
@@ -116,6 +119,7 @@ fun SettingsScreen(
 fun SettingsScreen(
     uiState: SettingsViewModel.SettingsUiState,
     onBackClicked: () -> Unit,
+    onTrueDarkStateChange: (Boolean) -> Unit,
     onTrueNorthStateChange: (Boolean) -> Unit,
     onThemeOptionClicked: (String) -> Unit,
     onAuthorPageClicked: () -> Unit,
@@ -141,6 +145,7 @@ fun SettingsScreen(
         SettingsList(
             uiState = uiState,
             modifier = Modifier.padding(paddingValues),
+            onTrueDarkStateChange = onTrueDarkStateChange,
             onTrueNorthStateChange = onTrueNorthStateChange,
             onThemeItemClicked = { isThemeDialogVisible = true },
             onLicensesClicked = onLicensesClicked,
@@ -162,6 +167,7 @@ fun SettingsScreen(
 private fun SettingsList(
     modifier: Modifier = Modifier,
     uiState: SettingsViewModel.SettingsUiState,
+    onTrueDarkStateChange: (Boolean) -> Unit,
     onTrueNorthStateChange: (Boolean) -> Unit,
     onThemeItemClicked: () -> Unit,
     onAuthorPageClicked: () -> Unit,
@@ -209,10 +215,21 @@ private fun SettingsList(
             item(key = "__themeItem") {
                 SettingsItem(
                     icon = R.drawable.theme_icon24px,
-                    shape = singleListItemShape,
+                    shape = topListItemShape,
                     headlineText = stringResource(R.string.theme),
                     supportingText = getThemeName(option = uiState.theme),
                     onItemClicked = onThemeItemClicked
+                )
+            }
+            item(key = "__amoledBlackItem") {
+                SettingsItem(
+                    isChecked = uiState.isTrueDarkThemeEnabled,
+                    isEnabled = shouldShowTrueDarkSwitch(uiState.theme),
+                    onCheckedStateChange = { onTrueDarkStateChange(it) },
+                    icon = R.drawable.dark_mode_icon24px,
+                    headlineText = stringResource(R.string.amoled_dark),
+                    shape = bottomListItemShape,
+                    supportingText = stringResource(R.string.true_black_theme),
                 )
             }
             item(key = "__aboutHeader") {
@@ -298,54 +315,61 @@ fun SettingsItem(
 fun SettingsItem(
     modifier: Modifier = Modifier,
     isChecked: Boolean = false,
+    isEnabled: Boolean = true,
     onCheckedStateChange: ((Boolean) -> Unit),
     shape: RoundedCornerShape,
-    @DrawableRes
-    icon: Int,
+    @DrawableRes icon: Int,
     headlineText: String,
     supportingText: String,
 ) {
 
-    var checked by remember { mutableStateOf(false) }
-    ListItem(
-        trailingContent = {
-            Switch(
-                checked = isChecked,
-                onCheckedChange = { onCheckedStateChange(it) },
-                thumbContent = if (checked) {
-                    {
-                        Icon(
-                            imageVector = Icons.Filled.Check,
-                            contentDescription = null,
-                            modifier = Modifier.size(SwitchDefaults.IconSize),
-                        )
+    AnimatedVisibility(isEnabled) {
+        var checked by remember { mutableStateOf(false) }
+        ListItem(
+            trailingContent = {
+                Switch(
+                    checked = isChecked,
+                    onCheckedChange = { onCheckedStateChange(it) },
+                    thumbContent = if (checked) {
+                        {
+                            Icon(
+                                imageVector = Icons.Filled.Check,
+                                contentDescription = null,
+                                modifier = Modifier.size(SwitchDefaults.IconSize),
+                            )
+                        }
+                    } else {
+                        null
                     }
-                } else {
-                    null
-                }
+                )
+            }, leadingContent = {
+                Icon(
+                    painter = painterResource(icon),
+                    contentDescription = headlineText,
+                    modifier = Modifier.requiredSize(iconDefaultSize)
+                )
 
-            )
-        },
-        leadingContent = {
-            Icon(
-                painter = painterResource(icon),
-                contentDescription = headlineText,
-                modifier = Modifier.requiredSize(iconDefaultSize)
-            )
-
-        }, colors = ListItemDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
-            headlineColor = MaterialTheme.colorScheme.onSurface,
-            supportingColor = MaterialTheme.colorScheme.onSurfaceVariant
-        ), headlineContent = {
-            Text(headlineText)
-        }, supportingContent = {
-            Text(supportingText)
-        }, modifier = modifier
-            .clip(shape)
-    )
+            }, colors = ListItemDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
+                headlineColor = MaterialTheme.colorScheme.onSurface,
+                supportingColor = MaterialTheme.colorScheme.onSurfaceVariant
+            ), headlineContent = {
+                Text(headlineText)
+            }, supportingContent = {
+                Text(supportingText)
+            }, modifier = modifier.clip(shape)
+        )
+    }
 }
 
+@Composable
+fun shouldShowTrueDarkSwitch(theme: String): Boolean {
+    return when (theme) {
+        ThemeConfig.FOLLOW_SYSTEM.prefName -> isSystemInDarkTheme()
+        ThemeConfig.DARK.prefName -> true
+        else -> false
+    }
+}
 
 @Composable
 private fun ThemeDialog(
@@ -430,10 +454,11 @@ fun sendMail(context: Context, launcher: ActivityResultLauncher<Intent>) {
 @Preview(showSystemUi = false, showBackground = false, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun SettingsScreenPreview() {
-    MBCompassTheme {
+    MBCompassTheme(darkTheme = true, uiState = SettingsViewModel.SettingsUiState()) {
         SettingsScreen(
             uiState = SettingsViewModel.SettingsUiState(),
             onBackClicked = {},
+            onTrueDarkStateChange = {},
             onTrueNorthStateChange = {},
             onThemeOptionClicked = {},
             onLicensesClicked = {},
@@ -446,13 +471,12 @@ fun SettingsScreenPreview() {
 @Preview(showSystemUi = false, showBackground = false, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun SettingsItemPreview() {
-    MBCompassTheme {
+    MBCompassTheme(darkTheme = true, uiState = SettingsViewModel.SettingsUiState()) {
         SettingsItem(
             icon = R.drawable.true_north_24px,
             headlineText = stringResource(R.string.true_north),
             shape = singleListItemShape,
             supportingText = stringResource(R.string.tn_desc),
-            onItemClicked = {}
-        )
+            onItemClicked = {})
     }
 }

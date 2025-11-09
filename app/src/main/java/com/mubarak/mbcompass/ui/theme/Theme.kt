@@ -2,15 +2,20 @@
 
 package com.mubarak.mbcompass.ui.theme
 
+import android.content.Context
 import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
+import android.util.Log
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import com.mubarak.mbcompass.ui.settings.SettingsViewModel
+import com.mubarak.mbcompass.utils.ThemeConfig
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -88,14 +93,57 @@ private val darkScheme = darkColorScheme(
     surfaceContainerHighest = surfaceContainerHighestDark,
 )
 
+private fun mbColorScheme(
+    context: Context,
+    isDarkTheme: Boolean,
+    isDynamicTheme: Boolean,
+    isAmoledTheme: Boolean
+): ColorScheme {
+    if (isDynamicTheme && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (isDarkTheme) {
+            if (isAmoledTheme) {
+                return dynamicDarkColorScheme(context).copy(
+                    background = Color.Black,
+                    surface = Color.Black
+                )
+            }
+
+            return dynamicDarkColorScheme(context)
+        } else {
+            return dynamicLightColorScheme(context)
+        }
+    } else if (isDarkTheme) {
+        if (isAmoledTheme) {
+            return trueBlackColorScheme(darkScheme)
+        }
+        return darkScheme
+    } else {
+        return lightScheme
+    }
+}
+
+fun trueBlackColorScheme(darkScheme: ColorScheme) = darkScheme.copy(
+    surface = Color.Black,
+    background = Color.Black,
+    surfaceVariant = Color.Black,
+    surfaceTint = Color.Black,
+    surfaceContainer = Color.Black,
+    surfaceContainerLow = Color.Black,
+    surfaceContainerLowest = Color.Black,
+    surfaceContainerHigh = Color.Black,
+    surfaceContainerHighest = Color.Black,
+)
+
+
 @Composable
 fun MBCompassTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean,
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
+    uiState: SettingsViewModel.SettingsUiState,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
+    when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
@@ -105,9 +153,19 @@ fun MBCompassTheme(
         else -> lightScheme
     }
 
+    val isDark = when (uiState.theme) {
+        ThemeConfig.FOLLOW_SYSTEM.prefName -> darkTheme
+        ThemeConfig.DARK.prefName -> true
+        ThemeConfig.LIGHT.prefName -> false
+        else -> darkTheme
+    }
+    val isAmoled = uiState.isTrueDarkThemeEnabled && isDark
+
+    Log.d("Theme value", "MBCompassTheme: $isAmoled")
+    val context = LocalContext.current
     MaterialTheme(
-        colorScheme = colorScheme,
-        typography =  Typography,
+        colorScheme = mbColorScheme(context, darkTheme, dynamicColor, isAmoled),
+        typography = Typography,
         content = content
     )
 }

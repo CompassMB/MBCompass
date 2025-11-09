@@ -30,6 +30,7 @@
     <string name="show_my_location">Show My Location</string>
     <string name="settings">Settings</string>
     <string name="theme">Theme</string>
+    <string name="amoled_dark">Amoled Dark</string>
     <string name="licenses">License</string>
     <string name="about_settings">About</string>
     <string name="sys_default">System default</string>
@@ -50,6 +51,7 @@
     <string name="location_disabled_rationale">Your device location is disabled. Tap Settings to turn it on.</string>
     <string name="true_north">True North</string>
     <string name="tn_desc">Correct Magnetic Declination</string>
+    <string name="true_black_theme">Use true black theme</string>
     <string name="permission_required">Permission required!</string>
     <string name="reload_location">Reload location</string>
     <string name="magnetic_north">Magnetic North</string>
