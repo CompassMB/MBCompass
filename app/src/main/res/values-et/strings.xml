@@ -55,4 +55,6 @@
     <string name="no_email_app">Ühtegi e-postirakendust ei leidu</string>
     <string name="magnetic_strength">Magnetvälja tugevus <b>%1$d</b> µT</string>
     <string name="nav_back">Liigu üles</string>
+    <string name="amoled_dark">Amoledi tume kujundus</string>
+    <string name="true_black_theme">Kasuta süsimusta kujundust</string>
 </resources>
