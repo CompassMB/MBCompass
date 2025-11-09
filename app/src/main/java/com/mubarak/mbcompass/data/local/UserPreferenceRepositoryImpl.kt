@@ -16,7 +16,11 @@ class UserPreferencesRepositoryImpl(
         dataStore.setValue(UserPreferences.KEY_THEME, theme)
     }
 
+    override suspend fun setTrueDarkState(boolean: Boolean) {
+        dataStore.setTrueDarkValue(UserPreferences.TRUE_DARK,boolean)
+    }
+
     override suspend fun setTrueNorthState(boolean: Boolean) {
-        dataStore.setValue(UserPreferences.TRUE_NORTH,boolean)
+        dataStore.setTrueNorthValue(UserPreferences.TRUE_NORTH,boolean)
     }
 }

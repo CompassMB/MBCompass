@@ -92,6 +92,15 @@ MBCompass has gained recognition from the global developer community:
 
 - Location permission is only used to detect the current location on the map.
 
+## Translations
+
+MBCompass is open for **community translations** on [Weblate](https://hosted.weblate.org/engage/mbcompass/)!  
+You can help make the app accessible to more users by translating it into your language.
+
+<a href="https://hosted.weblate.org/engage/mbcompass/">
+<img src="https://hosted.weblate.org/widget/mbcompass/287x66-grey.png" alt="Translation status" />
+</a>
+
 ##  Contributing
 
 Contributions are welcome! If you encounter bugs or have feature suggestions, please open an issue or submit a pull request. See [Contributing Guidelines](CONTRIBUTING.md) for details.

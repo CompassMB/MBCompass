@@ -15,10 +15,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.FragmentActivity
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.mubarak.mbcompass.ui.CompassNavGraph
+import com.mubarak.mbcompass.ui.settings.SettingsViewModel
 import com.mubarak.mbcompass.ui.theme.MBCompassTheme
 import com.mubarak.mbcompass.utils.ThemeConfig
 import dagger.hilt.android.AndroidEntryPoint
@@ -62,7 +65,13 @@ class MainActivity : FragmentActivity() {
                 }
             }
 
-            MBCompassTheme(darkTheme = darkTheme) {
+            val settingsViewModel = hiltViewModel<SettingsViewModel>()
+            val settingsUiState by settingsViewModel.uiState.collectAsStateWithLifecycle()
+
+            MBCompassTheme(
+                darkTheme = darkTheme,
+                uiState = settingsUiState
+            ) {
                 CompassNavGraph()
             }
         }
@@ -70,6 +79,7 @@ class MainActivity : FragmentActivity() {
 
     @Composable
     fun shouldUseDarkTheme(
+        // this function checks both systemInDark and the user preference dark mode also
         uiState: HostViewModel.UiState,
     ): Boolean = when (uiState.darkThemeConfig) {
         ThemeConfig.FOLLOW_SYSTEM -> isSystemInDarkTheme()
