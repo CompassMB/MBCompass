@@ -49,7 +49,7 @@
     <string name="magnetic_north">Norte magnético</string>
     <string name="compass_rose">Rosa dos Ventos</string>
     <string name="no_email_app">Nenhuma aplicação de e-mail encontrada</string>
-    <string name="magnetic_strength">Força magnética\n<b>%1$d</b> µT</string>
+    <string name="magnetic_strength">Força magnética <b>%1$d</b> µT</string>
     <string name="nav_back">Navegue para cima</string>
     <string name="calibration_required_message">A precisão da bússola é \n<b>%1$s</b>\nPara melhorar a precisão, agite o seu dispositivo descrevendo um padrão em forma de oito.</string>
     <string name="accuracy_low">BAIXO</string>
