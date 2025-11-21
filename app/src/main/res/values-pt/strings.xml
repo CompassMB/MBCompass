@@ -56,4 +56,5 @@
     <string name="accuracy_medium">MÉDIO</string>
     <string name="accuracy_high">ALTO</string>
     <string name="reload_location">Recarregar localização</string>
+    <string name="developer">Mubarak Basha</string>
 </resources>
