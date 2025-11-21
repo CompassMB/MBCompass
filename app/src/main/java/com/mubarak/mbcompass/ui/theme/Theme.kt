@@ -125,13 +125,7 @@ private fun mbColorScheme(
 fun trueBlackColorScheme(darkScheme: ColorScheme) = darkScheme.copy(
     surface = Color.Black,
     background = Color.Black,
-    surfaceVariant = Color.Black,
-    surfaceTint = Color.Black,
-    surfaceContainer = Color.Black,
     surfaceContainerLow = Color.Black,
-    surfaceContainerLowest = Color.Black,
-    surfaceContainerHigh = Color.Black,
-    surfaceContainerHighest = Color.Black,
 )
 
 
