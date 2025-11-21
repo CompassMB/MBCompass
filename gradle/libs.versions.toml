@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 [versions]
-agp = "8.13.0"
+agp = "8.13.1"
 datastorePreferences = "1.1.7"
 fragmentKtx = "1.8.9"
 hiltAndroid = "2.56.2"
@@ -14,11 +14,11 @@ espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.9.4"
 activityCompose = "1.11.0"
 composeBom = "2025.09.00"
-navigationCompose = "2.9.5"
+navigationCompose = "2.9.6"
 kspVersion = "2.2.0-2.0.2"
 kotlinxSerializationJson = "1.9.0"
 osmdroidAndroid = "6.1.20"
-uiViewbinding = "1.9.3"
+uiViewbinding = "1.9.5"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityCompose" }
