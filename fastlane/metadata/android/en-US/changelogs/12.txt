@@ -1,0 +1,5 @@
+- True North support added: Easily switch between True North and Magnetic North using a new toggle in Settings.
+- AMOLED True Dark Theme: Introduced a pure-black AMOLED mode for better contrast and improved battery efficiency on OLED displays.
+- Heading Status Indicator: A new status text now clearly shows whether your current heading is based on True North or Magnetic North.
+- Improved Sensor Status Dialog: Fixed an issue where dialog content was getting cut off on smaller screens.
+- General UI refinements and stability improvements
