@@ -54,9 +54,9 @@
 
 ## Features
 
-- Shows clear cardinal direction and magnetic azimuths.
-- Displays magnetic strength in µT.
+- Displays clear cardinal directions with both magnetic north and true north.
 - Live GPS location tracking on OpenStreetMap.
+- Shows magnetic field strength in µT.
 - Sensor fusion for improved accuracy (accelerometer, magnetometer, gyroscope).
 - Light and dark theme support controlled via Settings.
 - Keeps screen on during navigation.
@@ -64,7 +64,7 @@
 - Built with Jetpack Compose and Material Design.
 - Runs on Android 5.0+
 - No ads, no in-app purchases, no tracking.
-- [Find more on the website](https://compassmb.github.io/MBCompass-site/#features)
+- [Learn more on the website](https://compassmb.github.io/MBCompass-site/#features)
 
 ---
 
@@ -127,4 +127,4 @@ MBCompass is Free Software: you can use, study, share, and improve it at your wi
 See more information [here](https://github.com/MubarakNative/MBCompass/blob/main/LICENSE).
 
 ###  Artwork License:
-Compass rose : [MBCompass rose](https://github.com/MubarakNative/MBCompass/blob/main/app/src/main/res/drawable/mbcompass_rose.xml) © 2025 by [Mubarak Basha](https://mubaraknative.github.io) is licensed under CC BY-SA 4.0
+Compass rose : [MBCompass rose](https://github.com/MubarakNative/MBCompass/blob/main/app/src/main/res/drawable/mbcompass_rose.xml) © 2025 by Mubarak Basha is licensed under CC BY-SA 4.0
