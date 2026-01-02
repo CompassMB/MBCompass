@@ -35,7 +35,7 @@
 
 ## About
 
-**MBCompass** is a modern, free, and open-source compass and navigation app without **ads**, **IAP**, or **tracking**. Built with **Jetpack Compose**, it supports compass and navigation features while being **lightweight** and simple.
+**MBCompass** is a modern, free, and open-source compass and navigation app without **ads**, **IAP**, or **tracking**. Built with Jetpack Compose, it supports compass and navigation features while being **lightweight** and simple.
 
 > Not just a compass. Not a map app.
 >
