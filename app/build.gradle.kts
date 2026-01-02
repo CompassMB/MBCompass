@@ -17,7 +17,7 @@ android {
 
     defaultConfig {
         applicationId = "com.mubarak.mbcompass"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 36
         versionCode = 13
         versionName = "1.1.12"
