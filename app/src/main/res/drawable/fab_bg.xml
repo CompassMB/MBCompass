@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later-->
+
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
     android:color="#25DFF4">
     <item android:id="@android:id/mask">
