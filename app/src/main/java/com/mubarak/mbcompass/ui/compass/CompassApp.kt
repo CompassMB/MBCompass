@@ -30,14 +30,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
@@ -67,8 +66,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat
-import androidx.core.text.HtmlCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
@@ -90,7 +87,7 @@ import kotlin.math.roundToInt
 fun CompassApp(
     sensorViewModel: SensorViewModel = viewModel(),
     mainViewModel: MainViewModel = viewModel(),
-    settingsViewModel: SettingsViewModel = hiltViewModel(),
+    settingsViewModel: SettingsViewModel = hiltViewModel<SettingsViewModel>(),
     navigateToMap: () -> Unit,
     navigateToSettings: () -> Unit
 ) {
@@ -158,7 +155,7 @@ fun CompassApp(
             }
             IconButton(onClick = navigateToSettings) {
                 Icon(
-                    imageVector = Icons.Filled.Settings,
+                    painterResource(R.drawable.settings_24px),
                     contentDescription = stringResource(R.string.settings_content_description)
                 )
             }
@@ -261,7 +258,7 @@ fun MBCompass(
                 )
 
                 Text(
-                    text = context.getString(R.string.magnetic_strength,strengthRounded),
+                    text = stringResource(R.string.magnetic_strength,strengthRounded),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(top = 8.dp)
                 )

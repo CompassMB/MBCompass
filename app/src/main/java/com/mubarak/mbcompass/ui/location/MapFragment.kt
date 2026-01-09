@@ -39,14 +39,14 @@ class MapFragment : Fragment() {
     private var myLocationOverlay: MyLocationNewOverlay? = null
 
     private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission(), { isGranted ->
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
                 enableLocationOverlay()
             } else {
                 Toast.makeText(requireContext(), R.string.permission_rationale, Toast.LENGTH_SHORT)
                     .show()
             }
-        })
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
