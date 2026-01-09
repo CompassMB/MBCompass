@@ -54,10 +54,10 @@
 
 ## Features
 
-- Displays clear cardinal directions with both magnetic north and true north.
-- Live GPS location tracking on OpenStreetMap.
-- Shows magnetic field strength in µT.
-- Sensor fusion for improved accuracy (accelerometer, magnetometer, gyroscope).
+- Displays clear cardinal directions with both **magnetic north** and **true north**.
+- Live **GPS location tracking** on _OpenStreetMap_.
+- Shows magnetic field strength in **µT**.
+- Sensor fusion for improved accuracy (_accelerometer_, _magnetometer_, _gyroscope_).
 - Light and dark theme support controlled via Settings.
 - Keeps screen on during navigation.
 - Landscape orientation support.
@@ -127,4 +127,4 @@ MBCompass is Free Software: you can use, study, share, and improve it at your wi
 See more information [here](https://github.com/MubarakNative/MBCompass/blob/main/LICENSE).
 
 ###  Artwork License:
-Compass rose : [MBCompass rose](https://github.com/MubarakNative/MBCompass/blob/main/app/src/main/res/drawable/mbcompass_rose.xml) © 2025 by Mubarak Basha is licensed under CC BY-SA 4.0
+Compass rose : [MBCompass rose](https://github.com/MubarakNative/MBCompass/blob/main/app/src/main/res/drawable/mbcompass_rose.xml) © 2025 by Mubarak Basha is licensed under **CC BY-SA 4.0**

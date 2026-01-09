@@ -29,9 +29,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -65,7 +62,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mubarak.mbcompass.R
 import com.mubarak.mbcompass.ui.theme.MBCompassTheme
@@ -133,7 +130,7 @@ fun SettingsScreen(
             TopAppBar(title = { Text(stringResource(R.string.settings)) }, navigationIcon = {
                 IconButton(onClick = onBackClicked) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        painterResource(R.drawable.arrow_back_24px),
                         contentDescription = stringResource(R.string.nav_back)
                     )
                 }
@@ -333,7 +330,7 @@ fun SettingsItem(
                     thumbContent = if (checked) {
                         {
                             Icon(
-                                imageVector = Icons.Filled.Check,
+                                painterResource(R.drawable.code_icon24px),
                                 contentDescription = null,
                                 modifier = Modifier.size(SwitchDefaults.IconSize),
                             )
