@@ -17,4 +17,13 @@
     <string name="donate">Faites un don pour que cette application reste gratuite et sans publicité</string>
     <string name="location_disabled">Activer la position !</string>
     <string name="location_disabled_rationale">La position est désactivée. Active la dans les paramètres.</string>
+    <string name="north">Nord</string>
+    <string name="east">Est</string>
+    <string name="southeast">Sud-Est</string>
+    <string name="south">Sud</string>
+    <string name="southwest">Sud-Ouest</string>
+    <string name="west">Ouest</string>
+    <string name="northeast">Nord-Est</string>
+    <string name="northwest">Nord-Ouest</string>
+    <string name="compass">Boussole</string>
 </resources>
