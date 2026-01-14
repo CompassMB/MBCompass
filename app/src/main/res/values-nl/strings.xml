@@ -54,4 +54,7 @@
     <string name="magnetic_strength">Magnetische veldsterkte <b>%1$d</b> (µT)</string>
     <string name="tn_desc">Corrigeer Magnetische Declinatie</string>
     <string name="true_black_theme">Gebruik Echt Zwart Thema</string>
+    <string name="author">Auteur</string>
+    <string name="source_code">Broncode</string>
+    <string name="support">Steun ons</string>
 </resources>
