@@ -1,3 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="about_settings">À propos</string>
+    <string name="sys_default">Paramètre du système</string>
+    <string name="light_theme">Clair</string>
+    <string name="dark_theme">Sombre</string>
+    <string name="choose_theme">Choix du thème</string>
+    <string name="dismiss">Annuler</string>
+    <string name="app_license">GNU GPLv3</string>
+    <string name="settings_about">À propos</string>
+    <string name="display">Affichage</string>
+    <string name="author">Auteur</string>
+    <string name="developer">Mubarak Basha</string>
+    <string name="source_code">Code source</string>
+    <string name="github">GitHub</string>
+    <string name="support">Nous soutenir</string>
+    <string name="donate">Faites un don pour que cette application reste gratuite et sans publicité</string>
+    <string name="location_disabled">Activer la position !</string>
+    <string name="location_disabled_rationale">La position est désactivée. Active la dans les paramètres.</string>
 </resources>
