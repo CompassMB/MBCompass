@@ -28,7 +28,7 @@
     <string name="amoled_dark">Amoled Schwarz</string>
     <string name="licenses">Lizenz</string>
     <string name="about_settings">Über</string>
-    <string name="sys_default">Systemstandard</string>
+    <string name="sys_default">Systemvorgabe</string>
     <string name="light_theme">Hell</string>
     <string name="dark_theme">Dunkel</string>
     <string name="choose_theme">Thema wählen</string>
