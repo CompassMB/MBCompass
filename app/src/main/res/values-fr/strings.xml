@@ -13,7 +13,7 @@
     <string name="developer">Mubarak Basha</string>
     <string name="source_code">Code source</string>
     <string name="github">GitHub</string>
-    <string name="support">Nous soutenir</string>
+    <string name="support">Nous Soutenir</string>
     <string name="donate">Faites un don pour que cette application reste gratuite et sans publicité</string>
     <string name="location_disabled">Activer la position !</string>
     <string name="location_disabled_rationale">La position est désactivée. Active la dans les paramètres.</string>
@@ -27,10 +27,10 @@
     <string name="northwest">Nord-Ouest</string>
     <string name="compass">Boussole</string>
     <string name="true_north">Nord Géographique</string>
-    <string name="tn_desc">Correction de la déclinaison magnétique</string>
+    <string name="tn_desc">Corrige la déclinaison magnétique</string>
     <string name="true_black_theme">Thème Noir</string>
     <string name="permission_required">Autorisation requise !</string>
-    <string name="reload_location">Recharger la position</string>
+    <string name="reload_location">Rechargement de la position</string>
     <string name="magnetic_north">Nord Magnétique</string>
     <string name="compass_rose">Rose des vents</string>
     <string name="no_email_app">Application d\'e-mail non trouvée</string>
@@ -41,7 +41,7 @@
     <string name="permission_rationale">MBCompass a besoin de l\'accès à la position pour corriger la déclinaison magnétique et montrer le Nord Géographique</string>
     <string name="rotation_sensor_not_available">Capteur de mouvement indisponible</string>
     <string name="magnetometer_not_available">Capteur géomagnétique indisponible</string>
-    <string name="calibration_required_message">Précision de la bousole <b>%1$s</b>.\n\nPour améliorer la précision, bouge ton téléphone en faisant un 8.</string>
+    <string name="calibration_required_message">Précision de la boussole <b>%1$s</b>.\n\nPour améliorer la précision, bouge ton téléphone en faisant un 8.</string>
     <string name="accuracy_unreliable">Peu fiable</string>
     <string name="accuracy_low">Précision Basse</string>
     <string name="accuracy_unknown">Inconnue</string>
