@@ -447,15 +447,16 @@ private fun locationRequestDialog(
         .setTitle(title)
         .setIcon(R.drawable.error_icon24px)
         .setMessage(context.getString(message))
-        .setPositiveButton(R.string.ok_button) { dialog, _ -> dialog.dismiss() }
-        .setNegativeButton(R.string.settings) { _, _ ->
+        .setPositiveButton(R.string.settings) { _, _ ->
             val intent = if (actionIntent == Settings.ACTION_APPLICATION_DETAILS_SETTINGS) {
-                Intent(actionIntent, Uri.fromParts("package", context.packageName, null))
-            } else {
-                Intent(actionIntent)
-            }
+            Intent(actionIntent, Uri.fromParts("package", context.packageName, null))
+        } else {
+            Intent(actionIntent)
+        }
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(intent)
+            context.startActivity(intent) }
+        .setNegativeButton(R.string.ok_button) { dialog, _ ->
+            dialog.dismiss()
         }
         .show()
 }

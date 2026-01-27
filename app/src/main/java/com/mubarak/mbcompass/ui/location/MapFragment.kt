@@ -148,10 +148,10 @@ class MapFragment : Fragment() {
             .setTitle(title)
             .setIcon(R.drawable.error_icon24px)
             .setMessage(getString(errMessage))
-            .setPositiveButton(R.string.ok_button) { dialog, _ -> dialog.dismiss() }
-            .setNegativeButton(R.string.settings) { _, _ ->
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent)
+            .setPositiveButton(R.string.settings) { _, _ -> val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivity(intent) }
+            .setNegativeButton(R.string.ok_button) { dialog, _ ->
+                dialog.dismiss()
             }
             .show()
     }
