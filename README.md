@@ -17,7 +17,7 @@
 </p>
 
 <h4 align="center">
-  <a href="https://mubaraknative.github.io/">Author</a> | 
+  <a href="/CONTRIBUTING.md">Contribute</a> | 
   <a href="https://github.com/MubarakNative/MBCompass/blob/main/LICENSE">License</a>
 </h4>
 
@@ -35,7 +35,7 @@
 
 ## About
 
-**MBCompass** is a modern, free, and open-source compass and navigation app without **ads**, **IAP**, or **tracking**. Built with Jetpack Compose, it supports compass and navigation features while being **lightweight** and simple.
+**MBCompass** is a modern, free, and open-source compass and navigation app built from the ground up for Android, without **ads**, **IAP**, or **tracking**. Built with Jetpack Compose, it supports compass and navigation features while being **lightweight** and simple.
 
 > Not just a compass. Not a map app.
 >
@@ -68,15 +68,27 @@
 
 ---
 
-MBCompass v2.0 Design Proposal (Upcoming)
+## Upcoming (MBCompass Q2 Roadmap & Design Preview)
 
-<p align="center">
-  <img width="600" src="/mbcompass_v2.0_dsn_proposal.png"  alt="MBCompass new design proposal v2"/>
-</p>
+<details>
+  <summary><strong>Planned improvements and features currently under active development</strong></summary>
 
-MBCompass v1.1.12 Redesign Proposal, featuring a refreshed UI with a __GPS Speedometer__, __True AMOLED Dark Mode__, and more visual improvements for a better Android experience.
+  <br />
 
-_(Note: The design is a reference concept; actual implementation may vary to ensure optimal performance and Android best practices.)_
+  <p align="center">
+    <img width="600" src="/MBCompass_Q2_Roadmap.png" alt="MBCompass Q2 design preview"/>
+  </p>
+
+- GPX waypoint and track recording
+- Redesigned top-level navigation layout
+- Track export and sharing
+- and many more,..
+
+_(This is a reference design concept and does not represent the final outcome. The final implementation may vary to ensure optimal performance and alignment with Android best practices.)_
+
+</details>
+
+---
 
 ## Recognition
 
