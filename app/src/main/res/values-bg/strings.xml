@@ -15,7 +15,7 @@
     <string name="rotation_sensor_not_available">Ротационен векторен сензор не е наличен</string>
     <string name="magnetometer_not_available">Магнитометърът не е наличен</string>
     <string name="nav_back">Навигиране нагоре</string>
-    <string name="calibration_required_message">Точността на компаса е<b>%1$s</b>.\n\nЗа да подобрите точността, размахвайте устройството си във формата на осмица.</string>
+    <string name="calibration_required_message">Точността на компаса е <b>%1$s</b>.\n\nЗа да подобрите точността, размахвайте устройството си във формата на осмица.</string>
     <string name="accuracy_unreliable">НЕНАДЕЖДНО</string>
     <string name="accuracy_low">НИСКО</string>
     <string name="accuracy_unknown">Неизвестен</string>
