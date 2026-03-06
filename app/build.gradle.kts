@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     id("com.google.dagger.hilt.android")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -116,6 +117,9 @@ dependencies {
 
     // Unit Testing
     testImplementation(libs.junit)
+
+    // GSON (Json Serialization)
+    implementation(libs.gson)
 
     // Instrumentation Test
     androidTestImplementation(libs.androidx.junit)

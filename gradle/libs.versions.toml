@@ -4,6 +4,7 @@
 agp = "8.13.1"
 datastorePreferences = "1.2.0"
 fragmentKtx = "1.8.9"
+gson = "2.13.2"
 hiltAndroid = "2.56.2"
 kotlin = "2.2.0"
 coreKtx = "1.17.0"
@@ -27,6 +28,7 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
