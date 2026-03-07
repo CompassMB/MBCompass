@@ -1,4 +1,6 @@
-package com.mubarak.mbcompass.data.local.model
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+package com.mubarak.mbcompass.data.local.model.track
 
 import android.location.Location
 import android.os.Parcelable

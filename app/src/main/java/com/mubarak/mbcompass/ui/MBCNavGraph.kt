@@ -15,12 +15,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.mubarak.mbcompass.ui.compass.CompassApp
-import com.mubarak.mbcompass.ui.location.UserLocation
+import com.mubarak.mbcompass.navigation.MapRoute
+import com.mubarak.mbcompass.navigation.NavigationRoute
+import com.mubarak.mbcompass.navigation.SettingsRoute
+import com.mubarak.mbcompass.navigation.TracksRoute
+import com.mubarak.mbcompass.ui.compass.NavScreen
+import com.mubarak.mbcompass.ui.location.MapScreen
 import com.mubarak.mbcompass.ui.settings.SettingsScreen
+import com.mubarak.mbcompass.ui.tracks.TracksScreen
 
 @Composable
-fun CompassNavGraph(
+fun MBCNavGraph(
     modifier: Modifier = Modifier, navController: NavHostController = rememberNavController()
 ) {
     NavHost(
@@ -28,15 +33,14 @@ fun CompassNavGraph(
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
         navController = navController,
-        startDestination = Compass
+        startDestination = NavigationRoute
     ) {
-        composable<Compass> {
-            CompassApp(
-                navigateToMap = { navController.navigateWithBackStack(UserLocation) },
-                navigateToSettings = { navController.navigateWithBackStack(Settings) })
+        composable<NavigationRoute> {
+            NavScreen(
+                navigateToSettings = { navController.navigateWithBackStack(SettingsRoute) })
         }
 
-        composable<UserLocation>(
+        composable<MapRoute>(
             enterTransition = {
                 fadeThroughEnter()
             }, exitTransition = {
@@ -46,10 +50,10 @@ fun CompassNavGraph(
             }, popExitTransition = {
                 fadeThroughExit()
             }) {
-            UserLocation(navigateUp = { navController.navigateUp() })
+            MapScreen()
         }
 
-        composable<Settings>(
+        composable<SettingsRoute>(
             enterTransition = {
                 fadeThroughEnter()
             }, exitTransition = {
@@ -60,6 +64,20 @@ fun CompassNavGraph(
                 fadeThroughExit()
             }) {
             SettingsScreen(onBack = { navController.navigateUp() })
+        }
+
+        composable<TracksRoute>(
+            enterTransition = {
+                fadeThroughEnter()
+            }, exitTransition = {
+                fadeThroughExit()
+            }, popEnterTransition = {
+                fadeThroughEnter()
+            }, popExitTransition = {
+                fadeThroughExit()
+            }
+        ){
+            TracksScreen()
         }
     }
 }

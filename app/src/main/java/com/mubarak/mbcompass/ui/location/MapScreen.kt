@@ -3,53 +3,37 @@
 package com.mubarak.mbcompass.ui.location
 
 import androidx.activity.compose.LocalActivity
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.fragment.app.FragmentActivity
-import com.mubarak.mbcompass.R
 import com.mubarak.mbcompass.databinding.FragmentMapContainerBinding
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserLocation(
-    modifier: Modifier = Modifier,
-    navigateUp: () -> Unit
-) {
+fun MapScreen(
+    modifier: Modifier = Modifier
+)  {
     Scaffold(
         modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(stringResource(R.string.map))
-                },
-                navigationIcon = {
-                    IconButton(onClick = navigateUp) {
-                        Icon(
-                            painterResource(R.drawable.arrow_back_24px),
-                            contentDescription = stringResource(R.string.nav_back)
-                        )
-                    }
-                },
-            )
-        }
+        contentWindowInsets = WindowInsets(0, 0, 0, 0), // ← add this
+
     ) {
         val activity = LocalActivity.current as FragmentActivity
-        UserLocationMapView(modifier = Modifier.padding(it), activity)
+        MapContainerView(
+            modifier = Modifier.padding(it),
+            fragmentActivity = activity,
+        )
     }
+
 }
 
 @Composable
-fun UserLocationMapView(modifier: Modifier = Modifier, fragmentActivity: FragmentActivity) {
+fun MapContainerView(modifier: Modifier = Modifier, fragmentActivity: FragmentActivity) {
     // https://stackoverflow.com/questions/74218090/how-to-access-getsupportfragmentmanager-in-componentactivity
     AndroidViewBinding(FragmentMapContainerBinding::inflate, modifier = modifier) {
         val fragmentManager = fragmentActivity.supportFragmentManager

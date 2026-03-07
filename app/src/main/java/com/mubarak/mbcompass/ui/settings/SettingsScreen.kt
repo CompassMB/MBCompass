@@ -32,7 +32,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
@@ -127,14 +126,7 @@ fun SettingsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(stringResource(R.string.settings)) }, navigationIcon = {
-                IconButton(onClick = onBackClicked) {
-                    Icon(
-                        painterResource(R.drawable.arrow_back_24px),
-                        contentDescription = stringResource(R.string.nav_back)
-                    )
-                }
-            })
+            TopAppBar(title = { Text(stringResource(R.string.settings)) })
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { paddingValues ->

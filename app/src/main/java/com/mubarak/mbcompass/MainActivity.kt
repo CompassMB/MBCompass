@@ -20,7 +20,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.mubarak.mbcompass.ui.CompassNavGraph
+import com.mubarak.mbcompass.ui.MBCNavGraph
+import com.mubarak.mbcompass.ui.MBCompassApp
 import com.mubarak.mbcompass.ui.settings.SettingsViewModel
 import com.mubarak.mbcompass.ui.theme.MBCompassTheme
 import com.mubarak.mbcompass.utils.ThemeConfig
@@ -43,21 +44,30 @@ class MainActivity : FragmentActivity() {
                     .collect { uiState = it }
             }
         }
-
-        enableEdgeToEdge(
-            navigationBarStyle = SystemBarStyle.auto(
-                android.graphics.Color.TRANSPARENT,
-                android.graphics.Color.TRANSPARENT
-            ),
-            statusBarStyle = SystemBarStyle.auto(
-                android.graphics.Color.TRANSPARENT,
-                android.graphics.Color.TRANSPARENT
-            ),
-        )
         setContent {
             val darkTheme = shouldUseDarkTheme(uiState)
 
             LaunchedEffect(darkTheme) {
+
+                enableEdgeToEdge(
+                    statusBarStyle = if (darkTheme) {
+                        SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
+                    } else {
+                        SystemBarStyle.light(
+                            android.graphics.Color.TRANSPARENT,
+                            android.graphics.Color.TRANSPARENT
+                        )
+                    },
+                    navigationBarStyle = if (darkTheme) {
+                        SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
+                    } else {
+                        SystemBarStyle.light(
+                            android.graphics.Color.TRANSPARENT,
+                            android.graphics.Color.TRANSPARENT
+                        )
+                    }
+                )
+
                 val window = this@MainActivity.window
                 WindowCompat.getInsetsController(window, window.decorView).apply {
                     isAppearanceLightStatusBars = !darkTheme
@@ -72,7 +82,7 @@ class MainActivity : FragmentActivity() {
                 darkTheme = darkTheme,
                 uiState = settingsUiState
             ) {
-                CompassNavGraph()
+                MBCompassApp()
             }
         }
     }
