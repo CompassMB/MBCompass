@@ -14,7 +14,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import com.mubarak.mbcompass.ui.settings.SettingsViewModel
+import com.mubarak.mbcompass.features.settings.SettingsViewModel
 import com.mubarak.mbcompass.utils.ThemeConfig
 
 private val lightScheme = lightColorScheme(

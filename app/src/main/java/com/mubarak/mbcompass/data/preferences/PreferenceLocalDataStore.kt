@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-package com.mubarak.mbcompass.data.local
+package com.mubarak.mbcompass.data.preferences
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -10,7 +10,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.mubarak.mbcompass.data.local.model.UserPreferences
 import com.mubarak.mbcompass.utils.ThemeConfig
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-package com.mubarak.mbcompass.ui.settings
+package com.mubarak.mbcompass.features.settings
 
 import android.content.Context
 import android.content.Intent
@@ -65,6 +65,7 @@ import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mubarak.mbcompass.R
+import com.mubarak.mbcompass.features.settings.SettingsViewModel
 import com.mubarak.mbcompass.ui.theme.MBCompassTheme
 import com.mubarak.mbcompass.ui.theme.MBShapeDefaults.bottomListItemShape
 import com.mubarak.mbcompass.ui.theme.MBShapeDefaults.middleListItemShape

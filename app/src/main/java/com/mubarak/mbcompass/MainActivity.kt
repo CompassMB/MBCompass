@@ -20,8 +20,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.mubarak.mbcompass.ui.CompassNavGraph
-import com.mubarak.mbcompass.ui.settings.SettingsViewModel
+import com.mubarak.mbcompass.ui.MBNavGraph
+import com.mubarak.mbcompass.features.settings.SettingsViewModel
 import com.mubarak.mbcompass.ui.theme.MBCompassTheme
 import com.mubarak.mbcompass.utils.ThemeConfig
 import dagger.hilt.android.AndroidEntryPoint
@@ -72,7 +72,7 @@ class MainActivity : FragmentActivity() {
                 darkTheme = darkTheme,
                 uiState = settingsUiState
             ) {
-                CompassNavGraph()
+                MBNavGraph()
             }
         }
     }

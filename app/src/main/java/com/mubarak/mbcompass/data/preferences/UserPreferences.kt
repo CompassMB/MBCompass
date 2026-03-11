@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-package com.mubarak.mbcompass.data.local.model
+package com.mubarak.mbcompass.data.preferences
 
 data class UserPreferences(
     val theme: String,

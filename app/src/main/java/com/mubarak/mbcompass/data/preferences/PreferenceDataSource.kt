@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-package com.mubarak.mbcompass.data.local
+package com.mubarak.mbcompass.data.preferences
 
-import com.mubarak.mbcompass.data.local.model.UserPreferences
 import kotlinx.coroutines.flow.Flow
 
 interface PreferenceDataSource {

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-package com.mubarak.mbcompass.ui.location
+package com.mubarak.mbcompass.features.map
 
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.padding
@@ -21,7 +21,7 @@ import com.mubarak.mbcompass.databinding.FragmentMapContainerBinding
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserLocation(
+fun MapScreen(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit
 ) {
@@ -44,12 +44,12 @@ fun UserLocation(
         }
     ) {
         val activity = LocalActivity.current as FragmentActivity
-        UserLocationMapView(modifier = Modifier.padding(it), activity)
+        MapContainerView(modifier = Modifier.padding(it), activity)
     }
 }
 
 @Composable
-fun UserLocationMapView(modifier: Modifier = Modifier, fragmentActivity: FragmentActivity) {
+fun MapContainerView(modifier: Modifier = Modifier, fragmentActivity: FragmentActivity) {
     // https://stackoverflow.com/questions/74218090/how-to-access-getsupportfragmentmanager-in-componentactivity
     AndroidViewBinding(FragmentMapContainerBinding::inflate, modifier = modifier) {
         val fragmentManager = fragmentActivity.supportFragmentManager

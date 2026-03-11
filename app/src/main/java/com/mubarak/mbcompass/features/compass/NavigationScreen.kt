@@ -1,13 +1,15 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-package com.mubarak.mbcompass.ui.compass
+package com.mubarak.mbcompass.features.compass
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.SensorManager
+import android.location.LocationManager
 import android.net.Uri
 import android.provider.Settings
 import android.util.Log
@@ -74,9 +76,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mubarak.mbcompass.MainViewModel
 import com.mubarak.mbcompass.R
-import com.mubarak.mbcompass.sensor.AndroidSensorEventListener
-import com.mubarak.mbcompass.sensor.SensorViewModel
-import com.mubarak.mbcompass.ui.settings.SettingsViewModel
+import com.mubarak.mbcompass.core.sensors.AndroidSensorEventListener
+import com.mubarak.mbcompass.core.sensors.SensorViewModel
+import com.mubarak.mbcompass.core.location.AndroidLocationManager
+import com.mubarak.mbcompass.core.location.TAG
+import com.mubarak.mbcompass.features.settings.SettingsViewModel
 import com.mubarak.mbcompass.utils.Azimuth
 import com.mubarak.mbcompass.utils.CardinalDirection
 import com.mubarak.mbcompass.utils.KeepScreenOn
@@ -84,7 +88,7 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CompassApp(
+fun NavScreen(
     sensorViewModel: SensorViewModel = viewModel(),
     mainViewModel: MainViewModel = viewModel(),
     settingsViewModel: SettingsViewModel = hiltViewModel<SettingsViewModel>(),
@@ -298,12 +302,12 @@ private fun handleLocationRequest(
 ) {
     val hasFineLocation = ContextCompat.checkSelfPermission(
         context,
-        android.Manifest.permission.ACCESS_FINE_LOCATION
+        Manifest.permission.ACCESS_FINE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED
 
     val hasCoarseLocation = ContextCompat.checkSelfPermission(
         context,
-        android.Manifest.permission.ACCESS_COARSE_LOCATION
+        Manifest.permission.ACCESS_COARSE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED
 
     if (hasFineLocation || hasCoarseLocation) {
@@ -312,7 +316,7 @@ private fun handleLocationRequest(
         androidLocationManager.registerLocationListener()
 
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE)
-                as android.location.LocationManager
+                as LocationManager
 
         if (!LocationManagerCompat.isLocationEnabled(locationManager)) {
             Log.d("CompassApp", "Location is disabled")

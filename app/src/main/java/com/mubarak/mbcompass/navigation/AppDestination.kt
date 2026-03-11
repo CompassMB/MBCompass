@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-package com.mubarak.mbcompass.ui
+package com.mubarak.mbcompass.navigation
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object Compass
+data object NavigationRoute
 
 @Serializable
-data object UserLocation
+data object MapRoute
 
 @Serializable
-data object Settings
+data object SettingsRoute

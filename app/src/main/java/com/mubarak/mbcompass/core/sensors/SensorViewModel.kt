@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-package com.mubarak.mbcompass.sensor
+package com.mubarak.mbcompass.core.sensors
 
 import android.hardware.SensorManager
 import android.location.Location

@@ -1,4 +1,6 @@
-package com.mubarak.mbcompass.ui.compass
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+package com.mubarak.mbcompass.core.location
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
