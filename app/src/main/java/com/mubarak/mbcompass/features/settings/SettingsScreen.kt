@@ -78,7 +78,7 @@ import com.mubarak.mbcompass.utils.Const.APP_PAGE
 import com.mubarak.mbcompass.utils.Const.AUTHOR_EMAIL
 import com.mubarak.mbcompass.utils.Const.LICENSE_PAGE
 import com.mubarak.mbcompass.utils.Const.SUPPORT_PAGE
-import com.mubarak.mbcompass.utils.ThemeConfig
+import com.mubarak.mbcompass.ui.theme.ThemeConfig
 
 @Composable
 fun SettingsScreen(

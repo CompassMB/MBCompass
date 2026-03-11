@@ -58,4 +58,5 @@
     <string name="compass_rose">Compass Rose</string>
     <string name="no_email_app">No email app found</string>
     <string name="magnetic_strength">Magnetic Strength <b>%1$d</b> µT</string>
+    <string name="navigation">Navigation</string>
 </resources>

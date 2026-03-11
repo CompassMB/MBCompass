@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mubarak.mbcompass.data.preferences.UserPreferenceRepository
-import com.mubarak.mbcompass.utils.ThemeConfig
+import com.mubarak.mbcompass.ui.theme.ThemeConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch

@@ -92,7 +92,6 @@ fun NavScreen(
     sensorViewModel: SensorViewModel = viewModel(),
     mainViewModel: MainViewModel = viewModel(),
     settingsViewModel: SettingsViewModel = hiltViewModel<SettingsViewModel>(),
-    navigateToMap: () -> Unit,
     navigateToSettings: () -> Unit
 ) {
 
@@ -164,15 +163,6 @@ fun NavScreen(
                 )
             }
         })
-    }, floatingActionButton = {
-        SmallFloatingActionButton(
-            onClick = navigateToMap, modifier = Modifier.navigationBarsPadding()
-        ) {
-            Icon(
-                painterResource(R.drawable.map_fill_icon_24px),
-                contentDescription = stringResource(R.string.map)
-            )
-        }
     }) { innerPadding ->
 
         sensorEventListener?.let { listener ->

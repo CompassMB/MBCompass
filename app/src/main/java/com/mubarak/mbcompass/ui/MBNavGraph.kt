@@ -35,7 +35,6 @@ fun MBNavGraph(
     ) {
         composable<NavigationRoute> {
             NavScreen(
-                navigateToMap = { navController.navigateWithBackStack(MapRoute) },
                 navigateToSettings = { navController.navigateWithBackStack(SettingsRoute) })
         }
 

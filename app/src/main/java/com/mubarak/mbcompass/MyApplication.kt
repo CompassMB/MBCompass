@@ -6,4 +6,4 @@ import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class MBCompassApp: Application()
+class MyApp: Application()

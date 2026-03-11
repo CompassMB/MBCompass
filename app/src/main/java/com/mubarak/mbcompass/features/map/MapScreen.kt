@@ -3,6 +3,7 @@
 package com.mubarak.mbcompass.features.map
 
 import androidx.activity.compose.LocalActivity
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -27,21 +28,7 @@ fun MapScreen(
 ) {
     Scaffold(
         modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(stringResource(R.string.map))
-                },
-                navigationIcon = {
-                    IconButton(onClick = navigateUp) {
-                        Icon(
-                            painterResource(R.drawable.arrow_back_24px),
-                            contentDescription = stringResource(R.string.nav_back)
-                        )
-                    }
-                },
-            )
-        }
+        contentWindowInsets = WindowInsets(0, 0, 0, 0), // ← add this
     ) {
         val activity = LocalActivity.current as FragmentActivity
         MapContainerView(modifier = Modifier.padding(it), activity)
