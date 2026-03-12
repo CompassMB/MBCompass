@@ -11,4 +11,6 @@ interface PreferenceDataSource {
     suspend fun setValue(key: String, value: String)
     suspend fun setTrueNorthValue(key: String, value: Boolean)
     suspend fun setTrueDarkValue(key: String, value: Boolean)
+    suspend fun setHighAccuracy(value: Boolean)
+    suspend fun saveMapState(latitude: Double, longitude: Double, zoomLevel: Double)
 }

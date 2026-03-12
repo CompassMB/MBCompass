@@ -22,4 +22,16 @@ class UserPreferencesRepositoryImpl(
     override suspend fun setTrueNorthState(boolean: Boolean) {
         dataStore.setTrueNorthValue(UserPreferences.TRUE_NORTH,boolean)
     }
+
+    override suspend fun setHighAccuracy(value: Boolean) {
+        dataStore.setHighAccuracy(value)
+    }
+
+    override suspend fun saveMapState(
+        latitude: Double,
+        longitude: Double,
+        zoomLevel: Double
+    ) {
+        dataStore.saveMapState(latitude, longitude, zoomLevel)
+    }
 }

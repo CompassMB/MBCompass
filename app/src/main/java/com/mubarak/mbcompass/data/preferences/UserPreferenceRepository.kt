@@ -11,4 +11,6 @@ interface UserPreferenceRepository {
     suspend fun setTheme(theme: String)
     suspend fun setTrueDarkState(boolean: Boolean)
     suspend fun setTrueNorthState(boolean: Boolean)
+    suspend fun setHighAccuracy(value: Boolean)
+    suspend fun saveMapState(latitude: Double, longitude: Double, zoomLevel: Double)
 }

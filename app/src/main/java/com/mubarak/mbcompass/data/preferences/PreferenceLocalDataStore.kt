@@ -6,6 +6,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -47,6 +48,24 @@ class PreferenceLocalDataStore @Inject constructor(context: Context) : Preferenc
         }
     }
 
+    override suspend fun setHighAccuracy(value: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.HIGH_ACCURACY] = value
+        }
+    }
+
+    override suspend fun saveMapState(
+        latitude: Double,
+        longitude: Double,
+        zoomLevel: Double
+    ) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.LAST_LATITUDE] = latitude
+            preferences[PreferencesKeys.LAST_LONGITUDE] = longitude
+            preferences[PreferencesKeys.LAST_ZOOM_LEVEL] = zoomLevel
+        }
+    }
+
     override suspend fun setTrueNorthValue(key: String, value: Boolean) {
         dataStore.edit { preferences ->
             preferences[booleanPreferencesKey(key)] = value
@@ -57,7 +76,11 @@ class PreferenceLocalDataStore @Inject constructor(context: Context) : Preferenc
         return UserPreferences(
             theme = preferences[PreferencesKeys.THEME] ?: ThemeConfig.FOLLOW_SYSTEM.prefName,
             isTrueDarkThemeEnabled = preferences[PreferencesKeys.TRUE_DARK] ?: false,
-            isTrueNorthEnabled = preferences[PreferencesKeys.TRUE_NORTH] ?: false
+            isTrueNorthEnabled = preferences[PreferencesKeys.TRUE_NORTH] ?: false,
+            highAccuracy = preferences[PreferencesKeys.HIGH_ACCURACY] ?: false,
+            lastLatitude = preferences[PreferencesKeys.LAST_LATITUDE] ?: 48.8583,
+            lastLongitude = preferences[PreferencesKeys.LAST_LONGITUDE] ?: 2.2944,
+            lastZoomLevel = preferences[PreferencesKeys.LAST_ZOOM_LEVEL] ?: 16.0
         )
     }
 
@@ -65,5 +88,9 @@ class PreferenceLocalDataStore @Inject constructor(context: Context) : Preferenc
         val THEME = stringPreferencesKey(UserPreferences.KEY_THEME)
         val TRUE_DARK = booleanPreferencesKey(UserPreferences.TRUE_DARK)
         val TRUE_NORTH = booleanPreferencesKey(UserPreferences.TRUE_NORTH)
+        val HIGH_ACCURACY = booleanPreferencesKey(UserPreferences.HIGH_ACCURACY)
+        val LAST_LATITUDE = doublePreferencesKey(UserPreferences.LAST_LATITUDE)
+        val LAST_LONGITUDE = doublePreferencesKey(UserPreferences.LAST_LONGITUDE)
+        val LAST_ZOOM_LEVEL = doublePreferencesKey(UserPreferences.LAST_ZOOM_LEVEL)
     }
 }
