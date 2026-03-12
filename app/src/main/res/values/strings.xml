@@ -60,4 +60,12 @@
     <string name="magnetic_strength">Magnetic Strength <b>%1$d</b> µT</string>
     <string name="navigation">Navigation</string>
     <string name="tracks">Tracks</string>
+    <string name="no_tracks_title">No Tracks Yet</string>
+    <string name="no_tracks_message">Start recording to create your first track</string>
+    <string name="delete_track_title">Delete track?</string>
+    <string name="delete_track_message">Are you sure you want to delete track.</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="unstar_track">UnStar track</string>
+    <string name="star_track">Star Track</string>
 </resources>

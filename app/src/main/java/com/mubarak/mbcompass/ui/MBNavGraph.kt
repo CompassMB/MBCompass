@@ -63,7 +63,7 @@ fun MBNavGraph(
             }, popExitTransition = {
                 fadeThroughExit()
             }) {
-            TracksScreen()
+            TracksScreen(navController = navController)
         }
 
         composable<SettingsRoute>(
