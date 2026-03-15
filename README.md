@@ -76,7 +76,7 @@
   <br />
 
   <p align="center">
-    <img width="600" src="/MBCompass_Q2_Roadmap.png" alt="MBCompass Q2 design preview"/>
+    <img width="600" src="/MBCompass_Q2.png" alt="MBCompass Q2 design preview"/>
   </p>
 
 - GPX waypoint and track recording
