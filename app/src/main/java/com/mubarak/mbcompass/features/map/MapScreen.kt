@@ -24,11 +24,10 @@ import com.mubarak.mbcompass.databinding.FragmentMapContainerBinding
 @Composable
 fun MapScreen(
     modifier: Modifier = Modifier,
-    navigateUp: () -> Unit
 ) {
     Scaffold(
         modifier = modifier,
-        contentWindowInsets = WindowInsets(0, 0, 0, 0), // ← add this
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
     ) {
         val activity = LocalActivity.current as FragmentActivity
         MapContainerView(modifier = Modifier.padding(it), activity)

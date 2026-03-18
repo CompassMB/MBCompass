@@ -3,7 +3,7 @@ package com.mubarak.mbcompass.features.tracks
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mubarak.mbcompass.data.TrackRepository
-import com.mubarak.mbcompass.features.tracks.model.TrackListModel
+import com.mubarak.mbcompass.features.tracks.model.TrackItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,7 +18,7 @@ class TracksViewModel @Inject constructor(
     private val trackRepository: TrackRepository,
 ) : ViewModel() {
 
-    private val _tracks = MutableStateFlow<List<TrackListModel>>(emptyList())
+    private val _tracks = MutableStateFlow<List<TrackItem>>(emptyList())
     private val _isLoading = MutableStateFlow(true)
 
     val uiState: StateFlow<TracksUiState> = combine(
@@ -44,7 +44,7 @@ class TracksViewModel @Inject constructor(
             _isLoading.value = true
             try {
                 val tracklist = trackRepository.readTracklist()
-                _tracks.value = tracklist.trackList.sortedByDescending { it.date }
+                _tracks.value = tracklist.trackItemList.sortedByDescending { it.date }
             } catch (e: Exception) {
                 _tracks.value = emptyList()
             } finally {
@@ -68,7 +68,7 @@ class TracksViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val tracklist = trackRepository.readTracklist()
-                val track = tracklist.trackList.find { it.trackId == trackId }
+                val track = tracklist.trackItemList.find { it.trackId == trackId }
                 track?.let {
                     it.starred = !it.starred
                     trackRepository.saveTracklist(tracklist)
@@ -85,7 +85,7 @@ class TracksViewModel @Inject constructor(
             try {
                 val tracklist = trackRepository.readTracklist()
                 var totalDistance = 0f
-                tracklist.trackList.forEach { track ->
+                tracklist.trackItemList.forEach { track ->
                     totalDistance += track.length
                 }
                 tracklist.totalDistanceAll = totalDistance
@@ -98,7 +98,7 @@ class TracksViewModel @Inject constructor(
 }
 
 data class TracksUiState(
-    val tracks: List<TrackListModel> = emptyList(),
+    val tracks: List<TrackItem> = emptyList(),
     val isLoading: Boolean = false,
 )
 

@@ -4,7 +4,6 @@ import android.os.Parcelable
 import com.mubarak.mbcompass.features.tracks.TrackingConstants.DEFAULT_LATITUDE
 import com.mubarak.mbcompass.features.tracks.TrackingConstants.DEFAULT_LONGITUDE
 import com.mubarak.mbcompass.features.tracks.TrackingConstants.DEFAULT_ZOOM_LEVEL
-import com.mubarak.mbcompass.features.tracks.TrackingConstants.TRACK_FORMAT_VERSION
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 

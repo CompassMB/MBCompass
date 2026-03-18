@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Parcelize
-data class TrackListModel(
+data class TrackItem(
     val trackId: Long,
     var name: String,
     val date: Long,
@@ -22,11 +22,11 @@ data class TrackListModel(
 @Serializable
 @Parcelize
 data class Tracklist(
-    val trackList: MutableList<TrackListModel> = mutableListOf(),
+    val trackItemList: MutableList<TrackItem> = mutableListOf(),
     var modificationDate: Long = System.currentTimeMillis(),
     var totalDistanceAll: Float = 0f
 ) : Parcelable {
 
-    fun isEmpty(): Boolean = trackList.isEmpty()
+    fun isEmpty(): Boolean = trackItemList.isEmpty()
 
 }

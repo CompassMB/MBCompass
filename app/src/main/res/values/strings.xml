@@ -68,4 +68,7 @@
     <string name="cancel">Cancel</string>
     <string name="unstar_track">UnStar track</string>
     <string name="star_track">Star Track</string>
+    <string name="btn_start">Start</string>
+    <string name="save">Save track</string>
+    <string name="discard_track">Discard track</string>
 </resources>

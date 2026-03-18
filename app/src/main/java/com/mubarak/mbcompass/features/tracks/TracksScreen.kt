@@ -49,7 +49,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.mubarak.mbcompass.R
-import com.mubarak.mbcompass.features.tracks.model.TrackListModel
+import com.mubarak.mbcompass.features.tracks.model.TrackItem
 import com.mubarak.mbcompass.navigation.MapRoute
 import com.mubarak.mbcompass.utils.DateTimeFormatter
 import com.mubarak.mbcompass.utils.LengthUnitHelper
@@ -61,7 +61,6 @@ fun TracksScreen(
     modifier: Modifier = Modifier,
     viewModel: TracksViewModel = hiltViewModel<TracksViewModel>(),
     navController: NavHostController,
-    onTrackClick: (TrackListModel) -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -132,13 +131,13 @@ fun TracksScreen(
 
 @Composable
 private fun TracksList(
-    tracks: List<TrackListModel>,
+    tracks: List<TrackItem>,
     modifier: Modifier = Modifier,
-    onTrackClick: (TrackListModel) -> Unit,
-    onStarClick: (TrackListModel) -> Unit,
-    onDeleteTrack: (TrackListModel) -> Unit
+    onTrackClick: (TrackItem) -> Unit,
+    onStarClick: (TrackItem) -> Unit,
+    onDeleteTrack: (TrackItem) -> Unit
 ) {
-    var trackToDelete by remember { mutableStateOf<TrackListModel?>(null) }
+    var trackToDelete by remember { mutableStateOf<TrackItem?>(null) }
 
     LazyColumn(
         modifier = modifier,
@@ -193,7 +192,7 @@ private fun TracksList(
 
 @Composable
 private fun TrackListItem(
-    track: TrackListModel,
+    track: TrackItem,
     onTrackClick: () -> Unit,
     onStarClick: () -> Unit,
     onDeleteRequest: () -> Unit,

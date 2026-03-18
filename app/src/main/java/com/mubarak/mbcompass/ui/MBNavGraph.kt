@@ -50,7 +50,7 @@ fun MBNavGraph(
             }, popExitTransition = {
                 fadeThroughExit()
             }) {
-            MapScreen(navigateUp = { navController.navigateUp() })
+            MapScreen()
         }
 
         composable<TracksRoute>(

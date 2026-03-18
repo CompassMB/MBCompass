@@ -34,17 +34,16 @@ class TrackRepository @Inject constructor(
     }
 
     // save track as JSON to storage.
-    fun saveTrack(track: Track, withGpx: Boolean) {
+    fun saveTrack(track: Track) {
         val jsonString = encodeTrack(track)
         if (jsonString.isNotBlank()) {
             writeTxtFile(jsonString, track.trackUriString.toUri())
         }
-        if (withGpx) {
-            val gpx = GpxBuilder.createGpxString(track)
-            if (gpx.isNotBlank()) {
-                writeTxtFile(gpx, track.gpxUriString.toUri())
-            }
+        val gpx = GpxBuilder.createGpxString(track)
+        if (gpx.isNotBlank()) {
+            writeTxtFile(gpx, track.gpxUriString.toUri())
         }
+
     }
 
     private fun encodeTrack(track: Track): String {
@@ -89,11 +88,11 @@ class TrackRepository @Inject constructor(
     // Delete track files and remove entry from tracklist.
     fun deleteTrack(trackId: Long): Tracklist {
         val tracklist = readTracklist()
-        val element = tracklist.trackList.find { it.trackId == trackId }
+        val element = tracklist.trackItemList.find { it.trackId == trackId }
         element?.let {
             it.trackUriString.toUri().toFile().delete()
             it.gpxUriString.toUri().toFile().delete()
-            tracklist.trackList.removeIf { e -> e.trackId == trackId }
+            tracklist.trackItemList.removeIf { e -> e.trackId == trackId }
             tracklist.totalDistanceAll -= it.length
             saveTracklist(tracklist)
         }
