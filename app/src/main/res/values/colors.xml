@@ -12,4 +12,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="marker_end_red">#DB3328</color>
+    <color name="marker_start_green">#39B43E</color>
+    <color name="location_grey">#ff7d7d7d</color>
 </resources>

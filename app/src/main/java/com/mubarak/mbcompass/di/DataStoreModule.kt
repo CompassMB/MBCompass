@@ -3,10 +3,10 @@
 package com.mubarak.mbcompass.di
 
 import android.content.Context
-import com.mubarak.mbcompass.data.local.PreferenceDataSource
-import com.mubarak.mbcompass.data.local.PreferenceLocalDataStore
-import com.mubarak.mbcompass.data.local.UserPreferenceRepository
-import com.mubarak.mbcompass.data.local.UserPreferencesRepositoryImpl
+import com.mubarak.mbcompass.data.preferences.PreferenceDataSource
+import com.mubarak.mbcompass.data.preferences.PreferenceLocalDataStore
+import com.mubarak.mbcompass.data.preferences.UserPreferenceRepository
+import com.mubarak.mbcompass.data.preferences.UserPreferencesRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,29 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- SPDX-License-Identifier: GPL-3.0-or-later-->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.location.MapFragment">
+    android:layout_height="match_parent">
 
     <org.osmdroid.views.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <ImageButton
-        android:id="@+id/btnLocation"
-        android:background="@drawable/fab_bg"
-        android:clickable="true"
-        android:focusable="true"
-        android:elevation="6dp"
-        android:contentDescription="@string/show_my_location"
-        android:src="@drawable/my_location_24"
+<!--  Live Stats  -->
+    <LinearLayout
+        android:id="@+id/liveStatsContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="16dp"/>
+        android:layout_gravity="top|start"
+        android:layout_margin="16dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/liveStatisticsDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="2.5 km" />
+
+        <TextView
+            android:id="@+id/liveStatisticsDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="15:32" />
+
+    </LinearLayout>
+
+
+    <ImageButton
+        android:id="@+id/btnLocation"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="120dp"
+        android:background="@drawable/fab_bg"
+        android:padding="16dp"
+        android:elevation="6dp"
+        android:src="@drawable/my_location_24"
+        android:contentDescription="@string/show_my_location"/>
+
+
+<!--Bottom bar-->
+    <LinearLayout
+        android:id="@+id/bottomControls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+
+        <ImageButton
+            android:id="@+id/btnDiscardTrack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/fab_bg"
+            android:contentDescription="@string/discard_track"
+            android:padding="12dp"
+            android:elevation="6dp"
+            android:src="@drawable/delete_24px"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+
+
+        <LinearLayout
+            android:id="@+id/btnStartTrack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/extended_fab_bg"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingStart="20dp"
+            android:contentDescription="@string/btn_start"
+            android:paddingEnd="24dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp">
+
+            <ImageView
+                android:id="@+id/btnStartTrackIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/start_circle_24px" />
+
+            <TextView
+                android:id="@+id/btnStartTrackText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="@string/btn_start"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- SAVE -->
+
+        <ImageButton
+            android:id="@+id/btnSaveTrack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/fab_bg"
+            android:contentDescription="@string/save"
+            android:padding="12dp"
+            android:elevation="6dp"
+            android:src="@drawable/save_24dp"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+
+    </LinearLayout>
+
+</FrameLayout>

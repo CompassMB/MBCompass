@@ -1,0 +1,480 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+package com.mubarak.mbcompass.features.settings
+
+import android.content.Context
+import android.content.Intent
+import android.content.res.Configuration
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.DrawableRes
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.surfaceColorAtElevation
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mubarak.mbcompass.R
+import com.mubarak.mbcompass.features.settings.SettingsViewModel
+import com.mubarak.mbcompass.ui.theme.MBCompassTheme
+import com.mubarak.mbcompass.ui.theme.MBShapeDefaults.bottomListItemShape
+import com.mubarak.mbcompass.ui.theme.MBShapeDefaults.middleListItemShape
+import com.mubarak.mbcompass.ui.theme.MBShapeDefaults.singleListItemShape
+import com.mubarak.mbcompass.ui.theme.MBShapeDefaults.topListItemShape
+import com.mubarak.mbcompass.ui.theme.iconDefaultSize
+import com.mubarak.mbcompass.ui.theme.spacingMedium
+import com.mubarak.mbcompass.ui.theme.spacingSmall
+import com.mubarak.mbcompass.utils.Const.APP_PAGE
+import com.mubarak.mbcompass.utils.Const.AUTHOR_EMAIL
+import com.mubarak.mbcompass.utils.Const.LICENSE_PAGE
+import com.mubarak.mbcompass.utils.Const.SUPPORT_PAGE
+import com.mubarak.mbcompass.ui.theme.ThemeConfig
+
+@Composable
+fun SettingsScreen(
+    onBack: () -> Unit,
+    viewModel: SettingsViewModel = hiltViewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(), onResult = {})
+
+    SettingsScreen(
+        uiState = uiState,
+        onBackClicked = onBack,
+        onTrueDarkStateChange = viewModel::setTrueDarkState,
+        onTrueNorthStateChange = viewModel::setTrueNorthState,
+        onThemeOptionClicked = viewModel::setTheme,
+        onAuthorPageClicked = {
+            sendMail(context, launcher)
+        },
+        onLicensesClicked = {
+            uriHandler.openUri(LICENSE_PAGE)
+        },
+        onSupportClicked = {
+            uriHandler.openUri(SUPPORT_PAGE)
+        },
+        onSourceClicked = {
+            uriHandler.openUri(APP_PAGE)
+        })
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SettingsScreen(
+    uiState: SettingsViewModel.SettingsUiState,
+    onBackClicked: () -> Unit,
+    onTrueDarkStateChange: (Boolean) -> Unit,
+    onTrueNorthStateChange: (Boolean) -> Unit,
+    onThemeOptionClicked: (String) -> Unit,
+    onAuthorPageClicked: () -> Unit,
+    onSupportClicked: () -> Unit,
+    onLicensesClicked: () -> Unit,
+    onSourceClicked: () -> Unit
+) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { Text(stringResource(R.string.settings)) }, navigationIcon = {
+                IconButton(onClick = onBackClicked) {
+                    Icon(
+                        painterResource(R.drawable.arrow_back_24px),
+                        contentDescription = stringResource(R.string.nav_back)
+                    )
+                }
+            })
+        },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+    ) { paddingValues ->
+        var isThemeDialogVisible by remember { mutableStateOf(false) }
+        SettingsList(
+            uiState = uiState,
+            modifier = Modifier.padding(paddingValues),
+            onTrueDarkStateChange = onTrueDarkStateChange,
+            onTrueNorthStateChange = onTrueNorthStateChange,
+            onThemeItemClicked = { isThemeDialogVisible = true },
+            onLicensesClicked = onLicensesClicked,
+            onAuthorPageClicked = onAuthorPageClicked,
+            onSupportClicked = onSupportClicked,
+            onSourceClicked = onSourceClicked
+        )
+        ThemeDialog(
+            isDialogVisible = isThemeDialogVisible,
+            onDismissRequest = { isThemeDialogVisible = false },
+            currentSelection = uiState.theme,
+            options = uiState.themeDialogOptions,
+            onOptionClicked = onThemeOptionClicked,
+        )
+    }
+}
+
+@Composable
+private fun SettingsList(
+    modifier: Modifier = Modifier,
+    uiState: SettingsViewModel.SettingsUiState,
+    onTrueDarkStateChange: (Boolean) -> Unit,
+    onTrueNorthStateChange: (Boolean) -> Unit,
+    onThemeItemClicked: () -> Unit,
+    onAuthorPageClicked: () -> Unit,
+    onLicensesClicked: () -> Unit,
+    onSupportClicked: () -> Unit,
+    onSourceClicked: () -> Unit,
+) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+    ) {
+        val listState = rememberLazyListState()
+        LazyColumn(
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
+            state = listState,
+        ) {
+            item(key = "__trueNorthHeader") {
+                Text(
+                    text = stringResource(R.string.compass),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.tertiary,
+                )
+                Spacer(modifier = Modifier.requiredSize(spacingMedium))
+            }
+            item(key = "__trueNorthItem") {
+                SettingsItem(
+                    isChecked = uiState.isTrueNorthEnabled,
+                    onCheckedStateChange = { onTrueNorthStateChange(it) },
+                    icon = R.drawable.true_north_24px,
+                    headlineText = stringResource(R.string.true_north),
+                    shape = singleListItemShape,
+                    supportingText = stringResource(R.string.tn_desc),
+                )
+                Spacer(modifier = Modifier.requiredSize(spacingMedium))
+
+            }
+            item(key = "__displayHeader") {
+                Text(
+                    text = stringResource(R.string.display),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.tertiary,
+                )
+                Spacer(modifier = Modifier.requiredSize(spacingMedium))
+            }
+            item(key = "__themeItem") {
+                SettingsItem(
+                    icon = R.drawable.theme_icon24px,
+                    shape = topListItemShape,
+                    headlineText = stringResource(R.string.theme),
+                    supportingText = getThemeName(option = uiState.theme),
+                    onItemClicked = onThemeItemClicked
+                )
+            }
+            item(key = "__amoledBlackItem") {
+                SettingsItem(
+                    isChecked = uiState.isTrueDarkThemeEnabled,
+                    isEnabled = shouldShowTrueDarkSwitch(uiState.theme),
+                    onCheckedStateChange = { onTrueDarkStateChange(it) },
+                    icon = R.drawable.dark_mode_icon24px,
+                    headlineText = stringResource(R.string.amoled_dark),
+                    shape = bottomListItemShape,
+                    supportingText = stringResource(R.string.true_black_theme),
+                )
+            }
+            item(key = "__aboutHeader") {
+                Spacer(modifier = Modifier.requiredSize(spacingMedium))
+                Text(
+                    text = stringResource(R.string.settings_about),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.tertiary,
+                )
+                Spacer(modifier = Modifier.requiredSize(spacingMedium))
+            }
+            item(key = "__aboutItem") {
+                SettingsItem(
+                    icon = R.drawable.person_icon24px,
+                    shape = topListItemShape,
+                    headlineText = stringResource(R.string.author),
+                    supportingText = stringResource(R.string.developer),
+                    onItemClicked = onAuthorPageClicked
+                )
+            }
+            item(key = "__licenseItem") {
+                SettingsItem(
+                    icon = R.drawable.license_icon24px,
+                    shape = middleListItemShape,
+                    headlineText = stringResource(R.string.licenses),
+                    supportingText = stringResource(R.string.app_license),
+                    onItemClicked = onLicensesClicked
+                )
+            }
+            item(key = "__supportItem") {
+                SettingsItem(
+                    icon = R.drawable.icon_support_24,
+                    shape = middleListItemShape,
+                    headlineText = stringResource(R.string.support),
+                    supportingText = stringResource(R.string.donate),
+                    onItemClicked = onSupportClicked
+                )
+            }
+            item(key = "__sourcecodeItem") {
+                SettingsItem(
+                    icon = R.drawable.code_icon24px,
+                    shape = bottomListItemShape,
+                    headlineText = stringResource(R.string.source_code),
+                    supportingText = stringResource(R.string.github),
+                    onItemClicked = onSourceClicked
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun SettingsItem(
+    modifier: Modifier = Modifier,
+    @DrawableRes icon: Int,
+    shape: RoundedCornerShape,
+    headlineText: String,
+    supportingText: String,
+    onItemClicked: () -> Unit
+) {
+    ListItem(
+        leadingContent = {
+            Icon(
+                painter = painterResource(icon),
+                contentDescription = headlineText,
+                modifier = Modifier.requiredSize(iconDefaultSize)
+            )
+        }, colors = ListItemDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
+            headlineColor = MaterialTheme.colorScheme.onSurface,
+            supportingColor = MaterialTheme.colorScheme.onSurfaceVariant
+        ), headlineContent = {
+            Text(headlineText)
+        }, supportingContent = {
+            Text(supportingText)
+        }, modifier = modifier
+            .clip(shape)
+            .clickable(onClick = onItemClicked)
+    )
+}
+
+@Composable
+fun SettingsItem(
+    modifier: Modifier = Modifier,
+    isChecked: Boolean = false,
+    isEnabled: Boolean = true,
+    onCheckedStateChange: ((Boolean) -> Unit),
+    shape: RoundedCornerShape,
+    @DrawableRes icon: Int,
+    headlineText: String,
+    supportingText: String,
+) {
+
+    AnimatedVisibility(isEnabled) {
+        var checked by remember { mutableStateOf(false) }
+        ListItem(
+            trailingContent = {
+                Switch(
+                    checked = isChecked,
+                    onCheckedChange = { onCheckedStateChange(it) },
+                    thumbContent = if (checked) {
+                        {
+                            Icon(
+                                painterResource(R.drawable.code_icon24px),
+                                contentDescription = null,
+                                modifier = Modifier.size(SwitchDefaults.IconSize),
+                            )
+                        }
+                    } else {
+                        null
+                    }
+                )
+            }, leadingContent = {
+                Icon(
+                    painter = painterResource(icon),
+                    contentDescription = headlineText,
+                    modifier = Modifier.requiredSize(iconDefaultSize)
+                )
+
+            }, colors = ListItemDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
+                headlineColor = MaterialTheme.colorScheme.onSurface,
+                supportingColor = MaterialTheme.colorScheme.onSurfaceVariant
+            ), headlineContent = {
+                Text(headlineText)
+            }, supportingContent = {
+                Text(supportingText)
+            }, modifier = modifier.clip(shape)
+        )
+    }
+}
+
+@Composable
+fun shouldShowTrueDarkSwitch(theme: String): Boolean {
+    return when (theme) {
+        ThemeConfig.FOLLOW_SYSTEM.prefName -> isSystemInDarkTheme()
+        ThemeConfig.DARK.prefName -> true
+        else -> false
+    }
+}
+
+@Composable
+private fun ThemeDialog(
+    isDialogVisible: Boolean,
+    onDismissRequest: () -> Unit,
+    currentSelection: String,
+    options: List<String>,
+    onOptionClicked: (String) -> Unit,
+) {
+    if (isDialogVisible) {
+        AlertDialog(
+            onDismissRequest = onDismissRequest,
+            title = {
+                Text(text = stringResource(R.string.choose_theme))
+            },
+            text = {
+                val scrollState = rememberScrollState()
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(spacingSmall),
+                    modifier = Modifier.verticalScroll(scrollState),
+                ) {
+                    for (option in options) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(spacingMedium),
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    onOptionClicked(option)
+                                    onDismissRequest()
+                                }
+                                .padding(vertical = spacingSmall),
+                        ) {
+                            RadioButton(
+                                selected = option == currentSelection,
+                                onClick = null,
+                                colors = RadioButtonDefaults.colors(
+                                    selectedColor = MaterialTheme.colorScheme.tertiary,
+                                ),
+                            )
+                            Text(
+                                text = getThemeName(option = option),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onBackground,
+                            )
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = onDismissRequest,
+                ) {
+                    Text(text = stringResource(R.string.dismiss))
+                }
+            },
+        )
+    }
+}
+
+@Composable
+fun getThemeName(option: String): String {
+    return when (option) {
+        ThemeConfig.FOLLOW_SYSTEM.prefName -> stringResource(R.string.sys_default)
+        ThemeConfig.LIGHT.prefName -> stringResource(R.string.light_theme)
+        ThemeConfig.DARK.prefName -> stringResource(R.string.dark_theme)
+        else -> throw IllegalArgumentException("Unknown theme")
+    }
+}
+
+fun sendMail(context: Context, launcher: ActivityResultLauncher<Intent>) {
+    val intent = Intent(Intent.ACTION_SENDTO).apply {
+        data = "mailto:$AUTHOR_EMAIL".toUri()
+    }
+    if (intent.resolveActivity(context.packageManager) != null) {
+        launcher.launch(intent)
+    } else {
+        Toast.makeText(context, context.getString(R.string.no_email_app), Toast.LENGTH_SHORT).show()
+    }
+}
+
+@Preview(showSystemUi = false, showBackground = false, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun SettingsScreenPreview() {
+    MBCompassTheme(darkTheme = true, uiState = SettingsViewModel.SettingsUiState()) {
+        SettingsScreen(
+            uiState = SettingsViewModel.SettingsUiState(),
+            onBackClicked = {},
+            onTrueDarkStateChange = {},
+            onTrueNorthStateChange = {},
+            onThemeOptionClicked = {},
+            onLicensesClicked = {},
+            onSupportClicked = {},
+            onAuthorPageClicked = {},
+            onSourceClicked = {})
+    }
+}
+
+@Preview(showSystemUi = false, showBackground = false, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun SettingsItemPreview() {
+    MBCompassTheme(darkTheme = true, uiState = SettingsViewModel.SettingsUiState()) {
+        SettingsItem(
+            icon = R.drawable.true_north_24px,
+            headlineText = stringResource(R.string.true_north),
+            shape = singleListItemShape,
+            supportingText = stringResource(R.string.tn_desc),
+            onItemClicked = {})
+    }
+}
