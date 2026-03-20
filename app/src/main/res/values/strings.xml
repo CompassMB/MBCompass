@@ -79,7 +79,7 @@
     <string name="brn">Pause</string>
     <string name="btn_pause">Pause</string>
     <string name="track_not_saved">Track not saved</string>
-    <string name="msg_empty_recording">Couldn't save the track. No waypoints were recorded.</string>
+    <string name="msg_empty_recording">Couldn\'t save the track. No waypoints were recorded.</string>
     <string name="resume_recording">Resume recording</string>
     <string name="save_track">Save track</string>
     <string name="save_track_confirmation">Would you like to save the recorded track?</string>
