@@ -4,176 +4,677 @@ package com.mubarak.mbcompass.features.map
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
-import android.content.pm.ActivityInfo
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
+import android.location.Location
+import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
+import android.os.Handler
+import android.os.IBinder
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.StringRes
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.mubarak.mbcompass.R
+import com.mubarak.mbcompass.core.location.LocationHelper
+import com.mubarak.mbcompass.data.AppPreferences
+import com.mubarak.mbcompass.data.TrackRepository
 import com.mubarak.mbcompass.databinding.FragmentMapBinding
+import com.mubarak.mbcompass.features.tracks.MapOverlayHelper
+import com.mubarak.mbcompass.features.tracks.TrackerService
+import com.mubarak.mbcompass.features.tracks.TrackingConstants
+import com.mubarak.mbcompass.features.tracks.model.Track
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.CopyrightOverlay
-import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.ItemizedIconOverlay
+import org.osmdroid.views.overlay.OverlayItem
+import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.compass.CompassOverlay
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MapFragment : Fragment() {
 
     private var _binding: FragmentMapBinding? = null
     private val binding get() = _binding!!
-    private lateinit var mapView: MapView
-    private var myLocationOverlay: MyLocationNewOverlay? = null
 
-    private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-                enableLocationOverlay()
-            } else {
-                Toast.makeText(requireContext(), R.string.permission_rationale, Toast.LENGTH_SHORT)
-                    .show()
+    private var trackerService: TrackerService? = null
+    private var bound = false
+
+    @Inject
+    lateinit var trackRepository: TrackRepository
+
+    private lateinit var mapView: MapView
+    private lateinit var controller: IMapController
+
+    private lateinit var btnStart: LinearLayout
+    private lateinit var btnStartIcon: ImageView
+    private lateinit var btnStartTxt: TextView
+    private lateinit var btnSave: ImageButton
+    private lateinit var btnDiscard: ImageButton
+    private lateinit var locationButton: ImageButton
+
+    private val uiHandler = Handler(Looper.getMainLooper())
+    private var trackingState = TrackingConstants.STATE_TRACKING_NOT
+    private var userInteraction = false
+    private lateinit var currentBestLocation: Location
+    private var isGpsProviderActive: Boolean = false
+    private var isNetworkProviderActive: Boolean = false
+    private var currentTrack: Track = Track()
+    private var trackUriToDisplay: String? = null
+
+    private var currentPositionOverlay: ItemizedIconOverlay<OverlayItem>? = null
+    private var currentTrackPolyline: Polyline? = null
+    private var currentTrackMarkersOverlay: ItemizedIconOverlay<OverlayItem>? = null
+    private var savedTrackPolyline: Polyline? = null
+    private var savedTrackMarkersOverlay: ItemizedIconOverlay<OverlayItem>? = null
+
+    companion object {
+        const val TAG = "MapFragment"
+        const val ARG_TRACK_URI = "track_uri"
+
+        fun newInstance(trackUri: String? = null): MapFragment {
+            return MapFragment().apply {
+                arguments = Bundle().apply {
+                    trackUri?.let { putString(ARG_TRACK_URI, it) }
+                }
             }
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        currentBestLocation = LocationHelper.getLastKnownLocation(requireContext())
+        trackingState = AppPreferences.loadTrackingState()
+
+        Log.d(TAG, "onCreate - currentBestLocation: ${currentBestLocation.latitude}, " +
+                "${currentBestLocation.longitude}")
+    }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
 
-        Configuration.getInstance().userAgentValue =
-            requireContext().applicationContext?.packageName
-
-        Configuration.getInstance()
-            .load(requireContext(), requireContext().getSharedPreferences("osmdroid", 0))
+        Configuration.getInstance().userAgentValue = requireContext().packageName
+        Configuration.getInstance().load(
+            requireContext(),
+            requireContext().getSharedPreferences("osmdroid", 0)
+        )
 
         mapView = binding.mapView
-        mapView.setTileSource(TileSourceFactory.MAPNIK) // Uses OSM tile server tile policy applies
-        mapView.setMultiTouchControls(true)
-        mapView.setTilesScaledToDpi(true)
+        controller = mapView.controller
 
+        btnStart = binding.btnStartTrack
+        btnStartIcon = binding.btnStartTrackIcon
+        btnStartTxt = binding.btnStartTrackText
+        btnSave = binding.btnSaveTrack
+        btnDiscard = binding.btnDiscardTrack
+        locationButton = binding.btnLocation
+
+        mapView.setTileSource(TileSourceFactory.MAPNIK)
+        mapView.setMultiTouchControls(true)
+        mapView.zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
+        mapView.setTilesScaledToDpi(true)
         mapView.minZoomLevel = 3.coerceAtLeast(TileSourceFactory.MAPNIK.minimumZoomLevel).toDouble()
         mapView.maxZoomLevel = TileSourceFactory.MAPNIK.maximumZoomLevel.toDouble()
 
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // TODO: Just a temporary solution to fix remap execute after config changes
-        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        trackUriToDisplay = arguments?.getString(ARG_TRACK_URI)
 
-        val mapController = mapView.controller
+        setupMap()
 
-        mapController.setZoom(20.1)
-        mapController.setCenter(GeoPoint(48.8583, 2.2944)) // Default location (Eiffel tower)
-
-        val mCopyrightOverlay = CopyrightOverlay(context)
-        mapView.overlays.add(mCopyrightOverlay)
-
-        val mCompassOverlay = CompassOverlay(
-            context, InternalCompassOrientationProvider(context),
-            mapView
-        )
-        mCompassOverlay.enableCompass()
-        mapView.overlays.add(mCompassOverlay)
-
-        binding.btnLocation.setOnClickListener {
-            checkAndEnableLocation()
+        trackUriToDisplay?.let { trackUri ->
+            Log.d(TAG, "Loading saved track from URI: $trackUri")
+            loadAndDisplayTrack(trackUri)
+        } ?: run {
+            restoreMapState()
         }
 
+        setupButtons()
         checkAndEnableLocation()
     }
 
-    private fun enableLocationOverlay() {
-        // Only add the overlay if it null already exist or does not exist in the mapView
-        if (myLocationOverlay == null || !mapView.overlays.contains(myLocationOverlay)) {
-            // Remove any potentially old overlay first
-            myLocationOverlay?.let { mapView.overlays.remove(it) }
+    override fun onStart() {
+        super.onStart()
 
-            myLocationOverlay =
-                MyLocationNewOverlay(GpsMyLocationProvider(requireContext()), mapView).apply {
-                    val currentArrow = BitmapFactory.decodeResource(
-                        context?.resources, R.drawable.my_arrow_nav
-                    )
-
-                    setPersonAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
-
-                    setDirectionIcon(currentArrow)
-                    setDirectionAnchor(.5f, .5f)
-
-                    enableMyLocation()
-                    enableFollowLocation()
-                }
-            mapView.overlays.add(myLocationOverlay)
-        } else {
-            if (!myLocationOverlay!!.isMyLocationEnabled) {
-                showDialog(R.string.location_disabled, R.string.location_disabled_rationale)
-            }
-            // If it already exists, just ensure it's enabled
-            myLocationOverlay?.enableMyLocation()
-            myLocationOverlay?.enableFollowLocation() // center the map on the user's location
-        }
-        mapView.invalidate()
-    }
-
-    private fun checkAndEnableLocation() {
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
+            ) == PackageManager.PERMISSION_DENIED
         ) {
-            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-        } else {
-            enableLocationOverlay()
+            requestLocationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+
+        if (trackUriToDisplay == null) {
+            requireContext().bindService(
+                Intent(requireContext(), TrackerService::class.java),
+                serviceConnection,
+                Context.BIND_AUTO_CREATE
+            )
         }
     }
-
-    private fun showDialog(@StringRes title: Int, @StringRes errMessage: Int) {
-        AlertDialog.Builder(requireContext())
-            .setTitle(title)
-            .setIcon(R.drawable.error_icon24px)
-            .setMessage(getString(errMessage))
-            .setPositiveButton(R.string.settings) { _, _ -> val intent =
-                Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent) }
-            .setNegativeButton(R.string.ok_button) { dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
-    }
-
 
     override fun onResume() {
         super.onResume()
         mapView.onResume()
-        myLocationOverlay?.enableMyLocation()
+
+        if (bound) {
+            if (trackingState != TrackingConstants.STATE_TRACKING_ACTIVE) {
+                trackerService?.addGpsLocationListener()
+                trackerService?.addNetworkLocationListener()
+            }
+
+            uiHandler.removeCallbacks(periodicLocationRequestRunnable)
+            uiHandler.postDelayed(periodicLocationRequestRunnable, 0)
+
+            Log.d(TAG, "onResume - restarted periodic updates")
+        }
+
+        updateMainButton(trackingState)
     }
 
     override fun onPause() {
         super.onPause()
         mapView.onPause()
-        myLocationOverlay?.disableMyLocation()
+
+        saveMapState()
+
+        if (bound && trackingState != TrackingConstants.STATE_TRACKING_ACTIVE) {
+            trackerService?.removeGpsLocationListener()
+            trackerService?.removeNetworkLocationListener()
+        }
+
+        uiHandler.removeCallbacks(periodicLocationRequestRunnable)
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        if (bound && trackUriToDisplay == null) {
+            requireContext().unbindService(serviceConnection)
+            bound = false
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        uiHandler.removeCallbacks(periodicLocationRequestRunnable)
         _binding = null
         mapView.onDetach()
+    }
+
+    private val requestLocationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                Log.i(TAG, "Location permission granted")
+                if (bound) requireContext().unbindService(serviceConnection)
+                requireContext().bindService(
+                    Intent(requireContext(), TrackerService::class.java),
+                    serviceConnection,
+                    Context.BIND_AUTO_CREATE
+                )
+            } else {
+                Log.w(TAG, "Location permission denied")
+                if (bound) requireContext().unbindService(serviceConnection)
+            }
+        }
+
+    private val recordingPermissionsResultLauncher: ActivityResultLauncher<Array<String>> =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionsMap ->
+            val locationGranted = ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+
+            val notificationsGranted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                permissionsMap.getOrDefault(Manifest.permission.POST_NOTIFICATIONS, false)
+            } else {
+                true
+            }
+
+            if (locationGranted && notificationsGranted) {
+                startTrackerService(resume = trackingState == TrackingConstants.STATE_TRACKING_PAUSED)
+            }
+
+            if (!locationGranted && !notificationsGranted) {
+                Toast.makeText(
+                    requireContext(),
+                    R.string.msg_notification_perm_denied,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as TrackerService.LocalBinder
+            trackerService = binder.getService()
+            bound = true
+
+            trackingState = trackerService?.trackingState ?: TrackingConstants.STATE_TRACKING_NOT
+            updateMainButton(trackingState)
+
+            uiHandler.removeCallbacks(periodicLocationRequestRunnable)
+            uiHandler.postDelayed(periodicLocationRequestRunnable, 0)
+
+            Log.d(TAG, "Service connected - starting periodic location updates")
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            bound = false
+            trackerService = null
+            uiHandler.removeCallbacks(periodicLocationRequestRunnable)
+            Log.d(TAG, "Service disconnected - stopped periodic updates")
+        }
+    }
+
+    private fun setupButtons() {
+        locationButton.setOnClickListener {
+            centerMap(currentBestLocation, animated = true)
+        }
+
+        btnStart.setOnClickListener {
+            handleMainButton()
+        }
+
+        btnSave.setOnClickListener {
+            handleSaveTrack()
+        }
+
+        btnDiscard.setOnClickListener {
+            handleClearTrack()
+        }
+    }
+
+    private fun handleMainButton() {
+        when (trackingState) {
+            TrackingConstants.STATE_TRACKING_NOT -> startTracking(resume = false)
+            TrackingConstants.STATE_TRACKING_ACTIVE -> trackerService?.pauseTracking()
+            TrackingConstants.STATE_TRACKING_PAUSED -> startTracking(resume = true)
+        }
+    }
+
+    private fun startTracking(resume: Boolean) {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                recordingPermissionsResultLauncher.launch(
+                    arrayOf(
+                        Manifest.permission.ACTIVITY_RECOGNITION,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    )
+                )
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                recordingPermissionsResultLauncher.launch(
+                    arrayOf(Manifest.permission.ACTIVITY_RECOGNITION)
+                )
+            } else {
+                startTrackerService(resume = resume)
+            }
+        } else {
+            requestLocationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+    }
+
+    private fun startTrackerService(resume: Boolean = false) {
+        val intent = Intent(requireContext(), TrackerService::class.java)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            requireContext().startForegroundService(intent)
+        } else {
+            requireContext().startService(intent)
+        }
+
+        if (resume) {
+            trackerService?.resumeTracking()
+        } else {
+            trackerService?.startTracking()
+        }
+    }
+
+    private fun updateMainButton(trackingState: Int) {
+        this.trackingState = trackingState
+
+        when (trackingState) {
+            TrackingConstants.STATE_TRACKING_NOT -> {
+                btnStartIcon.setImageResource(R.drawable.start_circle_24px)
+                btnStartTxt.text = getString(R.string.btn_start)
+                btnStart.contentDescription = getString(R.string.btn_start)
+                btnSave.isGone = true
+                btnDiscard.isGone = true
+            }
+            TrackingConstants.STATE_TRACKING_ACTIVE -> {
+                btnStartIcon.setImageResource(R.drawable.pause_circle_24px)
+                btnStartTxt.text = getString(R.string.btn_pause)
+                btnStart.contentDescription = getString(R.string.btn_pause)
+                btnSave.isGone = true
+                btnDiscard.isGone = true
+            }
+            TrackingConstants.STATE_TRACKING_PAUSED -> {
+                btnStartIcon.setImageResource(R.drawable.start_circle_24px)
+                btnStartTxt.text = getString(R.string.btn_resume)
+                btnStart.contentDescription = getString(R.string.btn_resume)
+                btnSave.isVisible = true
+                btnDiscard.isVisible = true
+            }
+        }
+    }
+
+    private fun handleSaveTrack() {
+        trackerService?.let { service ->
+            if (service.currentTrack.wayPoints.isEmpty()) {
+                AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.track_not_saved)
+                    .setMessage(R.string.msg_empty_recording)
+                    .setPositiveButton(R.string.resume_recording) { _, _ ->
+                        trackerService?.resumeTracking()
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .show()
+            } else {
+                AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.save_track)
+                    .setMessage(R.string.save_track_confirmation)
+                    .setPositiveButton(R.string.save) { _, _ ->
+                        saveTrackAndNavigateBack(service)
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .show()
+            }
+        }
+    }
+
+    private fun saveTrackAndNavigateBack(service: TrackerService) {
+        val savedTrack = service.currentTrack.copy(
+            latitude = mapView.mapCenter.latitude,
+            longitude = mapView.mapCenter.longitude,
+            zoomLevel = mapView.zoomLevelDouble
+        )
+
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                trackRepository.saveTrackAndUpdateTrack(savedTrack)
+            }
+
+            clearCurrentTrackOverlays()
+            service.clearTrack()
+            updateMainButton(trackingState)
+
+            Toast.makeText(requireContext(), R.string.track_saved, Toast.LENGTH_SHORT).show()
+
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+    }
+
+    private fun handleClearTrack() {
+        if (currentTrack.wayPoints.isEmpty()) {
+            trackerService?.clearTrack()
+        } else {
+            AlertDialog.Builder(requireContext())
+                .setTitle(R.string.discard_track)
+                .setMessage(R.string.discard_track_confirmation)
+                .setPositiveButton(R.string.discard) { _, _ ->
+                    clearCurrentTrackOverlays()
+                    trackerService?.clearTrack()
+                    updateMainButton(trackingState)
+                    Toast.makeText(requireContext(), R.string.track_discarded, Toast.LENGTH_SHORT).show()
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+        }
+    }
+
+    private val periodicLocationRequestRunnable: Runnable = object : Runnable {
+        override fun run() {
+            if (!bound) {
+                Log.w(TAG, "Not bound to service, stopping periodic updates")
+                return
+            }
+
+            trackerService?.let { service ->
+                val previousTrackingState = trackingState
+
+                currentBestLocation = service.currentBestLocation
+                currentTrack = service.currentTrack
+                isGpsProviderActive = service.isGpsProviderActive
+                isNetworkProviderActive = service.isNetworkProviderActive
+                trackingState = service.trackingState
+
+                if (trackingState != previousTrackingState) {
+                    updateMainButton(trackingState)
+                    Log.d(TAG, "Tracking state changed: $previousTrackingState → $trackingState")
+                }
+
+                markCurrentPosition(currentBestLocation, trackingState)
+
+                if (trackingState != TrackingConstants.STATE_TRACKING_NOT) {
+                    overlayCurrentTrack(currentTrack, trackingState)
+                }
+
+                if (!userInteraction) {
+                    centerMap(currentBestLocation, animated = true)
+                }
+            }
+
+            uiHandler.postDelayed(this, TrackingConstants.UI_UPDATE_INTERVAL)
+        }
+    }
+
+    private fun setupMap() {
+        mapView.overlays.add(CopyrightOverlay(context))
+
+        val compassOverlay = CompassOverlay(
+            context,
+            InternalCompassOrientationProvider(context),
+            mapView
+        )
+        compassOverlay.enableCompass()
+        mapView.overlays.add(compassOverlay)
+
+        mapView.setOnTouchListener { _, _ ->
+            userInteraction = true
+            false
+        }
+    }
+
+    private fun restoreMapState() {
+        val zoomLevel = AppPreferences.loadZoomLevel()
+        controller.setZoom(zoomLevel)
+        controller.setCenter(GeoPoint(currentBestLocation.latitude, currentBestLocation.longitude))
+        markCurrentPosition(currentBestLocation, trackingState)
+    }
+
+    private fun saveMapState() {
+        if (trackUriToDisplay == null) {
+            val location = trackerService?.currentBestLocation ?: currentBestLocation
+            AppPreferences.saveZoomLevel(mapView.zoomLevelDouble)
+            AppPreferences.saveCurrentLocation(location)
+            userInteraction = false
+        }
+    }
+
+    private fun markCurrentPosition(location: Location, trackingState: Int) {
+        currentPositionOverlay?.let { mapView.overlays.remove(it) }
+
+        val mapOverlayHelper = MapOverlayHelper()
+        currentPositionOverlay = mapOverlayHelper.createMyLocationOverlay(
+            requireContext(),
+            location,
+            trackingState
+        )
+        mapView.overlays.add(currentPositionOverlay)
+        mapView.invalidate()
+    }
+
+    private fun overlayCurrentTrack(track: Track, trackingState: Int) {
+        currentTrackPolyline?.let { mapView.overlays.remove(it) }
+        currentTrackMarkersOverlay?.let { mapView.overlays.remove(it) }
+
+        if (track.wayPoints.isNotEmpty()) {
+            val mapOverlayHelper = MapOverlayHelper()
+
+            currentTrackPolyline = mapOverlayHelper.createTrackOverlay(
+                requireContext(),
+                track,
+                trackingState
+            )
+
+            currentTrackMarkersOverlay = mapOverlayHelper.createStartEndMarkersOverlay(
+                requireContext(),
+                track,
+                displayMarkers = false
+            )
+
+            mapView.overlays.add(currentTrackPolyline)
+            mapView.overlays.add(currentTrackMarkersOverlay)
+            mapView.invalidate()
+        }
+    }
+
+    private fun updateSavedTrackOverlay(track: Track, centerMap: Boolean) {
+        savedTrackPolyline?.let { mapView.overlays.remove(it) }
+        savedTrackMarkersOverlay?.let { mapView.overlays.remove(it) }
+
+        if (track.wayPoints.isNotEmpty()) {
+            val mapOverlayHelper = MapOverlayHelper()
+
+            savedTrackPolyline = mapOverlayHelper.createTrackOverlay(
+                requireContext(),
+                track,
+                TrackingConstants.STATE_TRACKING_NOT
+            )
+
+            savedTrackMarkersOverlay = mapOverlayHelper.createStartEndMarkersOverlay(
+                requireContext(),
+                track,
+                displayMarkers = true
+            )
+
+            mapView.overlays.add(savedTrackPolyline)
+            mapView.overlays.add(savedTrackMarkersOverlay)
+        }
+
+        if (centerMap) {
+            centerOnTrack(track)
+        }
+
+        mapView.invalidate()
+    }
+
+    private fun clearCurrentTrackOverlays() {
+        currentTrackPolyline?.let { mapView.overlays.remove(it) }
+        currentTrackMarkersOverlay?.let { mapView.overlays.remove(it) }
+        currentTrackPolyline = null
+        currentTrackMarkersOverlay = null
+        mapView.invalidate()
+    }
+
+    private fun centerMap(location: Location, animated: Boolean = false) {
+        val position = GeoPoint(location.latitude, location.longitude)
+        when (animated) {
+            true -> controller.animateTo(position)
+            false -> controller.setCenter(position)
+        }
+        userInteraction = false
+    }
+
+    private fun centerOnTrack(track: Track) {
+        if (track.latitude != TrackingConstants.DEFAULT_LATITUDE &&
+            track.longitude != TrackingConstants.DEFAULT_LONGITUDE
+        ) {
+            controller.setZoom(track.zoomLevel)
+            controller.setCenter(GeoPoint(track.latitude, track.longitude))
+        } else {
+            val bounds = getTrackBounds(track)
+            if (bounds != null) {
+                mapView.post {
+                    mapView.zoomToBoundingBox(bounds, true, 100)
+                }
+            }
+        }
+    }
+
+    private fun getTrackBounds(track: Track): BoundingBox? {
+        if (track.wayPoints.isEmpty()) return null
+        val points = track.wayPoints.map { GeoPoint(it.latitude, it.longitude) }
+        return BoundingBox.fromGeoPoints(points)
+    }
+
+    private fun hasLocationPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun checkAndEnableLocation() {
+        if (!hasLocationPermission()) {
+            requestLocationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        } else {
+            markCurrentPosition(currentBestLocation, trackingState)
+        }
+    }
+
+    private fun loadAndDisplayTrack(trackUri: String) {
+        lifecycleScope.launch {
+            try {
+                val track = withContext(Dispatchers.IO) {
+                    trackRepository.readTrackFromUri(trackUri.toUri())
+                }
+
+                if (track.wayPoints.isEmpty()) {
+                    Toast.makeText(requireContext(), "Track has no data", Toast.LENGTH_SHORT).show()
+                    return@launch
+                }
+
+                updateSavedTrackOverlay(track, centerMap = true)
+
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading track", e)
+                Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 }

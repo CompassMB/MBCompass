@@ -71,4 +71,24 @@
     <string name="btn_start">Start</string>
     <string name="save">Save track</string>
     <string name="discard_track">Discard track</string>
+    <string name="btn_resume">Resume</string>
+    <string name="notification_channel_tracking">GPS tracking</string>
+    <string name="notification_channel_tracking_description">Show tracking progress</string>
+    <string name="msg_notification_perm_denied">Notification permission is required</string>
+    <string name="msg_activity_recog_perm_denied">Activity recognizion permission is required for step counting</string>
+    <string name="brn">Pause</string>
+    <string name="btn_pause">Pause</string>
+    <string name="track_not_saved">Track not saved!</string>
+    <string name="msg_empty_recording">Couldn\'t be save. No waypoints recorded</string>
+    <string name="resume_recording">Resume Recording</string>
+    <string name="save_track">Save track</string>
+    <string name="save_track_confirmation">Would you like to save recorded track</string>
+    <string name="track_saved">Track Saved</string>
+    <string name="discard_track_confirmation">Are your sure to discard track</string>
+    <string name="discard">Discard</string>
+    <string name="track_discarded">Track discarded</string>
+    <string name="permission_location_title">Location Permission</string>
+    <string name="permission_location_rationale">Location Permission is required to track</string>
+    <string name="permission_grant">Grant</string>
+    <string name="permission_tracking_rationale">Location, and all permission</string>
 </resources>

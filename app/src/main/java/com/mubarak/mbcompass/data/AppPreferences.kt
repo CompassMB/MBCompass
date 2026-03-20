@@ -60,11 +60,11 @@ object AppPreferences {
         }
     }
 
-
     fun loadCurrentLocation(): Location {
         return runBlocking {
             val preferences = prefDataStore.data.first()
-            val provider = preferences[CURRENT_LOCATION_PROVIDER_KEY] ?: LocationManager.NETWORK_PROVIDER
+            val provider =
+                preferences[CURRENT_LOCATION_PROVIDER_KEY] ?: LocationManager.NETWORK_PROVIDER
 
             Location(provider).apply {
                 latitude = preferences[CURRENT_LOCATION_LATITUDE_KEY] ?: DEFAULT_LATITUDE
@@ -79,7 +79,8 @@ object AppPreferences {
 
     fun saveCurrentLocation(location: Location) = runBlocking {
         prefDataStore.edit { preferences ->
-            preferences[CURRENT_LOCATION_PROVIDER_KEY] = location.provider ?: LocationManager.NETWORK_PROVIDER
+            preferences[CURRENT_LOCATION_PROVIDER_KEY] =
+                location.provider ?: LocationManager.NETWORK_PROVIDER
             preferences[CURRENT_LOCATION_LATITUDE_KEY] = location.latitude
             preferences[CURRENT_LOCATION_LONGITUDE_KEY] = location.longitude
             preferences[CURRENT_LOCATION_ACCURACY_KEY] = location.accuracy

@@ -15,6 +15,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.mubarak.mbcompass.features.compass.NavScreen
 import com.mubarak.mbcompass.features.map.MapScreen
 import com.mubarak.mbcompass.features.settings.SettingsScreen
@@ -49,8 +50,10 @@ fun MBNavGraph(
                 fadeThroughEnter()
             }, popExitTransition = {
                 fadeThroughExit()
-            }) {
-            MapScreen()
+            }) { backStackEntry ->
+            val args = backStackEntry.toRoute<MapRoute>()
+
+            MapScreen(trackUri = args.trackUri)
         }
 
         composable<TracksRoute>(

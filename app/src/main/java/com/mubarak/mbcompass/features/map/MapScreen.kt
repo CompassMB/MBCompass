@@ -6,45 +6,53 @@ import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.fragment.app.FragmentActivity
-import com.mubarak.mbcompass.R
 import com.mubarak.mbcompass.databinding.FragmentMapContainerBinding
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapScreen(
     modifier: Modifier = Modifier,
-) {
+    trackUri: String? = null,
+)  {
     Scaffold(
         modifier = modifier,
-        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        contentWindowInsets = WindowInsets(0, 0, 0, 0), // ← add this
+
     ) {
         val activity = LocalActivity.current as FragmentActivity
-        MapContainerView(modifier = Modifier.padding(it), activity)
+        MapContainerView(
+            modifier = Modifier.padding(it),
+            fragmentActivity = activity,
+            trackUri = trackUri
+        )
     }
+
 }
 
 @Composable
-fun MapContainerView(modifier: Modifier = Modifier, fragmentActivity: FragmentActivity) {
+fun MapContainerView(
+    modifier: Modifier = Modifier,
+    trackUri: String?= null,
+    fragmentActivity: FragmentActivity) {
+
     // https://stackoverflow.com/questions/74218090/how-to-access-getsupportfragmentmanager-in-componentactivity
     AndroidViewBinding(FragmentMapContainerBinding::inflate, modifier = modifier) {
         val fragmentManager = fragmentActivity.supportFragmentManager
+        val existingFragment = fragmentManager.findFragmentById(fragmentContainerView.id) as? MapFragment
 
-        // Ensure the fragment is added only once
-        if (fragmentManager.findFragmentById(fragmentContainerView.id) == null) {
+        // Replace if no fragment exists, OR if trackUri has changed
+        val existingUri = existingFragment?.arguments?.getString(MapFragment.ARG_TRACK_URI)
+        val uriChanged = existingUri != trackUri
+
+        if (existingFragment == null || uriChanged) {
             fragmentManager.beginTransaction()
-                .replace(fragmentContainerView.id, MapFragment())
-                .commit()
+                .replace(fragmentContainerView.id, MapFragment.Companion.newInstance(trackUri))
+                .commitAllowingStateLoss()
         }
     }
 }
