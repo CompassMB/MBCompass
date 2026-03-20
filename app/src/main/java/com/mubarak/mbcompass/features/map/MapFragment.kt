@@ -418,7 +418,7 @@ class MapFragment : Fragment() {
                     .setTitle(R.string.save_track)
                     .setMessage(R.string.save_track_confirmation)
                     .setPositiveButton(R.string.save) { _, _ ->
-                        saveTrackAndNavigateBack(service)
+                        saveTrack(service)
                     }
                     .setNegativeButton(R.string.cancel, null)
                     .show()
@@ -426,7 +426,7 @@ class MapFragment : Fragment() {
         }
     }
 
-    private fun saveTrackAndNavigateBack(service: TrackerService) {
+    private fun saveTrack(service: TrackerService) {
         val savedTrack = service.currentTrack.copy(
             latitude = mapView.mapCenter.latitude,
             longitude = mapView.mapCenter.longitude,
@@ -443,8 +443,6 @@ class MapFragment : Fragment() {
             updateMainButton(trackingState)
 
             Toast.makeText(requireContext(), R.string.track_saved, Toast.LENGTH_SHORT).show()
-
-            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 

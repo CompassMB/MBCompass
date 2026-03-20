@@ -80,21 +80,6 @@ class TracksViewModel @Inject constructor(
         }
     }
 
-    fun calculateTotals() {
-        viewModelScope.launch {
-            try {
-                val tracklist = trackRepository.readTracklist()
-                var totalDistance = 0f
-                tracklist.trackItemList.forEach { track ->
-                    totalDistance += track.length
-                }
-                tracklist.totalDistanceAll = totalDistance
-                trackRepository.saveTracklist(tracklist)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
 }
 
 data class TracksUiState(

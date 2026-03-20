@@ -2,15 +2,12 @@
 
 package com.mubarak.mbcompass.utils
 
-import android.content.Context
-import com.mubarak.mbcompass.R
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 import java.util.concurrent.TimeUnit
-import kotlin.text.format
 
 object DateTimeFormatter {
 

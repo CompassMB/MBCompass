@@ -66,18 +66,6 @@ fun TracksScreen(
 
     Scaffold(
         modifier = modifier,
-        floatingActionButton = {
-            if (uiState.tracks.isNotEmpty()) {
-                FloatingActionButton(
-                    onClick = { viewModel.calculateTotals() }
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.dark_mode_icon24px),
-                        contentDescription = "Statistics"
-                    )
-                }
-            }
-        },
         topBar = {
             TopAppBar(
                 title = {
