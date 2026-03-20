@@ -15,7 +15,7 @@
     <string name="github">GitHub</string>
     <string name="support">Nous Soutenir</string>
     <string name="donate">Faites un don pour que cette application reste gratuite et sans publicité</string>
-    <string name="location_disabled">Activer la position !</string>
+    <string name="location_disabled">Activer la position !</string>
     <string name="location_disabled_rationale">La position est désactivée. Active la dans les paramètres.</string>
     <string name="north">Nord</string>
     <string name="east">Est</string>
@@ -29,14 +29,14 @@
     <string name="true_north">Nord Géographique</string>
     <string name="tn_desc">Corrige la déclinaison magnétique</string>
     <string name="true_black_theme">Thème Noir</string>
-    <string name="permission_required">Autorisation requise !</string>
+    <string name="permission_required">Autorisation requise !</string>
     <string name="reload_location">Rechargement de la position</string>
     <string name="magnetic_north">Nord Magnétique</string>
     <string name="compass_rose">Rose des vents</string>
     <string name="no_email_app">Application d\'e-mail non trouvée</string>
     <string name="magnetic_strength">Force Magnétique <b>%1$d</b> µT</string>
     <string name="app_name">MBCompass</string>
-    <string name="calibration_required">Calibrage requis : faites pivoter l’appareil en forme de 8 pour le recalibrer !</string>
+    <string name="calibration_required">Calibrage requis : faites pivoter l’appareil en forme de 8 pour le recalibrer !</string>
     <string name="map">Carte</string>
     <string name="permission_rationale">MBCompass a besoin de l\'accès à la position pour corriger la déclinaison magnétique et montrer le Nord Géographique</string>
     <string name="rotation_sensor_not_available">Capteur de mouvement indisponible</string>
