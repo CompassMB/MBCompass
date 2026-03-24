@@ -16,6 +16,9 @@ data class MapRoute(val trackUri: String? = null)
 data object TracksRoute
 
 @Serializable
+data class TrackRoute(val trackUri: String?)
+
+@Serializable
 data object SettingsRoute
 
 data class TopLevelRoute<T : Any>(

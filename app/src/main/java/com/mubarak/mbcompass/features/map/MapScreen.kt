@@ -51,7 +51,7 @@ fun MapContainerView(
 
         if (existingFragment == null || uriChanged) {
             fragmentManager.beginTransaction()
-                .replace(fragmentContainerView.id, MapFragment.Companion.newInstance(trackUri))
+                .replace(fragmentContainerView.id, MapFragment.newInstance(trackUri))
                 .commitAllowingStateLoss()
         }
     }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Track View - Map Heights (40% of screen approximately) -->
+    <dimen name="track_view_map_height">280dp</dimen>
+
+</resources>
