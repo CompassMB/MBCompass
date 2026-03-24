@@ -60,9 +60,9 @@
     <string name="navigation">Навигация</string>
     <string name="tracks">Записи</string>
     <string name="no_tracks_title">Все още няма записи</string>
-    <string name="no_tracks_message">Започнете да записвате, за да създадете първия си запис.</string>
-    <string name="delete_track_title">Изтриване на запис?</string>
-    <string name="delete_track_message">Сигурни ли сте, че искате да изтриете този запис?</string>
+    <string name="no_tracks_message">Започнете да записвате, за да създадете първия си запис</string>
+    <string name="delete_track_title">Изтриване на запис</string>
+    <string name="delete_track_message">Сигурни ли сте, че искате да изтриете %1$s?</string>
     <string name="delete">Изтриване</string>
     <string name="cancel">Отказ</string>
     <string name="unstar_track">Премахване на звездата от записа</string>
