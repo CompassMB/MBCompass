@@ -25,7 +25,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -50,7 +49,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.mubarak.mbcompass.R
 import com.mubarak.mbcompass.features.tracks.model.TrackItem
-import com.mubarak.mbcompass.navigation.MapRoute
+import com.mubarak.mbcompass.navigation.TrackRoute
 import com.mubarak.mbcompass.utils.DateTimeFormatter
 import com.mubarak.mbcompass.utils.LengthUnitHelper
 
@@ -101,7 +100,7 @@ fun TracksScreen(
                         .fillMaxSize()
                         .padding(paddingValues),
                     onTrackClick = { track ->
-                        navController.navigate(MapRoute(trackUri = track.trackUriString))
+                        navController.navigate(TrackRoute(trackUri = track.trackUriString))
                     },
 
                     onStarClick = { track ->

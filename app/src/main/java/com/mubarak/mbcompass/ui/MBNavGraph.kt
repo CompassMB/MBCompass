@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.mubarak.mbcompass.features.track.TrackScreen
 import com.mubarak.mbcompass.features.compass.NavScreen
 import com.mubarak.mbcompass.features.map.MapScreen
 import com.mubarak.mbcompass.features.settings.SettingsScreen
@@ -23,6 +24,7 @@ import com.mubarak.mbcompass.features.tracks.TracksScreen
 import com.mubarak.mbcompass.navigation.NavigationRoute
 import com.mubarak.mbcompass.navigation.SettingsRoute
 import com.mubarak.mbcompass.navigation.MapRoute
+import com.mubarak.mbcompass.navigation.TrackRoute
 import com.mubarak.mbcompass.navigation.TracksRoute
 
 @Composable
@@ -67,6 +69,14 @@ fun MBNavGraph(
                 fadeThroughExit()
             }) {
             TracksScreen(navController = navController)
+        }
+
+        composable<TrackRoute> { backStackEntry ->
+            val trackRoute = backStackEntry.toRoute<TrackRoute>()
+            TrackScreen(
+                trackUri = trackRoute.trackUri!!,
+                onNavigateBack = { navController.navigateUp() }
+            )
         }
 
         composable<SettingsRoute>(
