@@ -102,7 +102,6 @@ fun TracksScreen(
                     onTrackClick = { track ->
                         navController.navigate(TrackRoute(trackUri = track.trackUriString))
                     },
-
                     onStarClick = { track ->
                         viewModel.toggleStarred(track.trackId)
                     },
@@ -193,7 +192,11 @@ private fun TrackListItem(
             .clickable(onClick = onTrackClick),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = if (track.starred) {
+                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+            } else {
+                MaterialTheme.colorScheme.surfaceVariant
+            }
         )
     ) {
         Row(
@@ -203,10 +206,20 @@ private fun TrackListItem(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            if (track.starred) {
+                Icon(
+                    painter = painterResource(R.drawable.star_fill_24px),
+                    contentDescription = "Starred",
+                    modifier = Modifier
+                        .size(20.dp)
+                        .padding(end = 8.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-
                 Text(
                     text = DateTimeFormatter.formatDateTimeString(track.date),
                     style = MaterialTheme.typography.titleMedium,

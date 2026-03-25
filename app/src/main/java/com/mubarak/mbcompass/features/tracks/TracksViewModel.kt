@@ -44,7 +44,12 @@ class TracksViewModel @Inject constructor(
             _isLoading.value = true
             try {
                 val tracklist = trackRepository.readTracklist()
-                _tracks.value = tracklist.trackItemList.sortedByDescending { it.date }
+
+                // Sort: starred first, then by date
+                _tracks.value = tracklist.trackItemList.sortedWith(
+                    compareByDescending<TrackItem> { it.starred }
+                        .thenByDescending { it.date }
+                )
             } catch (e: Exception) {
                 _tracks.value = emptyList()
             } finally {
@@ -57,7 +62,7 @@ class TracksViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 trackRepository.deleteTrack(trackId)
-                loadTracks()
+                loadTracks()  // Reload to update UI
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -72,18 +77,16 @@ class TracksViewModel @Inject constructor(
                 track?.let {
                     it.starred = !it.starred
                     trackRepository.saveTracklist(tracklist)
-                    loadTracks()
+                    loadTracks()  // Reload
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
-
 }
 
 data class TracksUiState(
     val tracks: List<TrackItem> = emptyList(),
     val isLoading: Boolean = false,
 )
-
