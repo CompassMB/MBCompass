@@ -21,7 +21,7 @@ fun MapScreen(
 )  {
     Scaffold(
         modifier = modifier,
-        contentWindowInsets = WindowInsets(0, 0, 0, 0), // ← add this
+        contentWindowInsets = WindowInsets(0, 0, 0, 0), // add this to remove extra spaces
 
     ) {
         val activity = LocalActivity.current as FragmentActivity
