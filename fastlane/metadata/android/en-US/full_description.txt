@@ -4,13 +4,15 @@
 <ul>
   <li>Shows clear cardinal direction and magnetic azimuths.</li>
   <li>Displays magnetic strength in µT.</li>
-  <li>Live GPS location tracking on OpenStreetMap.</li>
+  <li>Full GPX track recording with waypoints and path drawing.</li>
+  <li>Track stats: duration, distance, speed, and elevation.</li>
+  <li>View, manage, and share recorded tracks.</li>
   <li>Sensor fusion for improved accuracy (accelerometer, magnetometer, gyroscope).</li>
   <li>Light and dark theme support controlled via Settings.</li>
   <li>Keeps screen on during navigation.</li>
   <li>Landscape orientation support.</li>
   <li>Built with Jetpack Compose and Material Design.</li>
-  <li>Runs on Android 5.0+</li>
+  <li>Runs on Android 6.0+</li>
   <li>No ads, no in-app purchases, no tracking.</li>
   <li>Find more on the <b><i>website</i></b>: https://compassmb.github.io/MBCompass-site/</li>
 </ul>
