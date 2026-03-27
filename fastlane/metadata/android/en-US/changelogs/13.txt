@@ -1,0 +1,9 @@
+- GPX Track Recording: Record routes with waypoints and live map tracking.
+- Track List & Details: View, manage, and analyze all recorded tracks.
+- New custom bottom bar for ease and simple navigation between screens.
+- Track Stats: Duration, avg speed, elevation, and waypoint count added.
+- Export & Share: Save and share tracks in GPX format.
+- Map Tracking Controls: Start, pause, resume, and stop directly on map.
+- Foreground Tracking: Reliable tracking with persistent notification.
+- Star & Sort Tracks: Mark favorites and organize easily.
+- Last Known Location: Map shows last location even if GPS is off.
