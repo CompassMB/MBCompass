@@ -10,9 +10,9 @@
     <string name="west">Oeste</string>
     <string name="northwest">Noroeste</string>
     <string name="compass">Brújula</string>
-    <string name="calibration_required">Se necesita calibración: ¡Rota el dispositivo siguiendo un patrón en 8 para recalibrar!</string>
+    <string name="calibration_required">Se necesita calibración: ¡Mueve tu dispositivo siguiendo un patrón en 8 para recalibrar!</string>
     <string name="map">Mapa</string>
-    <string name="permission_rationale">MBCompass necesita acceso a la localización de su dispositivo para corregir el desfase magnético y mostrar el verdadero Norte.</string>
+    <string name="permission_rationale">MBCompass requiere acceso a la localización de su dispositivo para corregir el desfase magnético y mostrar el verdadero Norte.</string>
     <string name="rotation_sensor_not_available">El sensor de rotación vectorial no está disponible</string>
     <string name="magnetometer_not_available">Magnetómetro no disponible</string>
     <string name="nav_back">Arriba</string>
@@ -29,7 +29,7 @@
     <string name="show_my_location">Mostrar mi localización</string>
     <string name="settings">Ajustes</string>
     <string name="theme">Tema</string>
-    <string name="amoled_dark">Oscuro Amoled</string>
+    <string name="amoled_dark">Oscuro AMOLED</string>
     <string name="licenses">Licencia</string>
     <string name="about_settings">Acerca de</string>
     <string name="sys_default">Igual que el sistema</string>
@@ -57,4 +57,14 @@
     <string name="compass_rose">Rosa de los vientos</string>
     <string name="no_email_app">No se ha encontrado aplicación de correo</string>
     <string name="magnetic_strength">Fuerza Magnética <b>%1$d</b> µT</string>
+    <string name="navigation">Navegación</string>
+    <string name="btn_start">Iniciar</string>
+    <string name="btn_resume">Resumen</string>
+    <string name="notification_channel_tracking">Rastreo GPS</string>
+    <string name="notification_channel_tracking_description">Muestra el progreso de la ruta</string>
+    <string name="msg_notification_perm_denied">Se requiere el permiso de las notificaciones</string>
+    <string name="tracks">Rutas</string>
+    <string name="no_tracks_title">Aún no hay rutas</string>
+    <string name="save">Guardar ruta</string>
+    <string name="discard_track">Descartar ruta</string>
 </resources>
