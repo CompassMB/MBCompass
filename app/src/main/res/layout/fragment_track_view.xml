@@ -189,7 +189,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/save_24dp"
+                        android:src="@drawable/ic_speed_24px"
                         android:contentDescription="Speed"/>
 
                     <LinearLayout
@@ -341,7 +341,7 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/location_icon24px"
+                        android:src="@drawable/altitude_low_24px"
                         android:contentDescription="Lowest point"/>
 
                     <LinearLayout
@@ -379,7 +379,7 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/location_icon24px"
+                        android:src="@drawable/altitude_high_24px"
                         android:contentDescription="Highest point"/>
 
                     <LinearLayout

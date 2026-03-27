@@ -61,7 +61,6 @@
     <string name="navigation">Navigation</string>
     <string name="tracks">Tracks</string>
     <string name="no_tracks_title">No tracks yet</string>
-    <string name="cancel">Cancel</string>
     <string name="btn_start">Start</string>
     <string name="save">Save track</string>
     <string name="discard_track">Discard track</string>
@@ -122,6 +121,47 @@
 
     <string name="star_track">Star Track</string>
     <string name="unstar_track">Unstar Track</string>
+
+
+    <string name="location_permission_title">Location Permission Needed</string>
+    <string name="location_permission_message">This app needs access to your location to show your position on the map and record GPS tracks.\n\nYour location data stays on your device and is never shared.</string>
+    <string name="location_permission_required">Location Permission Required</string>
+    <string name="location_permission_rationale">To use this feature, we need access to your location. This allows us to:\n\n• Show your current position\n• Record GPS tracks\n• Center the map on your location</string>
+    <string name="location_permission_denied_message">Location permission is required to show your current position and record tracks.</string>
+
+    <!-- Notification Permission (Android 13+) -->
+    <string name="notification_permission_title">Notification Permission</string>
+    <string name="notification_permission_message">This app needs notification permission to show tracking status while recording.\n\nThis helps you stay informed about active recordings in the background.</string>
+    <string name="notification_permission_required">Notification Permission Required</string>
+    <string name="notification_permission_rationale">Notifications are needed to:\n\n• Show tracking status\n• Display recording controls\n• Keep you informed during background recording</string>
+    <string name="notification_permission_denied_brief">Notifications disabled - you won\'t see tracking status</string>
+
+    <!-- Activity Recognition Permission (Android 10+) -->
+    <string name="activity_recognition_permission_title">Activity Recognition</string>
+    <string name="activity_recognition_permission_message">This app can detect your activity (walking, running, etc.) to improve tracking accuracy.\n</string>
+    <string name="activity_recognition_permission_required">Activity Recognition Permission</string>
+    <string name="activity_recognition_permission_rationale">Activity recognition helps:\n\n• Detect when you\'re moving\n• Improve step counting\n• Better track accuracy</string>
+    <string name="activity_recognition_denied_brief">Step counting may be less accurate</string>
+
+    <!-- Location Services -->
+    <string name="location_off_message">Location services are turned off</string>
+    <string name="location_off_title">Location Services Disabled</string>
+    <string name="location_off_detailed">Location services must be enabled to use this feature.\n\nPlease enable location in your device settings.</string>
+
+    <!-- Permission Denied -->
+    <string name="permission_denied_message">%1$s permission was denied</string>
+
+    <!-- Dialog Buttons -->
+    <string name="grant_permission">Grant Permission</string>
+    <string name="not_now">Not Now</string>
+    <string name="try_again">Try Again</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="enable">ENABLE</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Info Messages -->
+    <string name="permission_education_info">This app respects your privacy. All location data stays on your device.</string>
+    <string name="tracking_requires_permissions">Recording tracks requires location and notification permissions</string>
 
     <string name="no_tracks_message">Start recording to create your first track </string>
     <string name="downhill">Downhill</string>

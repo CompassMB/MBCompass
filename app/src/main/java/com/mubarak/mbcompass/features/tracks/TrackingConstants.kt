@@ -2,8 +2,8 @@ package com.mubarak.mbcompass.features.tracks
 
 object TrackingConstants {
 
-    const val DEFAULT_LATITUDE = 71.172500
-    const val DEFAULT_LONGITUDE = 25.784444
+    const val DEFAULT_LATITUDE = 48.8584
+    const val DEFAULT_LONGITUDE = 2.2945
     const val DEFAULT_ZOOM_LEVEL = 16.0
 
     const val DEFAULT_ACCURACY = 300f

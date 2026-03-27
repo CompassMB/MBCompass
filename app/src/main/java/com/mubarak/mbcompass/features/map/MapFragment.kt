@@ -2,13 +2,11 @@
 
 package com.mubarak.mbcompass.features.map
 
-import android.Manifest
 import android.app.AlertDialog
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
@@ -24,10 +22,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -35,6 +31,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.mubarak.mbcompass.R
 import com.mubarak.mbcompass.core.location.LocationHelper
+import com.mubarak.mbcompass.core.permission.PermissionHandler
+import com.mubarak.mbcompass.ui.FragmentNotifications
 import com.mubarak.mbcompass.data.AppPreferences
 import com.mubarak.mbcompass.data.TrackRepository
 import com.mubarak.mbcompass.databinding.FragmentMapBinding
@@ -61,6 +59,7 @@ import org.osmdroid.views.overlay.compass.CompassOverlay
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
 class MapFragment : Fragment() {
 
@@ -75,6 +74,7 @@ class MapFragment : Fragment() {
 
     private lateinit var mapView: MapView
     private lateinit var controller: IMapController
+    private lateinit var permissionHandler: PermissionHandler
 
     private lateinit var btnStart: LinearLayout
     private lateinit var btnStartIcon: ImageView
@@ -87,8 +87,6 @@ class MapFragment : Fragment() {
     private var trackingState = TrackingConstants.STATE_TRACKING_NOT
     private var userInteraction = false
     private lateinit var currentBestLocation: Location
-    private var isGpsProviderActive: Boolean = false
-    private var isNetworkProviderActive: Boolean = false
     private var currentTrack: Track = Track()
     private var trackUriToDisplay: String? = null
 
@@ -111,14 +109,53 @@ class MapFragment : Fragment() {
         }
     }
 
+    private val locationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                onLocationPermissionGranted()
+            } else {
+                // Permission denied
+                FragmentNotifications.showToast(
+                    this,
+                    getString(R.string.location_permission_denied_message),
+                    Toast.LENGTH_LONG
+                )
+            }
+        }
+
+
+    private val notificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (!isGranted) {
+                FragmentNotifications.showToast(
+                    this,
+                    getString(R.string.notification_permission_denied_brief),
+                    Toast.LENGTH_LONG
+                )
+            }
+        }
+
+
+    private val activityRecognitionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (!isGranted) {
+                FragmentNotifications.showToast(
+                    this,
+                    getString(R.string.activity_recognition_denied_brief),
+                    Toast.LENGTH_SHORT
+                )
+            }
+        }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         currentBestLocation = LocationHelper.getLastKnownLocation(requireContext())
         trackingState = AppPreferences.loadTrackingState()
+        permissionHandler = PermissionHandler(this)
 
-        Log.d(TAG, "onCreate - currentBestLocation: ${currentBestLocation.latitude}, " +
-                "${currentBestLocation.longitude}")
+        Log.d(TAG, "onCreate - NO permission request on launch")
     }
 
     override fun onCreateView(
@@ -144,12 +181,7 @@ class MapFragment : Fragment() {
         btnDiscard = binding.btnDiscardTrack
         locationButton = binding.btnLocation
 
-        mapView.setTileSource(TileSourceFactory.MAPNIK)
-        mapView.setMultiTouchControls(true)
-        mapView.zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
-        mapView.setTilesScaledToDpi(true)
-        mapView.minZoomLevel = 3.coerceAtLeast(TileSourceFactory.MAPNIK.minimumZoomLevel).toDouble()
-        mapView.maxZoomLevel = TileSourceFactory.MAPNIK.maximumZoomLevel.toDouble()
+        setupMap()
 
         return binding.root
     }
@@ -160,8 +192,6 @@ class MapFragment : Fragment() {
 
         trackUriToDisplay = arguments?.getString(ARG_TRACK_URI)
 
-        setupMap()
-
         trackUriToDisplay?.let { trackUri ->
             Log.d(TAG, "Loading saved track from URI: $trackUri")
             loadAndDisplayTrack(trackUri)
@@ -170,32 +200,23 @@ class MapFragment : Fragment() {
         }
 
         setupButtons()
-        checkAndEnableLocation()
+
+        checkLocationServices()
     }
 
     override fun onStart() {
         super.onStart()
 
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_DENIED
-        ) {
-            requestLocationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-        }
-
-        if (trackUriToDisplay == null) {
-            requireContext().bindService(
-                Intent(requireContext(), TrackerService::class.java),
-                serviceConnection,
-                Context.BIND_AUTO_CREATE
-            )
+        if (trackUriToDisplay == null && permissionHandler.hasLocationPermission()) {
+            bindTrackerService()
         }
     }
 
     override fun onResume() {
         super.onResume()
         mapView.onResume()
+
+        checkLocationServices()
 
         if (bound) {
             if (trackingState != TrackingConstants.STATE_TRACKING_ACTIVE) {
@@ -205,8 +226,6 @@ class MapFragment : Fragment() {
 
             uiHandler.removeCallbacks(periodicLocationRequestRunnable)
             uiHandler.postDelayed(periodicLocationRequestRunnable, 0)
-
-            Log.d(TAG, "onResume - restarted periodic updates")
         }
 
         updateMainButton(trackingState)
@@ -215,7 +234,6 @@ class MapFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         mapView.onPause()
-
         saveMapState()
 
         if (bound && trackingState != TrackingConstants.STATE_TRACKING_ACTIVE) {
@@ -242,78 +260,59 @@ class MapFragment : Fragment() {
         mapView.onDetach()
     }
 
-    private val requestLocationPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-                Log.i(TAG, "Location permission granted")
-                if (bound) requireContext().unbindService(serviceConnection)
-                requireContext().bindService(
-                    Intent(requireContext(), TrackerService::class.java),
-                    serviceConnection,
-                    Context.BIND_AUTO_CREATE
-                )
-            } else {
-                Log.w(TAG, "Location permission denied")
-                if (bound) requireContext().unbindService(serviceConnection)
-            }
+
+    private fun checkLocationServices() {
+        if (!LocationHelper.isLocationEnabled(requireContext())) {
+            // Location services OFF
+            FragmentNotifications.showLocationOff(
+                fragment = this,
+                rootView = binding.root,
+                onEnableClick = {
+                    permissionHandler.openLocationSettings()
+                }
+            )
+        }
+    }
+
+
+    private fun onLocationPermissionGranted() {
+        Log.d(TAG, "Location permission granted - binding service")
+
+        // Check location services first
+        if (!LocationHelper.isLocationEnabled(requireContext())) {
+            checkLocationServices()
+            return
         }
 
-    private val recordingPermissionsResultLauncher: ActivityResultLauncher<Array<String>> =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionsMap ->
-            val locationGranted = ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-
-            val notificationsGranted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                permissionsMap.getOrDefault(Manifest.permission.POST_NOTIFICATIONS, false)
-            } else {
-                true
-            }
-
-            if (locationGranted && notificationsGranted) {
-                startTrackerService(resume = trackingState == TrackingConstants.STATE_TRACKING_PAUSED)
-            }
-
-            if (!locationGranted && !notificationsGranted) {
-                Toast.makeText(
-                    requireContext(),
-                    R.string.msg_notification_perm_denied,
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+        // Bind service
+        if (trackUriToDisplay == null) {
+            bindTrackerService()
         }
 
-    private val serviceConnection = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            val binder = service as TrackerService.LocalBinder
-            trackerService = binder.getService()
-            bound = true
+        // Center on current location
+        centerMap(currentBestLocation, animated = true)
+    }
 
-            trackingState = trackerService?.trackingState ?: TrackingConstants.STATE_TRACKING_NOT
-            updateMainButton(trackingState)
 
-            uiHandler.removeCallbacks(periodicLocationRequestRunnable)
-            uiHandler.postDelayed(periodicLocationRequestRunnable, 0)
-
-            Log.d(TAG, "Service connected - starting periodic location updates")
-        }
-
-        override fun onServiceDisconnected(name: ComponentName?) {
-            bound = false
-            trackerService = null
-            uiHandler.removeCallbacks(periodicLocationRequestRunnable)
-            Log.d(TAG, "Service disconnected - stopped periodic updates")
-        }
+    private fun bindTrackerService() {
+        requireContext().bindService(
+            Intent(requireContext(), TrackerService::class.java),
+            serviceConnection,
+            Context.BIND_AUTO_CREATE
+        )
     }
 
     private fun setupButtons() {
         locationButton.setOnClickListener {
-            centerMap(currentBestLocation, animated = true)
+            handleLocationButtonClick()
         }
 
+        // don't show start track button on TrackFragment
+        val isViewOnlyMode = trackUriToDisplay != null
+        btnStart.isVisible = !isViewOnlyMode
+
         btnStart.setOnClickListener {
-            handleMainButton()
+            handleStartButton()
         }
 
         btnSave.setOnClickListener {
@@ -325,7 +324,32 @@ class MapFragment : Fragment() {
         }
     }
 
-    private fun handleMainButton() {
+
+    private fun handleLocationButtonClick() {
+        when {
+            // Has permission, center map
+            permissionHandler.hasLocationPermission() -> {
+                // Check location services
+                if (!LocationHelper.isLocationEnabled(requireContext())) {
+                    checkLocationServices()
+                } else {
+                    centerMap(currentBestLocation, animated = true)
+                }
+            }
+
+            // No permission, request with education
+            else -> {
+                permissionHandler.requestLocationPermission(
+                    launcher = locationPermissionLauncher,
+                    onGranted = { onLocationPermissionGranted() },
+                    onDenied = { /* User declined */ }
+                )
+            }
+        }
+    }
+
+
+    private fun handleStartButton() {
         when (trackingState) {
             TrackingConstants.STATE_TRACKING_NOT -> startTracking(resume = false)
             TrackingConstants.STATE_TRACKING_ACTIVE -> trackerService?.pauseTracking()
@@ -333,32 +357,50 @@ class MapFragment : Fragment() {
         }
     }
 
+
     private fun startTracking(resume: Boolean) {
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                recordingPermissionsResultLauncher.launch(
-                    arrayOf(
-                        Manifest.permission.ACTIVITY_RECOGNITION,
-                        Manifest.permission.POST_NOTIFICATIONS
-                    )
-                )
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                recordingPermissionsResultLauncher.launch(
-                    arrayOf(Manifest.permission.ACTIVITY_RECOGNITION)
-                )
-            } else {
-                startTrackerService(resume = resume)
-            }
-        } else {
-            requestLocationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        // Location permission
+        if (!permissionHandler.hasLocationPermission()) {
+            permissionHandler.requestLocationPermission(
+                launcher = locationPermissionLauncher,
+                onGranted = { startTracking(resume) },
+                onDenied = { /* Cancelled */ }
+            )
+            return
         }
+
+        //  Location services
+        if (!LocationHelper.isLocationEnabled(requireContext())) {
+            checkLocationServices()
+            return
+        }
+
+        //  Notification permission (Android 13+)
+        if (!permissionHandler.hasNotificationPermission()) {
+            permissionHandler.requestNotificationPermission(
+                launcher = notificationPermissionLauncher,
+                onGranted = { startTracking(resume) },
+                onDenied = { startTracking(resume) } // Continue anyway
+            )
+            return
+        }
+
+        // Activity recognition (Android 10+)
+        if (!permissionHandler.hasActivityRecognitionPermission()) {
+            permissionHandler.requestActivityRecognitionPermission(
+                launcher = activityRecognitionLauncher,
+                onGranted = { startTrackerServiceActual(resume) },
+                onDenied = { startTrackerServiceActual(resume) } // Continue anyway
+            )
+            return
+        }
+
+        // all permissions, start service
+        startTrackerServiceActual(resume)
     }
 
-    private fun startTrackerService(resume: Boolean = false) {
+
+    private fun startTrackerServiceActual(resume: Boolean) {
         val intent = Intent(requireContext(), TrackerService::class.java)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -374,6 +416,28 @@ class MapFragment : Fragment() {
         }
     }
 
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as TrackerService.LocalBinder
+            trackerService = binder.getService()
+            bound = true
+
+            trackingState = trackerService?.trackingState ?: TrackingConstants.STATE_TRACKING_NOT
+            updateMainButton(trackingState)
+
+            uiHandler.removeCallbacks(periodicLocationRequestRunnable)
+            uiHandler.postDelayed(periodicLocationRequestRunnable, 0)
+
+            Log.d(TAG, "Service connected")
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            bound = false
+            trackerService = null
+            uiHandler.removeCallbacks(periodicLocationRequestRunnable)
+        }
+    }
+
     private fun updateMainButton(trackingState: Int) {
         this.trackingState = trackingState
 
@@ -381,21 +445,18 @@ class MapFragment : Fragment() {
             TrackingConstants.STATE_TRACKING_NOT -> {
                 btnStartIcon.setImageResource(R.drawable.start_circle_24px)
                 btnStartTxt.text = getString(R.string.btn_start)
-                btnStart.contentDescription = getString(R.string.btn_start)
                 btnSave.isGone = true
                 btnDiscard.isGone = true
             }
             TrackingConstants.STATE_TRACKING_ACTIVE -> {
                 btnStartIcon.setImageResource(R.drawable.pause_circle_24px)
                 btnStartTxt.text = getString(R.string.btn_pause)
-                btnStart.contentDescription = getString(R.string.btn_pause)
                 btnSave.isGone = true
                 btnDiscard.isGone = true
             }
             TrackingConstants.STATE_TRACKING_PAUSED -> {
                 btnStartIcon.setImageResource(R.drawable.start_circle_24px)
                 btnStartTxt.text = getString(R.string.btn_resume)
-                btnStart.contentDescription = getString(R.string.btn_resume)
                 btnSave.isVisible = true
                 btnDiscard.isVisible = true
             }
@@ -457,7 +518,6 @@ class MapFragment : Fragment() {
                     clearCurrentTrackOverlays()
                     trackerService?.clearTrack()
                     updateMainButton(trackingState)
-                    Toast.makeText(requireContext(), R.string.track_discarded, Toast.LENGTH_SHORT).show()
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
@@ -466,23 +526,17 @@ class MapFragment : Fragment() {
 
     private val periodicLocationRequestRunnable: Runnable = object : Runnable {
         override fun run() {
-            if (!bound) {
-                Log.w(TAG, "Not bound to service, stopping periodic updates")
-                return
-            }
+            if (!bound) return
 
             trackerService?.let { service ->
                 val previousTrackingState = trackingState
 
                 currentBestLocation = service.currentBestLocation
                 currentTrack = service.currentTrack
-                isGpsProviderActive = service.isGpsProviderActive
-                isNetworkProviderActive = service.isNetworkProviderActive
                 trackingState = service.trackingState
 
                 if (trackingState != previousTrackingState) {
                     updateMainButton(trackingState)
-                    Log.d(TAG, "Tracking state changed: $previousTrackingState → $trackingState")
                 }
 
                 markCurrentPosition(currentBestLocation, trackingState)
@@ -515,6 +569,13 @@ class MapFragment : Fragment() {
             userInteraction = true
             false
         }
+
+        mapView.setTileSource(TileSourceFactory.MAPNIK)
+        mapView.setMultiTouchControls(true)
+        mapView.zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
+        mapView.setTilesScaledToDpi(true)
+        mapView.minZoomLevel = 3.coerceAtLeast(TileSourceFactory.MAPNIK.minimumZoomLevel).toDouble()
+        mapView.maxZoomLevel = TileSourceFactory.MAPNIK.maximumZoomLevel.toDouble()
     }
 
     private fun restoreMapState() {
@@ -638,21 +699,6 @@ class MapFragment : Fragment() {
         if (track.wayPoints.isEmpty()) return null
         val points = track.wayPoints.map { GeoPoint(it.latitude, it.longitude) }
         return BoundingBox.fromGeoPoints(points)
-    }
-
-    private fun hasLocationPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun checkAndEnableLocation() {
-        if (!hasLocationPermission()) {
-            requestLocationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-        } else {
-            markCurrentPosition(currentBestLocation, trackingState)
-        }
     }
 
     private fun loadAndDisplayTrack(trackUri: String) {

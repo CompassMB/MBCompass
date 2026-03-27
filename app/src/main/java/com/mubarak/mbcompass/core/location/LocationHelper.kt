@@ -5,10 +5,12 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import androidx.core.content.ContextCompat
+import androidx.core.location.LocationManagerCompat
 import com.mubarak.mbcompass.data.AppPreferences
 import com.mubarak.mbcompass.features.tracks.TrackingConstants
 import com.mubarak.mbcompass.features.tracks.model.Track
@@ -20,6 +22,23 @@ import kotlin.math.pow
 object LocationHelper {
 
     private const val TAG = "LocationHelper"
+
+    //Check if location services (GPS/Network) are enabled
+    fun isLocationEnabled(context: Context): Boolean {
+        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            LocationManagerCompat.isLocationEnabled(locationManager)
+        } else {
+            try {
+                val gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                val networkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+                gpsEnabled || networkEnabled
+            } catch (e: Exception) {
+                false
+            }
+        }
+    }
 
     fun getDefaultLocation(): Location {
         val defaultLocation = Location(LocationManager.NETWORK_PROVIDER)
