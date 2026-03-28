@@ -21,9 +21,10 @@
 
 <blockquote>
 
-<b>Not just a compass. Not a map app.</b>
+<b>Not just a compass. Not a full navigation app.</b>
 
-MBCompass bridges the gap between a compass and a full navigation app - shows direction and live location without using hundreds of MBs of storage or privacy trade-offs.
+MBCompass sits in between, a focused **navigation utility** for hiking, trekking and everyday use, combining direction, live location, and track recording without unnecessary complexity.
+
 </blockquote>
 
 <b>The navigation starts from here</b>
