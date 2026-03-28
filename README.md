@@ -12,7 +12,7 @@
     <img src="https://img.shields.io/github/v/release/MubarakNative/MBCompass?include_prereleases&color=4B95DE&style=for-the-badge" alt="Latest Release"/>
   </a>
   <a href="https://apilevels.com/">
-    <img src="https://img.shields.io/badge/API-21%2B-1450A8?style=for-the-badge" alt="Min API"/>
+    <img src="https://img.shields.io/badge/API-23%2B-1450A8?style=for-the-badge" alt="Min API"/>
   </a>
 </p>
 
@@ -35,11 +35,11 @@
 
 ## About
 
-**MBCompass** is a modern, free, and open-source compass and navigation app built from the ground up for Android, without **ads**, **IAP**, or **tracking**. Built with Jetpack Compose, it supports compass and navigation features while being **lightweight** and simple.
+**MBCompass** is a modern, free, and open-source compass and navigation app built from the ground up for Android, without **ads**, **IAP**, or **tracking**. Built with Jetpack Compose, it supports compass and navigation features while being **lightweight**, simple and battery-efficient.
 
-> Not just a compass. Not a map app.
+>Not just a compass. Not a full navigation app.
 >
-> MBCompass bridges the gap between a **compass** and a **full navigation app** - shows direction and live location without using hundreds of MBs of storage or privacy trade-offs.
+>MBCompass sits in between, a focused **navigation utility** for hiking, trekking and everyday use, combining direction, live location, and track recording without unnecessary complexity.
 
 ---
 
@@ -54,17 +54,37 @@
 
 ## Features
 
-- Displays clear cardinal directions with both **magnetic north** and **true north**.
-- Live **GPS location tracking** on _OpenStreetMap_.
-- Shows magnetic field strength in **µT**.
-- Sensor fusion for improved accuracy (_accelerometer_, _magnetometer_, _gyroscope_).
-- Light and dark theme support controlled via Settings.
-- Keeps screen on during navigation.
-- Landscape orientation support.
-- Built with Jetpack Compose and Material Design.
-- Runs on Android 5.0+
-- No ads, no in-app purchases, no tracking.
-- [Learn more on the website](https://compassmb.github.io/MBCompass-site/#features)
+### Core Compass & Navigation
+- Displays clear cardinal directions with both **magnetic north** and **true north**
+- Live **GPS location tracking** on _OpenStreetMap_
+- Sensor fusion for improved accuracy (_accelerometer_, _magnetometer_, _gyroscope_)
+- Shows magnetic field strength in **µT**
+
+### Tracking & GPX
+- **Real-time track recording** directly on the map (start, pause, resume)
+- **Track management screen** to view and organize all saved tracks
+- **Track statistics**:
+    - Distance, duration, average speed
+    - Elevation gain/loss
+    - Min/max altitude
+- Smooth polyline rendering for recorded tracks
+- **Waypoint recording** during tracking
+- **GPX export support** using system file picker
+- **Share tracks** via Android share sheet
+- **Star and sort tracks** (favorites, organization)
+
+### App Experience
+- Light and dark theme (AMOLED Dark also supported) support via Settings
+- Keeps screen on during navigation
+- Custom bottom bar for ease navigation
+- Landscape orientation support
+- Built with Jetpack Compose and Material Design
+- No ads, no in-app purchases, no tracking
+- No Google Play Services dependency
+- Uses Android’s native location APIs
+- Runs on Android 6.0+
+
+[Learn more on the website](https://compassmb.github.io/MBCompass-site/#features)
 
 ---
 
@@ -79,12 +99,9 @@
     <img width="600" src="/MBCompass_Q2.png" alt="MBCompass Q2 design preview"/>
   </p>
 
-- GPX waypoint and track recording
-- Redesigned top-level navigation layout
-- Track export and sharing
-- and many more,..
-
-_(This is a reference design concept and does not represent the final outcome. The final implementation may vary to ensure optimal performance and alignment with Android best practices.)_
+- Offline maps (evaluating lightweight approaches)
+- Topographic (topo) map support
+- Navigation UX improvements and refinements
 
 </details>
 
@@ -100,9 +117,23 @@ MBCompass has gained recognition from the global developer community:
 
 [See full highlights](./Featured.md)
 
-##  Permissions
+## Permissions
 
-- Location permission is only used to detect the current location on the map.
+MBCompass only requests the minimum permissions required for navigation and tracking features:
+
+- **Location**
+    - Used to detect and display your current location on the map
+    - Required for real-time track recording and navigation features
+
+- **Notification (Android 13+)**
+    - Used to show foreground service notifications during active tracking
+    - Enables track progress visibility and quick controls (start/pause/stop)
+
+- **Activity Recognition (Android 10+)**
+    - Used to improve tracking accuracy by detecting user movement state (e.g., walking)
+
+MBCompass does **not** collect, store, or share any personal data.
+All location and tracking data stays on your device unless you explicitly export it (e.g., GPX files).
 
 ## Translations
 
