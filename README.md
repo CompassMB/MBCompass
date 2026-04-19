@@ -54,35 +54,41 @@
 
 ## Features
 
-### Core Compass & Navigation
-- Displays clear cardinal directions with both **magnetic north** and **true north**
-- Live **GPS location tracking** on _OpenStreetMap_
+### Compass & Navigation
+- Accurate compass with both **magnetic north** and **true north**
 - Sensor fusion for improved accuracy (_accelerometer_, _magnetometer_, _gyroscope_)
-- Shows magnetic field strength in **µT**
+- Displays real-time magnetic field strength (**µT**)
+- Live **GPS location tracking** on OpenStreetMap
+- Keeps screen on during navigation
 
-### Tracking & GPX
-- **Real-time track recording** directly on the map (start, pause, resume)
-- **Track management screen** to view and organize all saved tracks
+### Tracking & Waypoints
+- **Real-time track recording** on the map (start, pause, resume)
+- Smooth polyline rendering for clear path visualization
+- Reliable tracking using Android’s native location APIs
+
+### Track Analysis & Management
+- View and organize all saved tracks in one place
 - **Track statistics**:
-    - Distance, duration, average speed
-    - Elevation gain/loss
-    - Min/max altitude
-- Smooth polyline rendering for recorded tracks
-- **Waypoint recording** during tracking
-- **GPX export support** using system file picker
-- **Share tracks** via Android share sheet
-- **Star and sort tracks** (favorites, organization)
+  - Distance, duration, average speed
+  - Elevation gain/loss
+  - Min/max altitude
+- **Star and sort tracks** for easy organization
+
+### Export & Sharing
+- Export tracks as **GPX files** using the system file picker
+- Share tracks easily via Android share sheet
 
 ### App Experience
-- Light and dark theme (AMOLED Dark also supported) support via Settings
-- Keeps screen on during navigation
-- Custom bottom bar for ease navigation
+- Light, Dark, and **AMOLED** themes
 - Landscape orientation support
-- Built with Jetpack Compose and Material Design
-- No ads, no in-app purchases, no tracking
+- Clean UI with Jetpack Compose (Material Design)
+- Custom bottom bar for easy navigation
+
+### Privacy First
+- **No ads, no tracking, no in-app purchases**
 - No Google Play Services dependency
-- Uses Android’s native location APIs
-- Runs on Android 6.0+
+- Uses native Android location APIs
+- Supports Android 6.0+
 
 [Learn more on the website](https://compassmb.github.io/MBCompass-site/#features)
 
@@ -127,7 +133,7 @@ MBCompass only requests the minimum permissions required for navigation and trac
 
 - **Notification (Android 13+)**
     - Used to show foreground service notifications during active tracking
-    - Enables track progress visibility and quick controls (start/pause/stop)
+    - Enables track progress visibility and quick controls (pause/resume)
 
 - **Activity Recognition (Android 10+)**
     - Used to improve tracking accuracy by detecting user movement state (e.g., walking)
