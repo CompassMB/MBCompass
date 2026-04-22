@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import android.os.Build
-import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import androidx.core.content.ContextCompat
@@ -190,7 +189,7 @@ object LocationHelper {
 
 
 
-     // Calculate distance between two points (Haversine formula)
+     // Calculate distance between two points
     fun calculateDistance(previousLocation: Location?, location: Location): Float {
         var distance = 0f
         if (previousLocation != null) {

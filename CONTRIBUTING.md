@@ -32,7 +32,7 @@ No programming experience is required, translations can be done directly in the 
 
 ## Notes
 
-- For larger changes, please open an Issue in github first to discuss.
+- For larger changes, please open an Issue in GitHub first to discuss.
 - All derivative work must remain open-source under GPLv3.
 
 Thanks for helping to improve MBCompass!

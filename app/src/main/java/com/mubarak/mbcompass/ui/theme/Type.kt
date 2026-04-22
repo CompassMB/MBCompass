@@ -9,9 +9,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 
-// Default Material 3 typography values
-val baseline = Typography()
-
 // Set of Material typography styles to start with
 val Typography = Typography(
     bodyLarge = TextStyle(

@@ -30,7 +30,7 @@ class SettingsViewModel @Inject constructor(
         }.catch {
             Log.d("SettingsViewModel", "Error getting user preference", it)
             emit(SettingsUiState())
-        }.stateIn(viewModelScope, SharingStarted.Companion.WhileSubscribed(5_000), SettingsUiState())
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), SettingsUiState())
 
     fun setTheme(theme: String) {
         viewModelScope.launch {

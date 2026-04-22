@@ -288,9 +288,9 @@ class TrackerService : Service(), SensorEventListener {
     private fun stopForegroundCompat(removeNotification: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val flags = if (removeNotification) {
-                Service.STOP_FOREGROUND_REMOVE
+                STOP_FOREGROUND_REMOVE
             } else {
-                Service.STOP_FOREGROUND_DETACH
+                STOP_FOREGROUND_DETACH
             }
             stopForeground(flags)
         } else {
@@ -331,7 +331,7 @@ class TrackerService : Service(), SensorEventListener {
                     )
                 }
 
-                // Auto-save temp track every 2 minutes
+                // Auto-save temp track
                 val now = GregorianCalendar.getInstance().time
                 if (now.time - lastTempSaveTime.time > TrackingConstants.SAVE_TEMP_TRACK_INTERVAL) {
                     lastTempSaveTime = now
@@ -469,7 +469,7 @@ class TrackerService : Service(), SensorEventListener {
         }
     }
 
-    // Used for testing TODO: move it to a separate class
+    // TODO: move it to a separate class
     private fun createNotification(): Notification {
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(

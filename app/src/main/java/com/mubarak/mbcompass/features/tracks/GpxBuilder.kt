@@ -65,7 +65,7 @@ object GpxBuilder {
                 }
             }
 
-            if (track.wayPoints.size > 0) {
+            if (track.wayPoints.isNotEmpty()) {
                 track.wayPoints[track.wayPoints.size - 1].isStopOver =
                     LocationHelper.isStopOver(previousLocation, location)
             }

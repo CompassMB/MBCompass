@@ -108,10 +108,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
 
-
     // Dagger Hilt
     implementation(libs.hilt.android)
-    implementation(libs.androidx.coordinatorlayout)
     ksp(libs.hilt.android.compiler)
 
     // Android UI ViewBinding

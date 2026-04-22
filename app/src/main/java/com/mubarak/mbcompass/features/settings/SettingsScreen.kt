@@ -66,12 +66,12 @@ import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mubarak.mbcompass.R
-import com.mubarak.mbcompass.features.settings.SettingsViewModel
 import com.mubarak.mbcompass.ui.theme.MBCompassTheme
 import com.mubarak.mbcompass.ui.theme.MBShapeDefaults.bottomListItemShape
 import com.mubarak.mbcompass.ui.theme.MBShapeDefaults.middleListItemShape
 import com.mubarak.mbcompass.ui.theme.MBShapeDefaults.singleListItemShape
 import com.mubarak.mbcompass.ui.theme.MBShapeDefaults.topListItemShape
+import com.mubarak.mbcompass.ui.theme.ThemeConfig
 import com.mubarak.mbcompass.ui.theme.iconDefaultSize
 import com.mubarak.mbcompass.ui.theme.spacingMedium
 import com.mubarak.mbcompass.ui.theme.spacingSmall
@@ -79,7 +79,6 @@ import com.mubarak.mbcompass.utils.Const.APP_PAGE
 import com.mubarak.mbcompass.utils.Const.AUTHOR_EMAIL
 import com.mubarak.mbcompass.utils.Const.LICENSE_PAGE
 import com.mubarak.mbcompass.utils.Const.SUPPORT_PAGE
-import com.mubarak.mbcompass.ui.theme.ThemeConfig
 
 @Composable
 fun SettingsScreen(
