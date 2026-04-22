@@ -25,8 +25,6 @@ import kotlinx.coroutines.runBlocking
 
 object AppPreferences {
 
-    private const val TAG = "AppPreferences"
-
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preferences")
 
     private lateinit var prefDataStore: DataStore<Preferences>

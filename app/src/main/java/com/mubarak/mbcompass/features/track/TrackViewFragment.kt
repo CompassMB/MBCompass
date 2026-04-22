@@ -2,7 +2,6 @@
 
 package com.mubarak.mbcompass.features.track
 
-import com.mubarak.mbcompass.R
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
@@ -12,22 +11,35 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.FileProvider
 import androidx.core.net.toFile
 import androidx.core.net.toUri
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.mubarak.mbcompass.R
 import com.mubarak.mbcompass.data.TrackRepository
 import com.mubarak.mbcompass.databinding.FragmentTrackViewBinding
 import com.mubarak.mbcompass.features.map.MapFragment
 import com.mubarak.mbcompass.features.tracks.model.Track
-import com.mubarak.mbcompass.utils.DateTimeFormatter
-import com.mubarak.mbcompass.utils.LengthUnitHelper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -61,7 +73,8 @@ class TrackViewFragment : Fragment() {
     private var track: Track? = null
     private var trackUri: String? = null
 
-    // activity result launcher for saving GPX
+    private var fab: ImageButton? = null
+
     private val saveGpxLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult(),
         this::handleSaveGpxResult
@@ -86,37 +99,18 @@ class TrackViewFragment : Fragment() {
             return
         }
 
-        loadTrack(trackUri!!)
         setupMapFragment(trackUri!!)
-        setupActionButtons()
+        loadTrackAndSetupBottomSheet(trackUri!!)
+        setupFAB()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        fab = null
         _binding = null
     }
 
-    private fun loadTrack(trackUri: String) {
-        lifecycleScope.launch {
-            try {
-                val loadedTrack = withContext(Dispatchers.IO) {
-                    trackRepository.readTrackFromUri(trackUri.toUri())
-                }
-
-                track = loadedTrack
-                displayTrackStatistics(loadedTrack)
-
-            } catch (e: Exception) {
-                Log.e(TAG, "Error loading track", e)
-                Toast.makeText(
-                    requireContext(),
-                    "Error loading track",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        }
-    }
-
+// reuse existing map fragment
     private fun setupMapFragment(trackUri: String) {
         val fragmentManager = childFragmentManager
         val existingFragment = fragmentManager.findFragmentById(R.id.map_container) as? MapFragment
@@ -129,75 +123,117 @@ class TrackViewFragment : Fragment() {
             Log.d(TAG, "MapFragment added for track: $trackUri")
         }
     }
+    private fun loadTrackAndSetupBottomSheet(trackUri: String) {
+        lifecycleScope.launch {
+            try {
+                val loadedTrack = withContext(Dispatchers.IO) {
+                    trackRepository.readTrackFromUri(trackUri.toUri())
+                }
 
-    private fun displayTrackStatistics(track: Track) {
-        with(binding) {
-            // Track name and date
-            trackName.text = track.name
-            trackDate.text = DateTimeFormatter.formatDateTimeString(track.recordingStart)
+                track = loadedTrack
+                setupBottomSheet(loadedTrack)
 
-            trackDuration.text = DateTimeFormatter.formatDurationTime(track.duration)
-            trackDistance.text = LengthUnitHelper.convertDistanceToString(track.length)
-
-            trackWaypoints.text = track.wayPoints.size.toString()
-
-            // Average speed calculation
-            trackAvgSpeed.text = if (track.duration > 0) {
-                val speedKmh = (track.length / 1000.0) / (track.duration / 3600000.0)
-                String.format("%.1f km/h", speedKmh)
-            } else {
-                "0.0 km/h"
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading track", e)
+                Toast.makeText(
+                    requireContext(),
+                    "Error loading track: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
-
-            if (track.positiveElevation != 0.0 || track.negativeElevation != 0.0) {
-                elevationCard.isVisible = true
-                trackUphill.text = String.format("+%.0f m", track.positiveElevation)
-                trackDownhill.text = String.format("%.0f m", kotlin.math.abs(track.negativeElevation))
-            } else {
-                elevationCard.isVisible = false
-            }
-
-            if (track.maxAltitude > 0.0) {
-                altitudeRangeCard.isVisible = true
-                trackMinAltitude.text = String.format("%.0f m", track.minAltitude)
-                trackMaxAltitude.text = String.format("%.0f m", track.maxAltitude)
-            } else {
-                altitudeRangeCard.isVisible = false
-            }
-
-            // Recording details
-            if (track.recordingStop != 0L) {
-                recordingInfoCard.isVisible = true
-                trackRecordingStart.text = "Started: ${DateTimeFormatter.formatDateTimeString(track.recordingStart)}"
-                trackRecordingStop.text = "Ended: ${DateTimeFormatter.formatDateTimeString(track.recordingStop)}"
-            } else {
-                recordingInfoCard.isVisible = false
-            }
-        }
-
-        Log.d(TAG, "Displayed stats for track: ${track.name} (${track.wayPoints.size} waypoints)")
-    }
-
-    private fun setupActionButtons() {
-        binding.fabShare.setOnClickListener {
-            showShareOptions()
         }
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
+    private fun setupBottomSheet(track: Track) {
+        val composeView = binding.bottomSheetCompose as ComposeView
+
+        composeView.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+
+            setContent {
+                var showBottomSheet by remember { mutableStateOf(false) }
+                val sheetState = rememberModalBottomSheetState(
+                    skipPartiallyExpanded = false
+                )
+
+                MaterialTheme {
+                    if (showBottomSheet) {
+                        TrackStatsBottomSheet(
+                            track = track,
+                            sheetState = sheetState,
+                            onDismissRequest = {
+                                showBottomSheet = false
+                                fab?.visibility = VISIBLE
+                            },
+                            onShareClick = {
+                                showBottomSheet = false
+                                showShareOptions()
+                            },
+                            onDeleteClick = {
+                                showBottomSheet = false
+                                showDeleteConfirmation()
+                            }
+                        )
+                    }
+
+                    // update FAB visibility based on sheet state
+                    LaunchedEffect(showBottomSheet) {
+                        if (showBottomSheet) {
+                            fab?.visibility = GONE
+                        } else {
+                            fab?.visibility = VISIBLE
+                        }
+                    }
+                }
+
+                DisposableEffect(Unit) {
+                    fab?.setOnClickListener {
+                        showBottomSheet = true
+                    }
+                    onDispose { }
+                }
+            }
+        }
+    }
+
+
+    private fun setupFAB() {
+        fab = ImageButton(requireContext()).apply {
+            setImageResource(R.drawable.info_24px)
+            setBackgroundResource(R.drawable.fab_backgnd)
+            layoutParams = ViewGroup.MarginLayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(0, 0, 48, 48)
+            }
+        }
+
+        (binding.root as ViewGroup).addView(fab)
+
+        // align it top end
+        val layoutParams = fab!!.layoutParams as FrameLayout.LayoutParams
+        layoutParams.gravity = android.view.Gravity.TOP or android.view.Gravity.END
+        layoutParams.setMargins(0, 16,
+            resources.getDimensionPixelSize(R.dimen.fab_margin),
+            resources.getDimensionPixelSize(R.dimen.fab_margin)
+        )
+        fab!!.layoutParams = layoutParams
+    }
 
     private fun showShareOptions() {
-        val options = arrayOf("Save GPX to file", "Share GPX via apps", "Delete track")
+        val options = arrayOf("Save GPX to file", "Share GPX via apps")
 
         AlertDialog.Builder(requireContext())
-            .setTitle("Track Options")
+            .setTitle(R.string.share_track)
             .setItems(options) { _, which ->
                 when (which) {
                     0 -> openSaveGpxDialog()
                     1 -> shareGpxViaShareSheet()
-                    2 -> showDeleteConfirmation()
                 }
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(R.string.cancel, null)
             .show()
     }
 
@@ -212,7 +248,7 @@ class TrackViewFragment : Fragment() {
             try {
                 saveGpxLauncher.launch(intent)
             } catch (e: Exception) {
-                Log.e(TAG, "Unable to save GPX.", e)
+                Log.e(TAG, getString(R.string.toast_error_saving_gpx), e)
                 Toast.makeText(requireContext(), "Please install a file manager app", Toast.LENGTH_LONG).show()
             }
         }
@@ -227,10 +263,10 @@ class TrackViewFragment : Fragment() {
                 lifecycleScope.launch {
                     try {
                         copyFile(sourceUri, targetUri)
-                        Toast.makeText(requireContext(), "GPX file saved successfully", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), R.string.toast_gpx_saved, Toast.LENGTH_LONG).show()
                     } catch (e: Exception) {
                         Log.e(TAG, "Error saving GPX", e)
-                        Toast.makeText(requireContext(), "Error saving GPX file", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), R.string.toast_error_saving_gpx, Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -282,21 +318,22 @@ class TrackViewFragment : Fragment() {
 
             } catch (e: Exception) {
                 Log.e(TAG, "Error sharing GPX", e)
-                Toast.makeText(requireContext(), "Error sharing GPX file", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), R.string.toast_error_saving_gpx, Toast.LENGTH_LONG).show()
             }
         }
     }
 
+
     private fun showDeleteConfirmation() {
         track?.let { track ->
             AlertDialog.Builder(requireContext())
-                .setTitle("Delete Track")
+                .setTitle(R.string.delete_track_title)
                 .setMessage("Are you sure you want to delete this track?\n\n- ${track.name}")
                 .setIcon(R.drawable.delete_24px)
-                .setPositiveButton("Delete") { _, _ ->
+                .setPositiveButton(R.string.delete) { _, _ ->
                     deleteTrack()
                 }
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show()
         }
     }
@@ -309,9 +346,12 @@ class TrackViewFragment : Fragment() {
                         trackRepository.deleteTrack(track.getTrackId())
                     }
 
+                    Toast.makeText(requireContext(), R.string.track_deleted, Toast.LENGTH_SHORT).show()
+                    requireActivity().onBackPressed()
+
                 } catch (e: Exception) {
                     Log.e(TAG, "Error deleting track", e)
-                    Toast.makeText(requireContext(), "Error deleting track", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), R.string.toast_error_deleting_track, Toast.LENGTH_LONG).show()
                 }
             }
         }

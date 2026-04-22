@@ -11,7 +11,6 @@
     <string name="west">West</string>
     <string name="northwest">Northwest</string>
     <string name="compass">Compass</string>
-    <string name="calibration_required">Calibration required: move your device in a figure-eight pattern to recalibrate.</string>
     <string name="map">Map</string>
     <string name="permission_rationale">MBCompass requires location access to correct magnetic declination and display True North.</string>
     <string name="rotation_sensor_not_available">Rotation vector sensor not available</string>
@@ -32,7 +31,6 @@
     <string name="theme">Theme</string>
     <string name="amoled_dark">AMOLED dark</string>
     <string name="licenses">License</string>
-    <string name="about_settings">About</string>
     <string name="sys_default">System default</string>
     <string name="light_theme">Light</string>
     <string name="dark_theme">Dark</string>
@@ -67,61 +65,30 @@
     <string name="btn_resume">Resume</string>
     <string name="notification_channel_tracking">GPS tracking</string>
     <string name="notification_channel_tracking_description">Shows tracking progress</string>
-    <string name="msg_notification_perm_denied">Notification permission is required</string>
-    <string name="msg_activity_recog_perm_denied">Activity recognition permission is required for step counting</string>
-    <string name="brn">Pause</string>
     <string name="btn_pause">Pause</string>
     <string name="track_not_saved">Track not saved</string>
     <string name="msg_empty_recording">Couldn\'t save the track. No waypoints were recorded.</string>
     <string name="resume_recording">Resume recording</string>
     <string name="save_track">Save track</string>
     <string name="save_track_confirmation">Would you like to save the recorded track?</string>
-    <string name="track_saved">Track saved</string>
+    <string name="track_saved">Track saved successfully</string>
     <string name="discard_track_confirmation">Are you sure you want to discard this track?</string>
     <string name="discard">Discard</string>
-    <string name="track_discarded">Track discarded</string>
-    <string name="permission_location_title">Location permission</string>
-    <string name="permission_location_rationale">Location permission is required for tracking</string>
-    <string name="permission_grant">Grant</string>
-    <string name="permission_tracking_rationale">Location and related permissions are required for tracking</string>
-    <string name="distance">Distance</string>
-    <string name="duration">Duration</string>
-    <string name="average_speed">Avg speed</string>
-    <string name="waypoints">Waypoints</string>
-    <string name="elevation">Elevation</string>
-    <string name="uphill">Uphil</string>
-    <string name="share">Share</string>
+
     <string name="track_details">Track details</string>
 
-    <string name="recording_details">Recording Details</string>
-    <string name="recording_started">Started: %1$s</string>
-    <string name="recording_ended">Ended: %1$s</string>
-
-    <string name="dialog_share_title">Track Options</string>
-    <string name="dialog_share_option_save_gpx">Save GPX to file</string>
-    <string name="dialog_share_option_share_gpx">Share GPX via apps</string>
-    <string name="dialog_share_option_delete_track">Delete track</string>
-
-    <string name="dialog_delete_track_message">Are you sure you want to delete this track?</string>
-    <string name="dialog_delete_button">Delete</string>
+    <string name="toast_error_deleting_track">Error Deleting track</string>
 
     <string name="toast_gpx_saved">GPX file saved successfully</string>
-    <string name="toast_install_file_helper">Please install a file manager app</string>
-    <string name="toast_error_loading_track">Error loading track</string>
     <string name="toast_error_saving_gpx">Error saving GPX file</string>
-    <string name="toast_error_sharing_gpx">Error sharing GPX file</string>
-    <string name="toast_error_deleting_track">Error deleting track</string>
 
     <string name="share_track">Share Track</string>
-    <string name="save_gpx_to_file">Save GPX to file</string>
-    <string name="share_gpx_via_apps">Share GPX via apps</string>
     <string name="delete_track_title">Delete Track</string>
     <string name="delete_track_message">Are you sure you want to delete "%1$s"?</string>
     <string name="delete">Delete</string>
 
     <string name="star_track">Star Track</string>
     <string name="unstar_track">Unstar Track</string>
-
 
     <string name="location_permission_title">Location Permission Needed</string>
     <string name="location_permission_message">This app needs access to your location to show your position on the map and record GPS tracks.\n\nYour location data stays on your device and is never shared.</string>
@@ -143,29 +110,14 @@
     <string name="activity_recognition_permission_rationale">Activity recognition helps:\n\n• Detect when you\'re moving\n• Improve step counting\n• Better track accuracy</string>
     <string name="activity_recognition_denied_brief">Step counting may be less accurate</string>
 
-    <!-- Location Services -->
-    <string name="location_off_message">Location services are turned off</string>
-    <string name="location_off_title">Location Services Disabled</string>
-    <string name="location_off_detailed">Location services must be enabled to use this feature.\n\nPlease enable location in your device settings.</string>
-
-    <!-- Permission Denied -->
-    <string name="permission_denied_message">%1$s permission was denied</string>
-
-    <!-- Dialog Buttons -->
     <string name="grant_permission">Grant Permission</string>
     <string name="not_now">Not Now</string>
     <string name="try_again">Try Again</string>
     <string name="open_settings">Open Settings</string>
-    <string name="enable">ENABLE</string>
     <string name="cancel">Cancel</string>
 
-    <!-- Info Messages -->
-    <string name="permission_education_info">This app respects your privacy. All location data stays on your device.</string>
-    <string name="tracking_requires_permissions">Recording tracks requires location and notification permissions</string>
-
     <string name="no_tracks_message">Start recording to create your first track </string>
-    <string name="downhill">Downhill</string>
-    <string name="dialog_delete_track_title">Delete track</string>
+    <string name="track_deleted">Track Deleted</string>
 
 
 </resources>

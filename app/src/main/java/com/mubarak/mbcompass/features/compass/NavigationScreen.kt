@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -38,10 +37,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -68,6 +65,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
@@ -76,10 +74,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mubarak.mbcompass.MainViewModel
 import com.mubarak.mbcompass.R
-import com.mubarak.mbcompass.core.sensors.AndroidSensorEventListener
-import com.mubarak.mbcompass.core.sensors.SensorViewModel
 import com.mubarak.mbcompass.core.location.AndroidLocationManager
 import com.mubarak.mbcompass.core.location.TAG
+import com.mubarak.mbcompass.core.sensors.AndroidSensorEventListener
+import com.mubarak.mbcompass.core.sensors.SensorViewModel
 import com.mubarak.mbcompass.features.settings.SettingsViewModel
 import com.mubarak.mbcompass.utils.Azimuth
 import com.mubarak.mbcompass.utils.CardinalDirection

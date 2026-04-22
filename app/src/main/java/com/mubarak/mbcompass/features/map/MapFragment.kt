@@ -154,8 +154,6 @@ class MapFragment : Fragment() {
         currentBestLocation = LocationHelper.getLastKnownLocation(requireContext())
         trackingState = AppPreferences.loadTrackingState()
         permissionHandler = PermissionHandler(this)
-
-        Log.d(TAG, "onCreate - NO permission request on launch")
     }
 
     override fun onCreateView(
@@ -310,6 +308,7 @@ class MapFragment : Fragment() {
         // don't show start track button on TrackFragment
         val isViewOnlyMode = trackUriToDisplay != null
         btnStart.isVisible = !isViewOnlyMode
+        locationButton.isVisible = !isViewOnlyMode
 
         btnStart.setOnClickListener {
             handleStartButton()
@@ -342,7 +341,9 @@ class MapFragment : Fragment() {
                 permissionHandler.requestLocationPermission(
                     launcher = locationPermissionLauncher,
                     onGranted = { onLocationPermissionGranted() },
-                    onDenied = { /* User declined */ }
+                    onDenied = {
+                        Toast.makeText(requireContext(), R.string.location_permission_required, Toast.LENGTH_SHORT).show()
+                    }
                 )
             }
         }
@@ -364,7 +365,7 @@ class MapFragment : Fragment() {
             permissionHandler.requestLocationPermission(
                 launcher = locationPermissionLauncher,
                 onGranted = { startTracking(resume) },
-                onDenied = { /* Cancelled */ }
+                onDenied = { Toast.makeText(requireContext(), R.string.location_permission_title, Toast.LENGTH_SHORT).show() }
             )
             return
         }

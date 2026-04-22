@@ -20,7 +20,6 @@ class PermissionHandler(
     private val context: Context
         get() = fragment.requireContext()
 
-
     fun requestLocationPermission(
         launcher: ActivityResultLauncher<String>,
         onGranted: () -> Unit,

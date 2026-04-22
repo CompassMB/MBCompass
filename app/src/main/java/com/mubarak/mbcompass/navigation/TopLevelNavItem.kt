@@ -31,6 +31,6 @@ val TopLevelDestination = listOf(
     TopLevelRoute(NavigationRoute, R.string.navigation, R.drawable.ic_nav_24px),
     TopLevelRoute(MapRoute(),      R.string.map,        R.drawable.ic_map_24px),
     TopLevelRoute(TracksRoute,      R.string.tracks,        R.drawable.ic_tracks_24px),
-    TopLevelRoute(SettingsRoute,   R.string.settings,   R.drawable.ic_settings_24px),
+    TopLevelRoute(SettingsRoute,   R.string.settings,   R.drawable.settings_24px),
 )
 
