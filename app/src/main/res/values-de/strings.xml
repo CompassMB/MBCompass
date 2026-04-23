@@ -82,7 +82,7 @@
     <string name="resume_recording">Aufzeichnen fortfahren</string>
     <string name="save_track">Track speichern</string>
     <string name="save_track_confirmation">Soll der aufgezeichnete Track gespeichert werden?</string>
-    <string name="track_saved">Track gespeichert</string>
+    <string name="track_saved">Track erfolgreich gespeichert</string>
     <string name="discard_track_confirmation">Soll der Track wirklich verworfen werden?</string>
     <string name="discard">Verwerfen</string>
     <string name="track_discarded">Track verworfen</string>
@@ -144,4 +144,5 @@
     <string name="enable">AKTIVIEREN</string>
     <string name="permission_education_info">Die App respektiert deine Privatsphäre. Alle Standortdaten bleiben auf dem Gerät.</string>
     <string name="tracking_requires_permissions">Das Aufzeichnen von Tracks benötigt die Berechtigung für Standort und Benachrichtigungen</string>
+    <string name="track_deleted">Track gelöscht</string>
 </resources>
