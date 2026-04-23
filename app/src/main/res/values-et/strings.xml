@@ -70,7 +70,7 @@
     <string name="msg_notification_perm_denied">Vajalik teavituste saatmise õigus</string>
     <string name="save_track">Salvesta rada</string>
     <string name="save_track_confirmation">Kas tahaksid raja salvestada?</string>
-    <string name="track_saved">Rada on salvestatud</string>
+    <string name="track_saved">Raja salvestamine õnnestus</string>
     <string name="discard_track_confirmation">Kas oled kindel, et soovid selle raja andmetest loobuda?</string>
     <string name="discard">Loobu</string>
     <string name="track_discarded">Oled raja salvestamisest loobunud</string>
@@ -144,4 +144,5 @@
     <string name="tracking_requires_permissions">Raja salvestamine eeldab, et asukoha tuvastamise ja teavituste õigused on olemas</string>
     <string name="no_tracks_message">Oma esimese raja loomiseks alusta salvestamist</string>
     <string name="downhill">Allamäge</string>
+    <string name="track_deleted">Rada on kustutatud</string>
 </resources>
