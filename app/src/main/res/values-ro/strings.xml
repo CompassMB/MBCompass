@@ -74,7 +74,7 @@
     <string name="resume_recording">Continuă înregistrarea</string>
     <string name="save_track">Salvează traseul</string>
     <string name="save_track_confirmation">Dorești să salvezi traseul înregistrat?</string>
-    <string name="track_saved">Traseu salvat</string>
+    <string name="track_saved">Traseu salvat cu succes</string>
     <string name="discard_track_confirmation">Sigur vrei să renunți la acest traseu?</string>
     <string name="discard">Renunță</string>
     <string name="track_discarded">Traseu eliminat</string>
@@ -144,4 +144,5 @@
     <string name="uphill">În sus</string>
     <string name="downhill">În jos</string>
     <string name="app_name">MBCompass</string>
+    <string name="track_deleted">Traseu șters</string>
 </resources>
