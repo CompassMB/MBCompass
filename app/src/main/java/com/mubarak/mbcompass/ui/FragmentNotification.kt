@@ -2,87 +2,102 @@
 
 package com.mubarak.mbcompass.ui
 
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.mubarak.mbcompass.R
+import kotlinx.coroutines.launch
 
 object FragmentNotifications {
 
+    fun attachSnackbarHost(
+        composeView: ComposeView,
+        bottomOffsetDp: Int
+    ): SnackbarHostState {
+        val snackbarHostState = SnackbarHostState()
 
-    fun showToast(
-        fragment: Fragment,
-        message: String,
-        duration: Int = Toast.LENGTH_SHORT
-    ) {
-        Toast.makeText(fragment.requireContext(), message, duration).show()
+        composeView.setContent {
+            SnackbarContainer(
+                snackBarHostState = snackbarHostState,
+                bottomOffsetDp = bottomOffsetDp
+            )
+        }
+
+        return snackbarHostState
     }
 
-    // Show custom banner notification with optional action
-    fun showBanner(
+    @Composable
+    private fun SnackbarContainer(
+        snackBarHostState: SnackbarHostState,
+        bottomOffsetDp: Int
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            SnackbarHost(
+                hostState = snackBarHostState,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = bottomOffsetDp.dp)
+            )
+        }
+    }
+
+    fun showSnackbar(
         fragment: Fragment,
-        rootView: View,
+        snackbarHostState: SnackbarHostState,
         message: String,
         actionText: String? = null,
         onAction: (() -> Unit)? = null,
-        duration: Long = 5000L
+        duration: SnackbarDuration = SnackbarDuration.Short
     ) {
-        val context = fragment.requireContext()
+        fragment.lifecycleScope.launch {
+            val result = snackbarHostState.showSnackbar(
+                message = message,
+                actionLabel = actionText,
+                withDismissAction = true,
+                duration = duration
+            )
 
-        val banner = TextView(context).apply {
-            text = if (actionText != null) "$message    [$actionText]" else message
-            setTextColor(ContextCompat.getColor(context, R.color.white))
-            setBackgroundColor(ContextCompat.getColor(context, R.color.brand_color))
-            setPadding(32, 24, 32, 24)
-            gravity = Gravity.CENTER
-            textSize = 14f
-
-            if (onAction != null) {
-                isClickable = true
-                isFocusable = true
-                setOnClickListener {
-                    onAction()
-                    (parent as? ViewGroup)?.removeView(this)
-                }
+            if (result == SnackbarResult.ActionPerformed) {
+                onAction?.invoke()
             }
-        }
-
-        if (rootView is FrameLayout) {
-            val params = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                gravity = Gravity.BOTTOM
-                bottomMargin = 210
-            }
-
-            rootView.addView(banner, params)
-
-            banner.postDelayed({
-                (banner.parent as? ViewGroup)?.removeView(banner)
-            }, duration)
-        } else {
-            // Fallback to Toast
-            showToast(fragment, message, Toast.LENGTH_LONG)
         }
     }
 
     fun showLocationOff(
         fragment: Fragment,
-        rootView: View,
+        snackbarHostState: SnackbarHostState,
         onEnableClick: () -> Unit
     ) {
-        showBanner(
-            fragment, rootView,
-            "Location services are off",
-            "ENABLE",
-            onEnableClick,
-            7000L
+        showSnackbar(
+            fragment = fragment,
+            snackbarHostState = snackbarHostState,
+            message = fragment.getString(R.string.location_disabled_simple),
+            actionText = fragment.getString(R.string.enable),
+            onAction = onEnableClick,
+            duration = SnackbarDuration.Short
         )
+    }
+
+    fun showToast(
+        fragment: Fragment,
+        message: String
+    ) {
+        Toast
+            .makeText(fragment.requireContext(), message, Toast.LENGTH_SHORT)
+            .show()
     }
 }

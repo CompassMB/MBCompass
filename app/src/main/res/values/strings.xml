@@ -47,7 +47,9 @@
     <string name="donate">Donate to keep this app free and ad-free</string>
     <string name="location_disabled">Enable location</string>
     <string name="location_disabled_rationale">Location is turned off. Tap Settings to enable it.</string>
+    <string name="location_disabled_simple">Location is turned off.</string>
     <string name="true_north">True North</string>
+    <string name="enable">ENABLE</string>
     <string name="tn_desc">Correct magnetic declination</string>
     <string name="true_black_theme">Use true black theme</string>
     <string name="permission_required">Permission required</string>
