@@ -128,14 +128,7 @@ fun SettingsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(stringResource(R.string.settings)) }, navigationIcon = {
-                IconButton(onClick = onBackClicked) {
-                    Icon(
-                        painterResource(R.drawable.arrow_back_24px),
-                        contentDescription = stringResource(R.string.nav_back)
-                    )
-                }
-            })
+            TopAppBar(title = { Text(stringResource(R.string.settings)) })
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0), // add this to remove extra spaces
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
