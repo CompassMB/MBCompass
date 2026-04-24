@@ -24,6 +24,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.compose.material3.SnackbarHostState
 import androidx.core.net.toUri
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -59,7 +60,6 @@ import org.osmdroid.views.overlay.compass.CompassOverlay
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
 class MapFragment : Fragment() {
 
@@ -71,11 +71,10 @@ class MapFragment : Fragment() {
 
     @Inject
     lateinit var trackRepository: TrackRepository
-
+    private lateinit var snackbarHostState: SnackbarHostState
     private lateinit var mapView: MapView
     private lateinit var controller: IMapController
     private lateinit var permissionHandler: PermissionHandler
-
     private lateinit var btnStart: LinearLayout
     private lateinit var btnStartIcon: ImageView
     private lateinit var btnStartTxt: TextView
@@ -114,12 +113,11 @@ class MapFragment : Fragment() {
             if (isGranted) {
                 onLocationPermissionGranted()
             } else {
-                // Permission denied
-                FragmentNotifications.showToast(
+                FragmentNotifications.showSnackbar(
                     this,
+                    snackbarHostState,
                     getString(R.string.location_permission_denied_message),
-                    Toast.LENGTH_LONG
-                )
+                    )
             }
         }
 
@@ -130,19 +128,17 @@ class MapFragment : Fragment() {
                 FragmentNotifications.showToast(
                     this,
                     getString(R.string.notification_permission_denied_brief),
-                    Toast.LENGTH_LONG
-                )
+                    )
             }
         }
-
 
     private val activityRecognitionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (!isGranted) {
-                FragmentNotifications.showToast(
+                FragmentNotifications.showSnackbar(
                     this,
-                    getString(R.string.activity_recognition_denied_brief),
-                    Toast.LENGTH_SHORT
+                    snackbarHostState,
+                    getString(R.string.activity_recognition_denied_brief)
                 )
             }
         }
@@ -154,6 +150,7 @@ class MapFragment : Fragment() {
         currentBestLocation = LocationHelper.getLastKnownLocation(requireContext())
         trackingState = AppPreferences.loadTrackingState()
         permissionHandler = PermissionHandler(this)
+
     }
 
     override fun onCreateView(
@@ -187,6 +184,11 @@ class MapFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        snackbarHostState = FragmentNotifications.attachSnackbarHost(
+            composeView = binding.snackbarHost,
+            bottomOffsetDp = 60 // bottom pdding
+        )
 
         trackUriToDisplay = arguments?.getString(ARG_TRACK_URI)
 
@@ -262,13 +264,11 @@ class MapFragment : Fragment() {
     private fun checkLocationServices() {
         if (!LocationHelper.isLocationEnabled(requireContext())) {
             // Location services OFF
-            FragmentNotifications.showLocationOff(
-                fragment = this,
-                rootView = binding.root,
-                onEnableClick = {
-                    permissionHandler.openLocationSettings()
-                }
-            )
+            FragmentNotifications.showLocationOff(this,snackbarHostState) {
+                // open location settings
+                permissionHandler.openLocationSettings()
+
+            }
         }
     }
 
@@ -342,7 +342,11 @@ class MapFragment : Fragment() {
                     launcher = locationPermissionLauncher,
                     onGranted = { onLocationPermissionGranted() },
                     onDenied = {
-                        Toast.makeText(requireContext(), R.string.location_permission_required, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.location_permission_required,
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 )
             }
@@ -365,7 +369,13 @@ class MapFragment : Fragment() {
             permissionHandler.requestLocationPermission(
                 launcher = locationPermissionLauncher,
                 onGranted = { startTracking(resume) },
-                onDenied = { Toast.makeText(requireContext(), R.string.location_permission_title, Toast.LENGTH_SHORT).show() }
+                onDenied = {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.location_permission_title,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             )
             return
         }
@@ -449,12 +459,14 @@ class MapFragment : Fragment() {
                 btnSave.isGone = true
                 btnDiscard.isGone = true
             }
+
             TrackingConstants.STATE_TRACKING_ACTIVE -> {
                 btnStartIcon.setImageResource(R.drawable.pause_circle_24px)
                 btnStartTxt.text = getString(R.string.btn_pause)
                 btnSave.isGone = true
                 btnDiscard.isGone = true
             }
+
             TrackingConstants.STATE_TRACKING_PAUSED -> {
                 btnStartIcon.setImageResource(R.drawable.start_circle_24px)
                 btnStartTxt.text = getString(R.string.btn_resume)
