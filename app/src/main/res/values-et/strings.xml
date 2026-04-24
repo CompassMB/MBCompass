@@ -145,4 +145,5 @@
     <string name="no_tracks_message">Oma esimese raja loomiseks alusta salvestamist</string>
     <string name="downhill">Allamäge</string>
     <string name="track_deleted">Rada on kustutatud</string>
+    <string name="location_disabled_simple">Asukohatuvastus on lülitatud välja.</string>
 </resources>
