@@ -145,4 +145,5 @@
     <string name="downhill">Спускане</string>
     <string name="uphill">Изкачвчне</string>
     <string name="track_deleted">Маршрутът е изтрит</string>
+    <string name="location_disabled_simple">Местоположението е изключено.</string>
 </resources>
