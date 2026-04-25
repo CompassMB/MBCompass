@@ -145,4 +145,5 @@
     <string name="permission_education_info">Die App respektiert deine Privatsphäre. Alle Standortdaten bleiben auf dem Gerät.</string>
     <string name="tracking_requires_permissions">Das Aufzeichnen von Tracks benötigt die Berechtigung für Standort und Benachrichtigungen</string>
     <string name="track_deleted">Track gelöscht</string>
+    <string name="location_disabled_simple">Standort ist abgeschaltet.</string>
 </resources>
