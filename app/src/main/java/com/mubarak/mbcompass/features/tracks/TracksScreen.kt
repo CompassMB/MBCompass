@@ -158,7 +158,7 @@ private fun TracksList(
     // delete confirmation dialog
     trackToDelete?.let { track ->
         AlertDialog(
-            onDismissRequest = {},
+            onDismissRequest = { trackToDelete = null},
             title = { Text(stringResource(R.string.delete_track_title)) },
             text = {
                 Text(
@@ -172,13 +172,14 @@ private fun TracksList(
                 TextButton(
                     onClick = {
                         onDeleteTrack(track)
+                        trackToDelete = null
                     }
                 ) {
                     Text(stringResource(R.string.delete))
                 }
             },
             dismissButton = {
-                TextButton(onClick = {}) {
+                TextButton(onClick = { trackToDelete = null }) {
                     Text(stringResource(R.string.cancel))
                 }
             }
