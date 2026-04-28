@@ -37,8 +37,10 @@ import com.mubarak.mbcompass.utils.LengthUnitHelper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.Date
 import java.util.GregorianCalendar
 import javax.inject.Inject
@@ -62,7 +64,7 @@ class TrackerService : Service(), SensorEventListener {
 
     private val binder = LocalBinder()
     private val uiHandler: Handler = Handler(Looper.getMainLooper())
-    private val ioScope = CoroutineScope(Dispatchers.IO + Job())
+    private val ioScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     var trackingState: Int = TrackingConstants.STATE_TRACKING_NOT
         set(value) {
@@ -72,6 +74,7 @@ class TrackerService : Service(), SensorEventListener {
         }
 
     var currentBestLocation: Location = LocationHelper.getDefaultLocation()
+
     var currentTrack = Track()
 
     var isGpsProviderActive: Boolean = false
@@ -177,7 +180,7 @@ class TrackerService : Service(), SensorEventListener {
 
         if (trackingState == TrackingConstants.STATE_TRACKING_ACTIVE) {
             Log.w(TAG, "Service destroyed while tracking - pausing to save data")
-            pauseTracking()
+            pauseTracking(calledFromDestroy = true)
         }
 
         stopForegroundCompat(removeNotification = true)
@@ -185,6 +188,7 @@ class TrackerService : Service(), SensorEventListener {
 
         removeGpsLocationListener()
         removeNetworkLocationListener()
+        ioScope.cancel()
     }
 
     fun startTracking(newTrack: Boolean = true) {
@@ -210,7 +214,7 @@ class TrackerService : Service(), SensorEventListener {
         Log.d(TAG, "Started tracking")
     }
 
-    fun pauseTracking() {
+    fun pauseTracking(calledFromDestroy: Boolean = false) {
         currentTrack.recordingStop = System.currentTimeMillis()
         trackingState = TrackingConstants.STATE_TRACKING_PAUSED
 
@@ -218,12 +222,18 @@ class TrackerService : Service(), SensorEventListener {
         sensorManager.unregisterListener(this)
         altitudeSmoothingQueue.reset()
 
-        ioScope.launch {
-            trackRepository.saveTempTrack(currentTrack)
+        if (calledFromDestroy) {
+            // block until saved
+            runBlocking(Dispatchers.IO) {
+                trackRepository.saveTempTrack(currentTrack)
+            }
+        } else {
+            ioScope.launch {
+                trackRepository.saveTempTrack(currentTrack)
+            }
         }
 
         updateNotification()
-
         stopForegroundCompat(removeNotification = false)
 
         Log.d(TAG, "Paused tracking")
@@ -244,11 +254,14 @@ class TrackerService : Service(), SensorEventListener {
 
         trackingState = TrackingConstants.STATE_TRACKING_ACTIVE
 
+        addGpsLocationListener()
+        addNetworkLocationListener()
+
         startStepCounter()
         uiHandler.removeCallbacks(periodicTrackUpdateRunnable)
         uiHandler.postDelayed(periodicTrackUpdateRunnable, 0)
 
-        updateNotification()
+        startForeground(NOTIFICATION_ID, createNotification())
 
         Log.d(TAG, "Resumed tracking")
     }
@@ -473,7 +486,7 @@ class TrackerService : Service(), SensorEventListener {
     private fun createNotification(): Notification {
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
-            this, 0, intent,
+            this, 10, intent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
@@ -490,7 +503,7 @@ class TrackerService : Service(), SensorEventListener {
                     action = ACTION_PAUSE
                 }
                 val pausePendingIntent = PendingIntent.getService(
-                    this, 0, pauseIntent, PendingIntent.FLAG_IMMUTABLE
+                    this, ACTION_PAUSE.hashCode(), pauseIntent, PendingIntent.FLAG_IMMUTABLE
                 )
                 builder.addAction(
                     R.drawable.pause_circle_24px,
@@ -503,7 +516,7 @@ class TrackerService : Service(), SensorEventListener {
                     action = ACTION_RESUME
                 }
                 val resumePendingIntent = PendingIntent.getService(
-                    this, 0, resumeIntent, PendingIntent.FLAG_IMMUTABLE
+                    this, ACTION_RESUME.hashCode(), resumeIntent, PendingIntent.FLAG_IMMUTABLE
                 )
                 builder.addAction(
                     R.drawable.start_circle_24px,
