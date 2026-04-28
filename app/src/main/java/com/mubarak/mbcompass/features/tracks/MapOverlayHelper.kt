@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.location.Location
+import android.util.Log
 import androidx.core.content.ContextCompat
 import com.mubarak.mbcompass.R
 import com.mubarak.mbcompass.core.location.LocationHelper
@@ -86,7 +87,6 @@ class MapOverlayHelper {
         // Create polyline with styling
         val overlay = Polyline()
         overlay.outlinePaint.color = color
-        overlay.outlinePaint.strokeWidth = 8f
         overlay.outlinePaint.strokeCap = Paint.Cap.ROUND
         overlay.outlinePaint.strokeJoin = Paint.Join.ROUND
         overlay.setPoints(points)
