@@ -145,4 +145,5 @@
     <string name="downhill">În jos</string>
     <string name="app_name">MBCompass</string>
     <string name="track_deleted">Traseu șters</string>
+    <string name="location_disabled_simple">Locația este dezactivată.</string>
 </resources>
