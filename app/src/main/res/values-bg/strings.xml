@@ -82,7 +82,7 @@
     <string name="resume_recording">Възобновяване на записа</string>
     <string name="save_track">Запазване на маршрут</string>
     <string name="save_track_confirmation">Искате ли да запазите записания маршрут?</string>
-    <string name="track_saved">Маршрутът е запазен</string>
+    <string name="track_saved">Маршрутът е запазен успешно</string>
     <string name="discard_track_confirmation">Сигурни ли сте, че искате да премахнете този маршрут?</string>
     <string name="discard">Премахване</string>
     <string name="track_discarded">Маршрутът е премахнат</string>
@@ -144,4 +144,6 @@
     <string name="permission_education_info">Това приложение уважава вашата поверителност. Всички данни за местоположението остават на вашето устройство.</string>
     <string name="downhill">Спускане</string>
     <string name="uphill">Изкачвчне</string>
+    <string name="track_deleted">Маршрутът е изтрит</string>
+    <string name="location_disabled_simple">Местоположението е изключено.</string>
 </resources>

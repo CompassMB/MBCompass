@@ -75,7 +75,7 @@
     <string name="resume_recording">Kaydı sürdür</string>
     <string name="save_track">Yolu kaydet</string>
     <string name="save_track_confirmation">Kaydedilen yolu kaydetmek ister misiniz?</string>
-    <string name="track_saved">Yol kaydedildi</string>
+    <string name="track_saved">Yol başarıyla kaydedildi</string>
     <string name="discard_track_confirmation">Bu yolu silmek istediğinize emin misiniz?</string>
     <string name="discard">Sil</string>
     <string name="track_discarded">Yol silindi</string>
@@ -144,4 +144,6 @@
     <string name="no_tracks_message">İlk yolunu oluşturmak için kayda başla</string>
     <string name="downhill">Yokuş aşağı</string>
     <string name="dialog_delete_track_title">Yolu sil</string>
+    <string name="location_disabled_simple">Konum kapalı.</string>
+    <string name="track_deleted">Yol Silindi</string>
 </resources>
