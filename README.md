@@ -44,12 +44,14 @@
 ---
 
 <p align="center">
-  <img width="400" src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" />
-  <img width="400" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" />
+  <img width="31%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" />
+  <img width="31%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" />
+  <img width="31%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" />
 </p>
 <p align="center">
-  <img width="400" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" />
-  <img width="400" src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" />
+  <img width="31%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" />
+  <img width="31%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" />
+  <img width="31%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" />
 </p>
 
 ## Features
@@ -80,6 +82,7 @@
 
 ### App Experience
 - Light, Dark, and **AMOLED** themes
+- Extremely Lightweight (<2 MB) & Battery efficient
 - Landscape orientation support
 - Clean UI with Jetpack Compose (Material Design)
 - Custom bottom bar for easy navigation
@@ -89,8 +92,6 @@
 - No Google Play Services dependency
 - Uses native Android location APIs
 - Supports Android 6.0+
-
-[Learn more on the website](https://compassmb.github.io/MBCompass-site/#features)
 
 ---
 
@@ -105,7 +106,7 @@
     <img width="600" src="/MBCompass_Q2.png" alt="MBCompass Q2 design preview"/>
   </p>
 
-- Offline maps (evaluating lightweight approaches)
+- Offline maps (vector tile based, lightweight approach under evaluation)
 - Topographic (topo) map support
 - Navigation UX improvements and refinements
 
@@ -128,15 +129,15 @@ MBCompass has gained recognition from the global developer community:
 MBCompass only requests the minimum permissions required for navigation and tracking features:
 
 - **Location**
-    - Used to detect and display your current location on the map
-    - Required for real-time track recording and navigation features
+  - Used to detect and display your current location on the map
+  - Required for real-time track recording and navigation features
 
 - **Notification (Android 13+)**
-    - Used to show foreground service notifications during active tracking
-    - Enables track progress visibility and quick controls (pause/resume)
+  - Used to show foreground service notifications during active tracking
+  - Enables track progress visibility and quick controls (pause/resume)
 
 - **Activity Recognition (Android 10+)**
-    - Used to improve tracking accuracy by detecting user movement state (e.g., walking)
+  - Used to improve tracking accuracy by detecting user movement state (e.g., walking)
 
 MBCompass does **not** collect, store, or share any personal data.
 All location and tracking data stays on your device unless you explicitly export it (e.g., GPX files).
@@ -156,14 +157,21 @@ Contributions are welcome! If you encounter bugs or have feature suggestions, pl
 
 ## Support
 
-Open-source projects couldn't survive in the long run without donations or funding.
+Open-source projects couldn’t survive in the long run without donations or funding.
 
-MBCompass is a fully open-source project - free of ads, trackers, or in-app purchases.
+**MBCompass** is an independent, fully open-source project free of ads, trackers, and in-app purchases.
 If you find it useful, consider supporting its continued development and maintenance:
 
 Find more info on [MBCompass page](https://compassmb.github.io/MBCompass-site/donate.html)
 
-Your support helps ensure the project stays sustainable and continues to improve for everyone. Thank you!
+Your support directly helps:
+
+* Publish MBCompass on Google Play
+* Improve navigation features and overall user experience
+* Support lightweight vector map hosting and related infra
+* Maintain performance, reliability, and long-term updates
+
+Every contribution helps keep MBCompass independent, privacy-focused, and continuously improving for everyone. Thank you.
 
 ## License
 
@@ -172,6 +180,16 @@ Your support helps ensure the project stays sustainable and continues to improve
 MBCompass is Free Software: you can use, study, share, and improve it at your will. You may use, modify, and redistribute this project only if your modifications remain open-source under the same license.
 
 > Proprietary use, commercial redistribution, or publishing modified versions with ads or tracking is strictly prohibited under GPLv3 or later.
+
+>[!NOTE]
+> **AI Notice**
+> Due to the increasing use of AI/LLM tools in modifying and redistributing FOSS projects, this notice is provided for clarity.
+>
+> Redistributing this project (modified or unmodified) **without proper attribution** is a violation of the GPL-3.0 license.
+>
+> This includes cases where modifications are made using AI/LLM tools.
+>
+> All redistributions must retain copyright notices, provide attribution, and indicate changes.
 
 See more information [here](https://github.com/MubarakNative/MBCompass/blob/main/LICENSE).
 
