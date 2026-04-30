@@ -1,5 +1,13 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+/*
+*
+* Copyright (c) 2024 Mubarak Basha. All Rights Reserved.
+This project is licensed under GPL-3.0. Any derivative work must keep the same license,
+retain this copyright notice, and provide proper attribution.
+*
+* */
+
 package com.mubarak.mbcompass.ui.theme
 
 import androidx.compose.material3.Typography
@@ -8,8 +16,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-
-// Set of Material typography styles to start with
 val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
