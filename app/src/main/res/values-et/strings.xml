@@ -10,7 +10,6 @@
     <string name="west">Lääs</string>
     <string name="northwest">Loe</string>
     <string name="compass">Kompass</string>
-    <string name="calibration_required">Kalibreerimine on vajalik: pöörake seadet uuesti kalibreerimiseks kaheksakujuliselt!</string>
     <string name="map">Kaart</string>
     <string name="permission_rationale">Magnetiline deklinatsiooni parandamiseks ja geograafilise põhjasuuna näitamiseks MBCompass vajab õigust sinu asukoha tuvastamiseks.</string>
     <string name="magnetometer_not_available">Magnetomeeter pole saadaval</string>
@@ -29,7 +28,6 @@
     <string name="settings">Seadistused</string>
     <string name="theme">Kujundus</string>
     <string name="licenses">Litsents</string>
-    <string name="about_settings">Rakenduse teave</string>
     <string name="sys_default">Süsteemi kujundus</string>
     <string name="light_theme">Hele kujundus</string>
     <string name="dark_theme">Tume kujundus</string>

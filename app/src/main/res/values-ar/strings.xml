@@ -10,7 +10,6 @@
     <string name="west">الغرب</string>
     <string name="northwest">الشمال الغربي</string>
     <string name="compass">بوصلة</string>
-    <string name="calibration_required">المعايرة مطلوبة: حرّك الجهاز بشكل رقم 8 لإعادة المعايرة!</string>
     <string name="map">الخريطة</string>
     <string name="permission_rationale">يحتاج MBCompass إلى إذن الموقع لتصحيح الانحراف المغناطيسي وعرض الشمال الحقيقي.</string>
     <string name="rotation_sensor_not_available">مستشعر الدوران غير متوفر</string>
@@ -29,7 +28,6 @@
     <string name="theme">السمة</string>
     <string name="amoled_dark">أسود AMOLED</string>
     <string name="licenses">الترخيص</string>
-    <string name="about_settings">حول التطبيق</string>
     <string name="sys_default">النظام الافتراضي</string>
     <string name="light_theme">فاتح</string>
     <string name="dark_theme">داكن</string>

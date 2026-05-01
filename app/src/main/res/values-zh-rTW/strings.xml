@@ -9,7 +9,6 @@
     <string name="west">西</string>
     <string name="northwest">西北</string>
     <string name="compass">羅盤</string>
-    <string name="calibration_required">需要校準：請將設備以8字形軌跡旋轉！</string>
     <string name="map">地圖</string>
     <string name="permission_rationale">MBCompass需要位置訪問權限以校正磁偏角並顯示正北方向。</string>
     <string name="rotation_sensor_not_available">旋轉向量感測器不可用</string>
@@ -27,7 +26,6 @@
     <string name="settings">設定</string>
     <string name="theme">主題</string>
     <string name="licenses">許可證</string>
-    <string name="about_settings">關於</string>
     <string name="sys_default">系統預設值</string>
     <string name="light_theme">明亮主題</string>
     <string name="dark_theme">黑暗主題</string>

@@ -10,7 +10,6 @@
     <string name="west">West</string>
     <string name="northwest">Noordwest</string>
     <string name="compass">Kompas</string>
-    <string name="calibration_required">IJking vereist: beweeg het apparaat in de vorm van een acht om te ijken!</string>
     <string name="map">Kaart</string>
     <string name="permission_rationale">MBCompass heeft toegang nodig tot de locatie van het apparaat om te controleren voor magnetische declinatie en om het ware noorden weer te geven.</string>
     <string name="rotation_sensor_not_available">Rotatievectorsensor niet beschikbaar</string>
@@ -31,7 +30,6 @@
     <string name="theme">Thema</string>
     <string name="amoled_dark">Amoled Donker</string>
     <string name="licenses">Licentie</string>
-    <string name="about_settings">Over</string>
     <string name="sys_default">Systeem Standaardwaarde</string>
     <string name="light_theme">Licht</string>
     <string name="dark_theme">Donker</string>
