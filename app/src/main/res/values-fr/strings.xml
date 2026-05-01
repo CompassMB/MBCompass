@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="about_settings">À propos</string>
     <string name="sys_default">Paramètre du système</string>
     <string name="light_theme">Clair</string>
     <string name="dark_theme">Sombre</string>
@@ -36,7 +35,6 @@
     <string name="no_email_app">Application d\'e-mail non trouvée</string>
     <string name="magnetic_strength">Force Magnétique <b>%1$d</b> µT</string>
     <string name="app_name">MBCompass</string>
-    <string name="calibration_required">Calibrage requis : faites pivoter l’appareil en forme de 8 pour le recalibrer !</string>
     <string name="map">Carte</string>
     <string name="permission_rationale">MBCompass a besoin de l\'accès à la position pour corriger la déclinaison magnétique et montrer le Nord Géographique</string>
     <string name="rotation_sensor_not_available">Capteur de mouvement indisponible</string>

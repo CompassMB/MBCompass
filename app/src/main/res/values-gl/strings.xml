@@ -10,7 +10,6 @@
     <string name="west">Oeste</string>
     <string name="northwest">Noroeste</string>
     <string name="compass">Compás</string>
-    <string name="calibration_required">Necesítase calibración: Rota o dispositivo seguindo un patrón en 8 para recalibrar!</string>
     <string name="map">Mapa</string>
     <string name="permission_rationale">MBCompass necesita acceso á localización do seu dispositivo para corrixir o desfasamento magnético e mostrar o verdadeiro Norte.</string>
     <string name="rotation_sensor_not_available">O sensor de rotación vectorial non está dispoñible</string>
@@ -31,7 +30,6 @@
     <string name="theme">Tema</string>
     <string name="amoled_dark">Escuro Amoled</string>
     <string name="licenses">Licencia</string>
-    <string name="about_settings">Acerca de</string>
     <string name="sys_default">Igual que o sistema</string>
     <string name="light_theme">Claro</string>
     <string name="dark_theme">Escuro</string>

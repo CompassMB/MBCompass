@@ -10,7 +10,6 @@
     <string name="west">Захід</string>
     <string name="northwest">Північний захід</string>
     <string name="compass">Компас</string>
-    <string name="calibration_required">Необхідно провести калібрування: переміщайте свій пристрій у формі вісімки для повторного калібрування!</string>
     <string name="map">Карта</string>
     <string name="permission_rationale">MBCompass потребує дозволу на визначення вашого місцезнаходження, для корекції магнітної деклінації та відображення географічного північного напрямку.</string>
     <string name="rotation_sensor_not_available">Датчик вектора обертання недоступний</string>
@@ -18,7 +17,6 @@
     <string name="theme">Тема</string>
     <string name="amoled_dark">Темна Amoled</string>
     <string name="licenses">Ліцензія</string>
-    <string name="about_settings">Про додаток</string>
     <string name="sys_default">Системна</string>
     <string name="light_theme">Світла</string>
     <string name="dark_theme">Темна</string>
