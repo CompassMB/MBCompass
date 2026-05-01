@@ -1,0 +1,4 @@
+- Fix distance not updating after pause/resume from notification
+- Fix UI issues with top app bar and notifications
+- Improve tracking reliability and stability
+- Redesign track details with elevation chart and M3 cards
