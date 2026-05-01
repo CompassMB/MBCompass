@@ -32,7 +32,7 @@ data class AccuracyDialogState(
 
 class SensorViewModel : ViewModel() {
 
-    var _trueNorthEnabled = MutableStateFlow(false)
+    private val _trueNorthEnabled = MutableStateFlow(false)
     val trueNorthEnabled: StateFlow<Boolean> = _trueNorthEnabled.asStateFlow()
 
     private val _location = MutableStateFlow<Location?>(null)

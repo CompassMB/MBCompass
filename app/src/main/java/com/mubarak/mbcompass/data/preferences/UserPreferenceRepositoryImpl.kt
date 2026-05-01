@@ -20,7 +20,7 @@ class UserPreferencesRepositoryImpl(
         get() = dataStore.preferenceFlow
 
     override suspend fun setTheme(theme: String) {
-        dataStore.setValue(UserPreferences.KEY_THEME, theme)
+        dataStore.setTheme(UserPreferences.KEY_THEME, theme)
     }
 
     override suspend fun setTrueDarkState(boolean: Boolean) {
