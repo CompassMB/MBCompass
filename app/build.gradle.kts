@@ -20,8 +20,8 @@ android {
         applicationId = "com.mubarak.mbcompass"
         minSdk = 23
         targetSdk = 36
-        versionCode = 14
-        versionName = "1.1.13"
+        versionCode = 15
+        versionName = "1.1.14"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -119,7 +119,7 @@ dependencies {
     testImplementation(libs.junit)
 
     // Coroutine Test
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
+    testImplementation(libs.kotlinx.coroutines.test)
 
     // Instrumentation Test
     androidTestImplementation(libs.androidx.junit)
