@@ -10,7 +10,6 @@ retain this copyright notice, and provide proper attribution.
 
 package com.mubarak.mbcompass.data.preferences
 
-import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -18,7 +17,6 @@ import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import com.mubarak.mbcompass.ui.theme.ThemeConfig
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -26,11 +24,9 @@ import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
 
-private val Context.dataStore by preferencesDataStore(name = "settings")
-
-class PreferenceLocalDataStore @Inject constructor(context: Context) : PreferenceDataSource {
-
-    private val dataStore: DataStore<Preferences> = context.dataStore
+class PreferenceLocalDataStore @Inject constructor(
+    private val dataStore: DataStore<Preferences>
+) : PreferenceDataSource {
 
     override val preferenceFlow: Flow<UserPreferences>
         get() = dataStore.data
@@ -44,7 +40,7 @@ class PreferenceLocalDataStore @Inject constructor(context: Context) : Preferenc
                 mapUserPreferences(preferences)
             }
 
-    override suspend fun setValue(key: String, value: String) {
+    override suspend fun setTheme(key: String, value: String) {
         dataStore.edit { preferences ->
             preferences[stringPreferencesKey(key)] = value
         }

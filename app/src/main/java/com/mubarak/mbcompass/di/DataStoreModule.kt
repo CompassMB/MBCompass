@@ -11,6 +11,9 @@ retain this copyright notice, and provide proper attribution.
 package com.mubarak.mbcompass.di
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import com.mubarak.mbcompass.data.preferences.PreferenceDataSource
 import com.mubarak.mbcompass.data.preferences.PreferenceLocalDataStore
 import com.mubarak.mbcompass.data.preferences.UserPreferenceRepository
@@ -21,6 +24,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+private const val PREF_NAME = "settings"
+
+val Context.preferencesDataStore: DataStore<Preferences> by preferencesDataStore(
+    name = PREF_NAME)
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -28,13 +35,25 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideLocalDataStore(@ApplicationContext context: Context): PreferenceDataSource {
-        return PreferenceLocalDataStore(context)
+    fun provideDataStore(
+        @ApplicationContext context: Context
+    ): DataStore<Preferences> {
+        return context.preferencesDataStore
     }
 
     @Provides
     @Singleton
-    fun provideUserPreferenceRepository(dataStore: PreferenceDataSource): UserPreferenceRepository {
+    fun provideLocalDataStore(
+        dataStore: DataStore<Preferences>
+    ): PreferenceDataSource {
+        return PreferenceLocalDataStore(dataStore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserPreferenceRepository(
+        dataStore: PreferenceDataSource
+    ): UserPreferenceRepository {
         return UserPreferencesRepositoryImpl(dataStore)
     }
 }

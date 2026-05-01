@@ -118,6 +118,9 @@ dependencies {
     // Unit Testing
     testImplementation(libs.junit)
 
+    // Coroutine Test
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
+
     // Instrumentation Test
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
