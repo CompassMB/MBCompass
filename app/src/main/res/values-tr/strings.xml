@@ -105,5 +105,6 @@
     <string name="enable">AÇ</string>
     <string name="cancel">İptal</string>
     <string name="no_tracks_message">İlk yolunu oluşturmak için kayda başla</string>
-
+    <string name="location_disabled_simple">Konum kapalı.</string>
+    <string name="track_deleted">Yol Silindi</string>
 </resources>

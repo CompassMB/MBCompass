@@ -103,4 +103,8 @@
     <string name="try_again">Опитайте отново</string>
     <string name="open_settings">Отваряне на настройките</string>
     <string name="enable">АКТИВИРАЙТЕ</string>
+    <string name="location_disabled_simple">Местоположението е изключено.</string>
+    <string name="toast_gpx_saved">GPX файлът е успешно запазен</string>
+    <string name="toast_error_saving_gpx">Грешка при запазване на GPX файла</string>
+    <string name="track_deleted">Маршрутът е изтрит</string>
 </resources>

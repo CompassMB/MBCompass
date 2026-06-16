@@ -84,4 +84,27 @@
     <string name="toast_gpx_saved">GPX Datei erfolgreich gespeichert</string>
     <string name="toast_error_deleting_track">Fehler beim Löschen des Tracks</string>
     <string name="share_track">Track teilen</string>
+    <string name="location_disabled_simple">Standort ist abgeschaltet.</string>
+    <string name="enable">AKTIVIEREN</string>
+    <string name="toast_error_saving_gpx">Fehler beim Speichern der GPX-Datei</string>
+    <string name="location_permission_title">Standortberechtigung erforderlich</string>
+    <string name="location_permission_message">Diese App benötigt Zugriff auf Ihren Standort, um Ihre Position auf der Karte anzuzeigen und GPS-Tracks aufzuzeichnen.\n\nIhre Standortdaten verbleiben auf Ihrem Gerät und werden niemals weitergegeben.</string>
+    <string name="location_permission_required">Standortzugriff erforderlich</string>
+    <string name="location_permission_rationale">Um diese Funktion nutzen zu können, benötigen wir Zugriff auf Ihren Standort. Dies erlaubt uns:\n\n• Ihren aktuellen Standort anzuzeigen\n• GPS-Tracks aufzuzeichnen\n• Die Karte bzgl. Ihres Standorts zu zentrieren</string>
+    <string name="location_permission_denied_message">Standortzugriff ist erforderlich, um Ihren aktuellen Standort anzuzeigen und Routen aufzuzeichnen.</string>
+    <string name="notification_permission_title">Benachrichtigungsberechtigung</string>
+    <string name="notification_permission_message">Diese App benötigt die Berechtigung für Benachrichtigungen, um während der Aufnahme den Aufnahmestatus anzuzeigen.\n\nSo bleibst du über aktive Aufnahmen im Hintergrund auf dem Laufenden.</string>
+    <string name="notification_permission_required">Benachrichtigungsberechtigung erforderlich</string>
+    <string name="notification_permission_rationale">Benachrichtigungen sind erforderlich, um:\n\n• den Status der Wiedergabe anzuzeigen\n• die Steuerelemente für die Aufnahme anzuzeigen\n• Sie während der Hintergrundaufnahme auf dem Laufenden zu halten</string>
+    <string name="notification_permission_denied_brief">Benachrichtigungen deaktiviert – Sie sehen den Sendungsverfolgungsstatus nicht</string>
+    <string name="activity_recognition_permission_title">Aktivitätserkennung</string>
+    <string name="activity_recognition_permission_message">Die App kann deine Aktivitäten (Gehen, Rennen, etc.) erkennen, um die Genauigkeit beim Tracking zu verbessern.\n</string>
+    <string name="activity_recognition_permission_required">Erlaubnis zur Aktivitätserkennung erforderlich</string>
+    <string name="activity_recognition_permission_rationale">Aktivitätserkennung hilft:\n\n• zu erkennen, wenn du dich bewegst\n• die Schrittzählung zu verbessern\n• die Trackgenauigkteit zu erhöhen</string>
+    <string name="activity_recognition_denied_brief">Die Schrittzählung ist möglicherweise ungenau</string>
+    <string name="grant_permission">Berechtigung erteilen</string>
+    <string name="not_now">Nicht jetzt</string>
+    <string name="try_again">Nochmal versuchen</string>
+    <string name="open_settings">Einstellungen öffnen</string>
+    <string name="track_deleted">Track gelöscht</string>
 </resources>
