@@ -1,10 +1,16 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+/*
+*
+* Copyright (c) 2024 Mubarak Basha. All Rights Reserved.
+This project is licensed under GPL-3.0. Any derivative work must keep the same license,
+retain this copyright notice, and provide proper attribution.
+*
+* */
+
 plugins {
     alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.kotlinSymbolProcessing)
-    alias(libs.plugins.jetbrains.kotlin.android) apply false
-    id("com.google.dagger.hilt.android") version "2.56.2" apply false
-
+    alias(libs.plugins.hilt.android) apply false
+    alias(libs.plugins.kotlin.compose) apply false
+    alias(libs.plugins.kotlinSymbolProcessing) apply false
 }
