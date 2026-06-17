@@ -1,25 +1,37 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+/*
+*
+* Copyright (c) 2024 Mubarak Basha. All Rights Reserved.
+This project is licensed under GPL-3.0. Any derivative work must keep the same license,
+retain this copyright notice, and provide proper attribution.
+*
+* */
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlinSymbolProcessing)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
-    id("com.google.dagger.hilt.android")
     id("kotlin-parcelize")
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 android {
     namespace = "com.mubarak.mbcompass"
-    compileSdk = 36
-
+    compileSdk {
+        version = release(37)
+    }
     defaultConfig {
         applicationId = "com.mubarak.mbcompass"
         minSdk = 23
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 16
         versionName = "1.1.15"
 
@@ -49,15 +61,6 @@ android {
             )
         }
 
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlin{
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_1_8)
-        }
     }
     buildFeatures {
         compose = true
@@ -90,8 +93,6 @@ dependencies {
     implementation(libs.androidx.material3)
 
     // AndroidX Lifecycle
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
     // Compose Navigation
