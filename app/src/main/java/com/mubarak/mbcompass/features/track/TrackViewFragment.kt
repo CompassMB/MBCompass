@@ -54,6 +54,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.InputStream
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 @AndroidEntryPoint
 class TrackViewFragment : Fragment() {
@@ -141,6 +142,8 @@ class TrackViewFragment : Fragment() {
                 track = loadedTrack
                 setupBottomSheet(loadedTrack)
 
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 Log.e(TAG, "Error loading track", e)
                 Toast.makeText(

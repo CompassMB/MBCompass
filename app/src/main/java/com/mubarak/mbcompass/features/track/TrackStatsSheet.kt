@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.mubarak.mbcompass.R
@@ -97,8 +98,12 @@ fun TrackStatsBottomSheet(
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        text = DateTimeFormatter.formatDateTimeString(track.recordingStart),
-                        style = MaterialTheme.typography.bodySmall,
+                        text = "${LengthUnitHelper.convertDistanceToString(track.length)} • ${
+                            DateTimeFormatter.formatDurationTime(
+                                track.duration
+                            )
+                        }",
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -149,35 +154,19 @@ private fun StatsGrid(track: Track) {
         (track.length / 1000.0) / (track.duration / 3_600_000.0)
     else 0.0
 
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            StatTile(
-                icon = R.drawable.ic_duration24px,
-                label = "Duration",
-                value = DateTimeFormatter.formatDurationTime(track.duration),
-                modifier = Modifier.weight(1f)
-            )
-            StatTile(
-                icon = R.drawable.ic_distance_24px,
-                label = "Distance",
-                value = LengthUnitHelper.convertDistanceToString(track.length),
-                modifier = Modifier.weight(1f)
-            )
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            StatTile(
-                icon = R.drawable.location_icon24px,
-                label = "Points",
-                value = track.wayPoints.size.toString(),
-                modifier = Modifier.weight(1f)
-            )
-            StatTile(
-                icon = R.drawable.ic_speed_24px,
-                label = "Avg Speed",
-                value = "%.1f km/h".format(avgSpeed),
-                modifier = Modifier.weight(1f)
-            )
-        }
+    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        StatTile(
+            icon = R.drawable.location_icon24px,
+            label = stringResource(R.string.waypoints),
+            value = track.wayPoints.size.toString(),
+            modifier = Modifier.weight(1f)
+        )
+        StatTile(
+            icon = R.drawable.ic_speed_24px,
+            label = stringResource(R.string.avg_speed),
+            value = "%.1f km/h".format(avgSpeed),
+            modifier = Modifier.weight(1f)
+        )
     }
 }
 
@@ -257,14 +246,14 @@ private fun ElevationCard(track: Track) {
                     ElevationStat(
                         icon = R.drawable.arrow_back_24px,
                         iconRotation = 90f,
-                        label = "Ascent",
+                        label = stringResource(R.string.ascent),
                         value = "+%.0f m".format(track.positiveElevation),
                         modifier = Modifier.weight(1f)
                     )
                     ElevationStat(
                         icon = R.drawable.arrow_back_24px,
                         iconRotation = 270f,
-                        label = "Descent",
+                        label = stringResource(R.string.descent),
                         value = "−%.0f m".format(kotlin.math.abs(track.negativeElevation)),
                         modifier = Modifier.weight(1f)
                     )
@@ -332,10 +321,11 @@ private fun AltitudeRangeCard(minAltitude: Double, maxAltitude: Double) {
                 .padding(horizontal = 20.dp, vertical = 18.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+
             AltitudeTile(
-                icon = R.drawable.altitude_low_24px,
-                label = "Lowest",
-                value = "%.0f m".format(minAltitude),
+                icon = R.drawable.altitude_high_24px,
+                label = stringResource(R.string.alt_highest),
+                value = "%.0f m".format(maxAltitude),
                 modifier = Modifier.weight(1f)
             )
             VerticalDivider(
@@ -343,9 +333,9 @@ private fun AltitudeRangeCard(minAltitude: Double, maxAltitude: Double) {
                 color = MaterialTheme.colorScheme.outlineVariant
             )
             AltitudeTile(
-                icon = R.drawable.altitude_high_24px,
-                label = "Highest",
-                value = "%.0f m".format(maxAltitude),
+                icon = R.drawable.altitude_low_24px,
+                label = stringResource(R.string.alt_lowest),
+                value = "%.0f m".format(minAltitude),
                 modifier = Modifier.weight(1f)
             )
         }
@@ -395,13 +385,16 @@ private fun RecordingInfoCard(startTime: Long, endTime: Long) {
     ) {
         Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 18.dp)) {
             Text(
-                text = "Recording",
+                text = stringResource(R.string.recording),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(Modifier.height(12.dp))
-            RecordingRow(label = "Started", value = DateTimeFormatter.formatDateTimeString(startTime))
+            RecordingRow(
+                label = "Started",
+                value = DateTimeFormatter.formatDateTimeString(startTime)
+            )
             Spacer(Modifier.height(6.dp))
             RecordingRow(label = "Ended", value = DateTimeFormatter.formatDateTimeString(endTime))
         }
@@ -447,11 +440,11 @@ private fun ActionButtons(
         ) {
             Icon(
                 painter = painterResource(R.drawable.share_24px),
-                contentDescription = "Share",
+                contentDescription = stringResource(R.string.share),
                 modifier = Modifier.size(18.dp)
             )
             Spacer(Modifier.width(8.dp))
-            Text("Share", style = MaterialTheme.typography.labelLarge)
+            Text(stringResource(R.string.share), style = MaterialTheme.typography.labelLarge)
         }
 
         OutlinedButton(
@@ -470,11 +463,11 @@ private fun ActionButtons(
         ) {
             Icon(
                 painter = painterResource(R.drawable.delete_24px),
-                contentDescription = "Delete",
+                contentDescription = stringResource(R.string.delete),
                 modifier = Modifier.size(18.dp)
             )
             Spacer(Modifier.width(8.dp))
-            Text("Delete", style = MaterialTheme.typography.labelLarge)
+            Text(stringResource(R.string.delete), style = MaterialTheme.typography.labelLarge)
         }
     }
 }

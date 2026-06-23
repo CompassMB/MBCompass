@@ -24,7 +24,6 @@ data class Track(
     val wayPoints: MutableList<WayPoint> = mutableListOf(),
     var duration: Long = 0L,
     var durationOfPause: Long = 0L,
-    var stepCount: Float = 0f,
     var recordingStart: Long = System.currentTimeMillis(),
     var recordingStop: Long = recordingStart,
     var maxAltitude: Double = 0.0,

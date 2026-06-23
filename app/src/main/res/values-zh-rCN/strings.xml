@@ -94,11 +94,6 @@
     <string name="notification_permission_required">需要通知权限</string>
     <string name="notification_permission_rationale">需要通知权限用于：\n\n• 显示跟踪状态\n• 显示录制控件\n• 在后台录制期间让您及时了解情况</string>
     <string name="notification_permission_denied_brief">通知已禁用 - 您将看不到跟踪状态</string>
-    <string name="activity_recognition_permission_title">活动识别</string>
-    <string name="activity_recognition_permission_message">本应用可以检测您的活动（步行、跑步等）以提高跟踪精度。\n</string>
-    <string name="activity_recognition_permission_required">活动识别权限</string>
-    <string name="activity_recognition_permission_rationale">活动识别有助于：\n\n• 检测您何时在移动\n• 提高步数计数\n• 提升轨迹精度</string>
-    <string name="activity_recognition_denied_brief">步数计数可能不够准确</string>
     <string name="grant_permission">授予权限</string>
     <string name="not_now">暂不</string>
     <string name="try_again">重试</string>

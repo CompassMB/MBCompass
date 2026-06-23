@@ -93,11 +93,6 @@
     <string name="notification_permission_required">Необходимо е разрешение за известия</string>
     <string name="notification_permission_rationale">Необходими са известия, за да:\n\n• Показване на състоянието на проследяване\n• Контроли за запис на дисплея\n• Държи ви информирани по време на запис на заден план</string>
     <string name="notification_permission_denied_brief">Известията са деактивирани - няма да виждате състоянието на проследяване</string>
-    <string name="activity_recognition_permission_title">Разпознаване на дейности</string>
-    <string name="activity_recognition_permission_message">Това приложение може да разпознае вашата активност (ходене, бягане и др.), за да подобри точността на проследяване.\n</string>
-    <string name="activity_recognition_permission_required">Разрешение за разпознаване на активност</string>
-    <string name="activity_recognition_permission_rationale">Разпознаването на активност помага:\n\n• Откриване, когато се движите\n• Подобрете броенето на стъпки\n• По-добра точност на проследяването</string>
-    <string name="activity_recognition_denied_brief">Броенето на стъпките може да е по-малко точно</string>
     <string name="grant_permission">Предоставяне на разрешение</string>
     <string name="not_now">Не сега</string>
     <string name="try_again">Опитайте отново</string>

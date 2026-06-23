@@ -95,11 +95,6 @@
     <string name="notification_permission_required">Nõutav on õigus teavituste kuvamiseks</string>
     <string name="notification_permission_rationale">Teavitused on kasutusel:\n\n• Raja salvestamise oleku kuvamisel\n• salvestuse juhtnuppude kuvamiseks\n• Sinu teavitamiseks taustal toimiva salvestuse kontekstis</string>
     <string name="notification_permission_denied_brief">Teavitused pole lubatud - sa ei näe raja salvestamise olekut</string>
-    <string name="activity_recognition_permission_title">Aktiivsuse tuvastamine</string>
-    <string name="activity_recognition_permission_message">Täpsemaks raja salvestamiseks oskab see rakendus tuvastada sinu aktiivsust (kõndimine, jooksmine, jne.).\n</string>
-    <string name="activity_recognition_permission_required">Õigus aktiivsuse tuvastamiseks</string>
-    <string name="activity_recognition_permission_rationale">Aktiivsuse tuvastamine aitab:\n\n• Tuvastada sinu liikumist\n• Tagada täpsemat sammude lugemist\n• Salvestada rada täpsemalt</string>
-    <string name="activity_recognition_denied_brief">Sammude lugemine ei pruugi olla täpne</string>
     <string name="grant_permission">Anna vastavad õigused</string>
     <string name="not_now">Mitte praegu</string>
     <string name="try_again">Proovi uuesti</string>

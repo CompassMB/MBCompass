@@ -67,6 +67,7 @@ import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.compass.CompassOverlay
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 @AndroidEntryPoint
 class MapFragment : Fragment() {
@@ -139,18 +140,6 @@ class MapFragment : Fragment() {
                     )
             }
         }
-
-    private val activityRecognitionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (!isGranted) {
-                FragmentNotifications.showSnackbar(
-                    this,
-                    snackbarHostState,
-                    getString(R.string.activity_recognition_denied_brief)
-                )
-            }
-        }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -263,6 +252,7 @@ class MapFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        Log.d(TAG, "onDestroyView: Called")
         uiHandler.removeCallbacks(periodicLocationRequestRunnable)
         _binding = null
         mapView.onDetach()
@@ -398,18 +388,7 @@ class MapFragment : Fragment() {
         if (!permissionHandler.hasNotificationPermission()) {
             permissionHandler.requestNotificationPermission(
                 launcher = notificationPermissionLauncher,
-                onGranted = { startTracking(resume) },
-                onDenied = { startTracking(resume) } // Continue anyway
-            )
-            return
-        }
-
-        // Activity recognition (Android 10+)
-        if (!permissionHandler.hasActivityRecognitionPermission()) {
-            permissionHandler.requestActivityRecognitionPermission(
-                launcher = activityRecognitionLauncher,
-                onGranted = { startTrackerServiceActual(resume) },
-                onDenied = { startTrackerServiceActual(resume) } // Continue anyway
+                onGranted = { startTracking(resume) }
             )
             return
         }
@@ -515,7 +494,7 @@ class MapFragment : Fragment() {
             zoomLevel = mapView.zoomLevelDouble
         )
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 trackRepository.saveTrackAndUpdateTrack(savedTrack)
             }
@@ -653,7 +632,7 @@ class MapFragment : Fragment() {
         }
     }
 
-    private fun updateSavedTrackOverlay(track: Track, centerMap: Boolean) {
+    private fun updateSavedTrackOverlay(track: Track) {
         savedTrackPolyline?.let { mapView.overlays.remove(it) }
         savedTrackMarkersOverlay?.let { mapView.overlays.remove(it) }
 
@@ -675,13 +654,11 @@ class MapFragment : Fragment() {
             mapView.overlays.add(savedTrackPolyline)
             mapView.overlays.add(savedTrackMarkersOverlay)
         }
-
-        if (centerMap) {
-            centerOnTrack(track)
-        }
+         centerOnTrack(track)
 
         mapView.invalidate()
     }
+
 
     private fun clearCurrentTrackOverlays() {
         currentTrackPolyline?.let { mapView.overlays.remove(it) }
@@ -723,7 +700,8 @@ class MapFragment : Fragment() {
     }
 
     private fun loadAndDisplayTrack(trackUri: String) {
-        lifecycleScope.launch {
+
+        viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val track = withContext(Dispatchers.IO) {
                     trackRepository.readTrackFromUri(trackUri.toUri())
@@ -734,9 +712,11 @@ class MapFragment : Fragment() {
                     return@launch
                 }
 
-                updateSavedTrackOverlay(track, centerMap = true)
+                updateSavedTrackOverlay(track)
 
-            } catch (e: Exception) {
+            }  catch (e: CancellationException) {
+                throw e
+            }catch (e: Exception) {
                 Log.e(TAG, "Error loading track", e)
                 Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_LONG).show()
             }
