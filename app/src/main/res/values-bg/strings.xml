@@ -102,4 +102,17 @@
     <string name="toast_gpx_saved">GPX файлът е успешно запазен</string>
     <string name="toast_error_saving_gpx">Грешка при запазване на GPX файла</string>
     <string name="track_deleted">Маршрутът е изтрит</string>
+    <string name="delete_track_confirmation">Сигурни ли сте, че искате да изтриете този маршрут?\n\n- %1$s</string>
+    <string name="save_gpx_to_file">Запазване на GPX във файл</string>
+    <string name="share_gpx_via_apps">Споделяне на GPX чрез приложения</string>
+    <string name="waypoints">Точки</string>
+    <string name="avg_speed">Средна скорост</string>
+    <string name="alt_highest">Най-висока</string>
+    <string name="alt_lowest">Най-ниска</string>
+    <string name="share">Споделяне</string>
+    <string name="recording">Запис</string>
+    <string name="ascent">Изкачване</string>
+    <string name="descent">Спускане</string>
+    <string name="track_no_data">Няма данни за маршрута</string>
+    <string name="install_file_manager">Моля, инсталирайте приложение за файлов мениджър</string>
 </resources>
