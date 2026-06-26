@@ -26,7 +26,6 @@ data class WayPoint(
     val accuracy: Float,
     val distanceToStart: Float = 0f,
     var isStopOver: Boolean = false,
-    var starred: Boolean = false
 ) : Parcelable {
 
 

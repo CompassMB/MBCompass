@@ -97,11 +97,6 @@
     <string name="notification_permission_required">Benachrichtigungsberechtigung erforderlich</string>
     <string name="notification_permission_rationale">Benachrichtigungen sind erforderlich, um:\n\n• den Status der Wiedergabe anzuzeigen\n• die Steuerelemente für die Aufnahme anzuzeigen\n• Sie während der Hintergrundaufnahme auf dem Laufenden zu halten</string>
     <string name="notification_permission_denied_brief">Benachrichtigungen deaktiviert – Sie sehen den Sendungsverfolgungsstatus nicht</string>
-    <string name="activity_recognition_permission_title">Aktivitätserkennung</string>
-    <string name="activity_recognition_permission_message">Die App kann deine Aktivitäten (Gehen, Rennen, etc.) erkennen, um die Genauigkeit beim Tracking zu verbessern.\n</string>
-    <string name="activity_recognition_permission_required">Erlaubnis zur Aktivitätserkennung erforderlich</string>
-    <string name="activity_recognition_permission_rationale">Aktivitätserkennung hilft:\n\n• zu erkennen, wenn du dich bewegst\n• die Schrittzählung zu verbessern\n• die Trackgenauigkteit zu erhöhen</string>
-    <string name="activity_recognition_denied_brief">Die Schrittzählung ist möglicherweise ungenau</string>
     <string name="grant_permission">Berechtigung erteilen</string>
     <string name="not_now">Nicht jetzt</string>
     <string name="try_again">Nochmal versuchen</string>

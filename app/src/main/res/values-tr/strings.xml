@@ -93,11 +93,6 @@
     <string name="notification_permission_required">Bildirim İzni Gerekli</string>
     <string name="notification_permission_rationale">Bildirimler şu amaçlarla gereklidir:\n\n• İzleme durumunu göstermek\n• Kayıt denetimlerini görüntülemek\n• Arka planda kayıt yapılırken sizi bilgilendirmek</string>
     <string name="notification_permission_denied_brief">Bildirimler devre dışı bırakıldı - takip durumunu göremeyeceksiniz</string>
-    <string name="activity_recognition_permission_title">Etkinlik Tanıma</string>
-    <string name="activity_recognition_permission_message">Bu uygulama, izleme doğruluğunu artırmak için yaptığınız aktiviteyi (yürüyüş, koşu vb.) algılayabilir.\n</string>
-    <string name="activity_recognition_permission_required">Etkinlik Tanıma İzni</string>
-    <string name="activity_recognition_permission_rationale">Aktivite tanıma şu konularda yardımcı olur:\n\n• Hareket ettiğiniz anları algılamak\n• Adım sayımını iyileştirmek\n• İzleme doğruluğunu artırmak</string>
-    <string name="activity_recognition_denied_brief">Adım sayımı daha az doğru olabilir</string>
     <string name="grant_permission">İzin Ver</string>
     <string name="not_now">Şimdi Değil</string>
     <string name="try_again">Yeniden Dene</string>

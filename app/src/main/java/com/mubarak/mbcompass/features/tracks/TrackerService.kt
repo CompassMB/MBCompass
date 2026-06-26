@@ -54,7 +54,7 @@ import java.util.GregorianCalendar
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TrackerService : Service(), SensorEventListener {
+class TrackerService : Service() {
 
     companion object {
         private const val TAG = "TrackerService"
@@ -95,7 +95,6 @@ class TrackerService : Service(), SensorEventListener {
     var lastTempSaveTime: Date = GregorianCalendar.getInstance().time
 
     private lateinit var locationManager: LocationManager
-    private lateinit var sensorManager: SensorManager
     private lateinit var notificationManager: NotificationManager
 
     private var gpsLocationListener: LocationListener? = null
@@ -115,7 +114,6 @@ class TrackerService : Service(), SensorEventListener {
         locationAccuracyMultiplier = AppPreferences.loadAccuracyMultiplier()
 
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
-        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         createNotificationChannel()
@@ -213,7 +211,6 @@ class TrackerService : Service(), SensorEventListener {
 
         trackingState = TrackingConstants.STATE_TRACKING_ACTIVE
 
-        startStepCounter()
         uiHandler.removeCallbacks(periodicTrackUpdateRunnable)
         uiHandler.postDelayed(periodicTrackUpdateRunnable, 0)
 
@@ -227,7 +224,6 @@ class TrackerService : Service(), SensorEventListener {
         trackingState = TrackingConstants.STATE_TRACKING_PAUSED
 
         uiHandler.removeCallbacks(periodicTrackUpdateRunnable)
-        sensorManager.unregisterListener(this)
         altitudeSmoothingQueue.reset()
 
         if (calledFromDestroy) {
@@ -265,7 +261,6 @@ class TrackerService : Service(), SensorEventListener {
         addGpsLocationListener()
         addNetworkLocationListener()
 
-        startStepCounter()
         uiHandler.removeCallbacks(periodicTrackUpdateRunnable)
         uiHandler.postDelayed(periodicTrackUpdateRunnable, 0)
 
@@ -278,7 +273,6 @@ class TrackerService : Service(), SensorEventListener {
         trackingState = TrackingConstants.STATE_TRACKING_NOT
 
         uiHandler.removeCallbacks(periodicTrackUpdateRunnable)
-        sensorManager.unregisterListener(this)
         removeGpsLocationListener()
         removeNetworkLocationListener()
 
@@ -455,28 +449,6 @@ class TrackerService : Service(), SensorEventListener {
         }
     }
 
-    // TODO: move this logic into separate class
-    private fun startStepCounter() {
-        val stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
-        if (stepSensor != null) {
-            sensorManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_UI)
-        } else {
-            currentTrack.stepCount = -1f
-        }
-    }
-
-    override fun onSensorChanged(event: SensorEvent?) {
-        if (event?.sensor?.type == Sensor.TYPE_STEP_COUNTER) {
-            if (stepCountOffset == 0f) {
-                stepCountOffset = (event.values[0] - 1) - currentTrack.stepCount
-            }
-            currentTrack.stepCount = event.values[0] - stepCountOffset
-        }
-    }
-
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
-
-
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
@@ -490,7 +462,6 @@ class TrackerService : Service(), SensorEventListener {
         }
     }
 
-    // TODO: move it to a separate class
     private fun createNotification(): Notification {
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(

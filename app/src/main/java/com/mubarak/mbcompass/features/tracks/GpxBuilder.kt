@@ -114,14 +114,6 @@ object GpxBuilder {
         sb.append("\t\t<name>MBCompass Recording: ${track.name}</name>\n")
         sb.append("\t</metadata>\n")
 
-        // Starred points as waypoints
-        track.wayPoints.filter { it.starred }.forEach { waypoint ->
-            sb.append("\t<wpt lat=\"${waypoint.latitude}\" lon=\"${waypoint.longitude}\">\n")
-            sb.append("\t\t<name>Point of Interest</name>\n")
-            sb.append("\t\t<ele>${waypoint.altitude}</ele>\n")
-            sb.append("\t</wpt>\n")
-        }
-
         // Track segment
         sb.append("\t<trk>\n")
         sb.append("\t\t<name>Track</name>\n")

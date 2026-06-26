@@ -105,21 +105,28 @@
     <string name="notification_permission_rationale">Notifications are needed to:\n\n• Show tracking status\n• Display recording controls\n• Keep you informed during background recording</string>
     <string name="notification_permission_denied_brief">Notifications disabled - you won\'t see tracking status</string>
 
-    <!-- Activity Recognition Permission (Android 10+) -->
-    <string name="activity_recognition_permission_title">Activity Recognition</string>
-    <string name="activity_recognition_permission_message">This app can detect your activity (walking, running, etc.) to improve tracking accuracy.\n</string>
-    <string name="activity_recognition_permission_required">Activity Recognition Permission</string>
-    <string name="activity_recognition_permission_rationale">Activity recognition helps:\n\n• Detect when you\'re moving\n• Improve step counting\n• Better track accuracy</string>
-    <string name="activity_recognition_denied_brief">Step counting may be less accurate</string>
-
     <string name="grant_permission">Grant Permission</string>
     <string name="not_now">Not Now</string>
     <string name="try_again">Try Again</string>
     <string name="open_settings">Open Settings</string>
     <string name="cancel">Cancel</string>
 
+    <string name="delete_track_confirmation">Are you sure you want to delete this track?\n\n- %1$s</string>
+    <string name="save_gpx_to_file">Save GPX to file</string>
+    <string name="share_gpx_via_apps">Share GPX via apps</string>
+
     <string name="no_tracks_message">Start recording to create your first track </string>
     <string name="track_deleted">Track Deleted</string>
+    <string name="waypoints">Points</string>
+    <string name="avg_speed">Avg Speed</string>
+    <string name="alt_highest">Highest</string>
+    <string name="alt_lowest">Lowest</string>
+    <string name="share">Share</string>
+    <string name="recording">Recording</string>
+    <string name="ascent">Ascent</string>
+    <string name="descent">Descent</string>
+    <string name="track_no_data">Track has no data</string>
+    <string name="install_file_manager">Please install a file manager app</string>
 
 
 </resources>
