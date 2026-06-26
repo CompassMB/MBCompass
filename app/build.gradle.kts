@@ -64,7 +64,6 @@ android {
     }
     buildFeatures {
         compose = true
-        viewBinding = true
     }
     androidResources {
         generateLocaleConfig = true
@@ -119,9 +118,6 @@ dependencies {
     // Dagger Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
-
-    // Android UI ViewBinding
-    implementation(libs.androidx.ui.viewbinding)
 
     // Unit Testing
     testImplementation(libs.junit)

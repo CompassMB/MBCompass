@@ -39,7 +39,7 @@
 
 >Not just a compass. Not a full navigation app.
 >
->MBCompass sits in between, a focused **navigation utility** for hiking, trekking and everyday use, combining direction, live location, and track recording without unnecessary complexity.
+>MBCompass sits in between, a focused **navigation app** for hiking, trekking and everyday use, combining direction, live location, and track recording without unnecessary complexity.
 
 ---
 
@@ -57,59 +57,43 @@
 ## Features
 
 ### Compass & Navigation
-- Accurate compass with both **magnetic north** and **true north**
-- Sensor fusion for improved accuracy (_accelerometer_, _magnetometer_, _gyroscope_)
-- Displays real-time magnetic field strength (**µT**)
-- Live **GPS location tracking** on OpenStreetMap
+- Accurate compass with **magnetic north** and **true north**
+- Sensor fusion for improved accuracy (accelerometer, magnetometer, gyroscope)
+- Real-time magnetic field strength display (**µT**)
+- Live GPS location tracking on OpenStreetMap
 - Keeps screen on during navigation
 
-### Tracking & Waypoints
-- **Real-time track recording** on the map (start, pause, resume)
+### Track Recording
+- Real-time track recording with start, pause, and resume
 - Smooth polyline rendering for clear path visualization
-- Reliable tracking using Android’s native location APIs
+- Track statistics: distance, duration, average speed, elevation gain/loss, min/max altitude
+- Export tracks as **GPX files** via the system file picker
+- Share tracks via Android share sheet
+- View, star, and sort all saved tracks in one place
 
-### Track Analysis & Management
-- View and organize all saved tracks in one place
-- **Track statistics**:
-  - Distance, duration, average speed
-  - Elevation gain/loss
-  - Min/max altitude
-- **Star and sort tracks** for easy organization
-
-### Export & Sharing
-- Export tracks as **GPX files** using the system file picker
-- Share tracks easily via Android share sheet
-
-### App Experience
+### App
 - Light, Dark, and **AMOLED** themes
-- Extremely Lightweight (<2 MB) & Battery efficient
+- Extremely lightweight (<2 MB) and battery efficient
 - Landscape orientation support
-- Clean UI with Jetpack Compose (Material Design)
-- Custom bottom bar for easy navigation
-
-### Privacy First
-- **No ads, no tracking, no in-app purchases**
-- No Google Play Services dependency
-- Uses native Android location APIs
+- Clean Jetpack Compose UI with Material Design
+- No ads, no tracking, no in-app purchases
+- No Google Play Services dependency (Works on Custom ROM's too)
 - Supports Android 6.0+
 
 ---
 
-## Upcoming (MBCompass Q2 Roadmap & Design Preview)
+## Roadmap
 
 <details>
-  <summary><strong>Planned improvements and features currently under active development</strong></summary>
-
-  <br />
-
+  <summary><strong>Q2 planned features</strong></summary>
+  <br/>
   <p align="center">
     <img width="600" src="/MBCompass_Q2.png" alt="MBCompass Q2 design preview"/>
   </p>
 
-- Offline maps (vector tile based, lightweight approach under evaluation)
-- Topographic (topo) map support
-- Navigation UX improvements and refinements
-
+- Offline vector maps (lightweight, under evaluation)
+- Topographic map support
+- Navigation UX refinements
 </details>
 
 ---
@@ -121,6 +105,7 @@ MBCompass has gained recognition from the global developer community:
 -  #13 Product of the Day on Product Hunt
 -  Featured in two consecutive issues of Android Weekly
 -  Reached the front page of Hacker News
+-  OSM newsletter
 
 [See full highlights](./Featured.md)
 
@@ -135,9 +120,6 @@ MBCompass only requests the minimum permissions required for navigation and trac
 - **Notification (Android 13+)**
   - Used to show foreground service notifications during active tracking
   - Enables track progress visibility and quick controls (pause/resume)
-
-- **Activity Recognition (Android 10+)**
-  - Used to improve tracking accuracy by detecting user movement state (e.g., walking)
 
 MBCompass does **not** collect, store, or share any personal data.
 All location and tracking data stays on your device unless you explicitly export it (e.g., GPX files).
@@ -157,21 +139,9 @@ Contributions are welcome! If you encounter bugs or have feature suggestions, pl
 
 ## Support
 
-Open-source projects couldn’t survive in the long run without donations or funding.
+MBCompass is independent, ad-free, and self-funded. If it's useful to you, consider supporting development, it directly funds app maintenance on publishing platforms, vector map hosting (upcoming), navigation improvements, and long-term maintenance.
 
-**MBCompass** is an independent, fully open-source project free of ads, trackers, and in-app purchases.
-If you find it useful, consider supporting its continued development and maintenance:
-
-Find more info on [MBCompass page](https://compassmb.github.io/MBCompass-site/donate.html)
-
-Your support directly helps:
-
-* Publish MBCompass on Google Play
-* Improve navigation features and overall user experience
-* Support lightweight vector map hosting and related infra
-* Maintain performance, reliability, and long-term updates
-
-Every contribution helps keep MBCompass independent, privacy-focused, and continuously improving for everyone. Thank you.
+[Support MBCompass](https://compassmb.github.io/MBCompass-site/donate.html)
 
 ## License
 
