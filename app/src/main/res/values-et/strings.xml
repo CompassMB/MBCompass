@@ -102,4 +102,17 @@
     <string name="cancel">Katkesta</string>
     <string name="no_tracks_message">Oma esimese raja loomiseks alusta salvestamist</string>
     <string name="track_deleted">Rada on kustutatud</string>
+    <string name="delete_track_confirmation">Kas oled kindel, et soovid selle raja kustutada?\n\n- %1$s</string>
+    <string name="save_gpx_to_file">Salvesta GPX-failina</string>
+    <string name="share_gpx_via_apps">Jaga GPX-andmeid rakendusega</string>
+    <string name="waypoints">Teekonnapunktid</string>
+    <string name="avg_speed">Keskmine kiirus</string>
+    <string name="alt_highest">Kõrgeim</string>
+    <string name="alt_lowest">Madalaim</string>
+    <string name="share">Jaga</string>
+    <string name="recording">Salvestamisel</string>
+    <string name="ascent">Tõus</string>
+    <string name="descent">Laskumine</string>
+    <string name="track_no_data">Rajafail on andmeteta</string>
+    <string name="install_file_manager">Palun paigalda failihalduri rakendus</string>
 </resources>
