@@ -115,4 +115,10 @@
     <string name="descent">Laskumine</string>
     <string name="track_no_data">Rajafail on andmeteta</string>
     <string name="install_file_manager">Palun paigalda failihalduri rakendus</string>
+    <string name="folder_not_contain_maps">Valitud kaustas ei leidu .map faile</string>
+    <string name="map_source">Kaardiallikas</string>
+    <string name="source_offline_map">Hetkel kasutusel: võrguühenduseta kaardid - seadista lähtekausta alljärgnevas</string>
+    <string name="source_online_map">Hetkel kasutusel: võrguühendusega kaardid (vaikimisi eelistus)</string>
+    <string name="offline_folder_path">Mapsforge\'i .map kaust: /%1$s/ - klõpsa seadistamiseks</string>
+    <string name="offline_maps_folder">Võrguühenduseta kaartide kaust</string>
 </resources>
