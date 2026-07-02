@@ -16,6 +16,8 @@ interface PreferenceDataSource {
 
     val preferenceFlow: Flow<UserPreferences>
 
+    suspend fun setOfflineMapFolder(key: String, value: String)
+    suspend fun setMapSource(key: String, value: Boolean)
     suspend fun setTheme(key: String, value: String)
     suspend fun setTrueNorthValue(key: String, value: Boolean)
     suspend fun setTrueDarkValue(key: String, value: Boolean)

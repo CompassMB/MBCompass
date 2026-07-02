@@ -19,6 +19,14 @@ class UserPreferencesRepositoryImpl(
     override val getUserPreferenceStream: Flow<UserPreferences>
         get() = dataStore.preferenceFlow
 
+    override suspend fun setMapSourceState(boolean: Boolean) {
+        dataStore.setMapSource(UserPreferences.MAP_SOURCE, boolean)
+    }
+
+    override suspend fun setOfflineMapFolder(path: String) {
+        dataStore.setOfflineMapFolder(UserPreferences.OFFLINE_FOLDER_PATH,path)
+    }
+
     override suspend fun setTheme(theme: String) {
         dataStore.setTheme(UserPreferences.KEY_THEME, theme)
     }

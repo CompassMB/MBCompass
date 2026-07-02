@@ -12,6 +12,8 @@ package com.mubarak.mbcompass.data.preferences
 
 data class UserPreferences(
     val theme: String,
+    val offlineMapFolderPath: String,
+    val isOfflineMapSource: Boolean = false,
     val isTrueDarkThemeEnabled: Boolean = false,
     val isTrueNorthEnabled: Boolean = false,
     val highAccuracy: Boolean = false,
@@ -22,6 +24,8 @@ data class UserPreferences(
 
     companion object {
         const val KEY_THEME = "theme"
+        const val OFFLINE_FOLDER_PATH = "offline_folder"
+        const val MAP_SOURCE = "map_source"
         const val TRUE_DARK = "true_dark"
         const val TRUE_NORTH = "true_north"
         const val HIGH_ACCURACY = "high_accuracy"

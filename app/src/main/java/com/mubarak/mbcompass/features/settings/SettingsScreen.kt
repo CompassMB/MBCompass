@@ -41,7 +41,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
@@ -73,6 +72,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mubarak.mbcompass.MapProvider
 import com.mubarak.mbcompass.R
 import com.mubarak.mbcompass.ui.theme.MBCompassTheme
 import com.mubarak.mbcompass.ui.theme.MBShapeDefaults.bottomListItemShape
@@ -90,7 +90,6 @@ import com.mubarak.mbcompass.utils.Const.SUPPORT_PAGE
 
 @Composable
 fun SettingsScreen(
-    onBack: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -100,9 +99,39 @@ fun SettingsScreen(
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(), onResult = {})
 
+    val folderPickerLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocumentTree()
+    ) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+
+        // persistent read/write access for to uri survives app restarts
+        MapProvider.makeUriPersistent(context, uri)
+
+        val uriString = uri.toString()
+        viewModel.saveOfflineMapFolder(uriString)
+
+        // chosed folder has no .map files
+        val mapFiles = MapProvider.getOnDeviceMapFiles(context, uriString)
+        if (mapFiles.isEmpty()) {
+            Toast.makeText(
+                context,
+                R.string.folder_not_contain_maps,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
     SettingsScreen(
         uiState = uiState,
-        onBackClicked = onBack,
+        onMapSourceStateChange = { enabled ->
+            viewModel.setMapSourceState(enabled)
+            if (enabled && uiState.offlineMapFolder.isEmpty()) {
+                folderPickerLauncher.launch(null)
+            }
+        },
+        onOfflineMapFolderClicked = {
+            folderPickerLauncher.launch(null)
+        },
         onTrueDarkStateChange = viewModel::setTrueDarkState,
         onTrueNorthStateChange = viewModel::setTrueNorthState,
         onThemeOptionClicked = viewModel::setTheme,
@@ -124,7 +153,8 @@ fun SettingsScreen(
 @Composable
 fun SettingsScreen(
     uiState: SettingsViewModel.SettingsUiState,
-    onBackClicked: () -> Unit,
+    onMapSourceStateChange: (Boolean) -> Unit,
+    onOfflineMapFolderClicked: () -> Unit,
     onTrueDarkStateChange: (Boolean) -> Unit,
     onTrueNorthStateChange: (Boolean) -> Unit,
     onThemeOptionClicked: (String) -> Unit,
@@ -138,12 +168,14 @@ fun SettingsScreen(
         topBar = {
             TopAppBar(title = { Text(stringResource(R.string.settings)) })
         },
-        contentWindowInsets = WindowInsets(0, 0, 0, 0), // add this to remove extra spaces
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { paddingValues ->
         var isThemeDialogVisible by remember { mutableStateOf(false) }
         SettingsList(
             uiState = uiState,
+            onOfflineMapFolderClicked = onOfflineMapFolderClicked,
+            onMapSourceStateChange = onMapSourceStateChange,
             modifier = Modifier.padding(paddingValues),
             onTrueDarkStateChange = onTrueDarkStateChange,
             onTrueNorthStateChange = onTrueNorthStateChange,
@@ -167,6 +199,8 @@ fun SettingsScreen(
 private fun SettingsList(
     modifier: Modifier = Modifier,
     uiState: SettingsViewModel.SettingsUiState,
+    onOfflineMapFolderClicked: () -> Unit,
+    onMapSourceStateChange: (Boolean) -> Unit,
     onTrueDarkStateChange: (Boolean) -> Unit,
     onTrueNorthStateChange: (Boolean) -> Unit,
     onThemeItemClicked: () -> Unit,
@@ -175,6 +209,14 @@ private fun SettingsList(
     onSupportClicked: () -> Unit,
     onSourceClicked: () -> Unit,
 ) {
+
+    val context = LocalContext.current
+
+    val folderName = remember(uiState.offlineMapFolder) {
+        MapProvider.getOnDeviceMapFolderName(context, uiState.offlineMapFolder)
+            .ifEmpty { "No folder selected" }
+    }
+
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -204,6 +246,46 @@ private fun SettingsList(
                 Spacer(modifier = Modifier.requiredSize(spacingMedium))
 
             }
+            item(key = "__mapSourceHeader") {
+                Text(
+                    text = stringResource(R.string.map),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.tertiary,
+                )
+                Spacer(modifier = Modifier.requiredSize(spacingMedium))
+            }
+            item(key = "__mapSourceOfflineItem") {
+                SettingsItem(
+                    isChecked = uiState.useOfflineMaps,
+                    onCheckedStateChange = {
+                        onMapSourceStateChange(it)
+                    },
+                    icon = R.drawable.ic_map_24px,
+                    headlineText = stringResource(R.string.map_source),
+                    shape = if (!uiState.useOfflineMaps) singleListItemShape else topListItemShape,
+                    supportingText = if (uiState.useOfflineMaps)
+                        stringResource(R.string.source_offline_map)
+                    else
+                        stringResource(R.string.source_online_map),
+                )
+            }
+
+            if (uiState.useOfflineMaps) {
+                item(key = "__mapFolderItem") {
+                    SettingsItem(
+                        onItemClicked = onOfflineMapFolderClicked,
+                        icon = R.drawable.folder_24px,
+                        headlineText = stringResource(R.string.offline_maps_folder),
+                        shape = bottomListItemShape,
+                        supportingText = stringResource(
+                            R.string.offline_folder_path,
+                            folderName
+                        )
+                    )
+                    Spacer(modifier = Modifier.requiredSize(spacingMedium))
+                }
+            }
+
             item(key = "__displayHeader") {
                 Text(
                     text = stringResource(R.string.display),
@@ -314,6 +396,8 @@ fun SettingsItem(
 @Composable
 fun SettingsItem(
     modifier: Modifier = Modifier,
+    isCheckBoxVisible: Boolean = true,
+    onItemClicked: () -> Unit = {},
     isChecked: Boolean = false,
     isEnabled: Boolean = true,
     onCheckedStateChange: ((Boolean) -> Unit),
@@ -327,28 +411,29 @@ fun SettingsItem(
         var checked by remember { mutableStateOf(false) }
         ListItem(
             trailingContent = {
-                Switch(
-                    checked = isChecked,
-                    onCheckedChange = { onCheckedStateChange(it) },
-                    thumbContent = if (checked) {
-                        {
-                            Icon(
-                                painterResource(R.drawable.code_icon24px),
-                                contentDescription = null,
-                                modifier = Modifier.size(SwitchDefaults.IconSize),
-                            )
+                if (isCheckBoxVisible) {
+                    Switch(
+                        checked = isChecked,
+                        onCheckedChange = { onCheckedStateChange(it) },
+                        thumbContent = if (checked) {
+                            {
+                                Icon(
+                                    painterResource(R.drawable.code_icon24px),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(SwitchDefaults.IconSize),
+                                )
+                            }
+                        } else {
+                            null
                         }
-                    } else {
-                        null
-                    }
-                )
+                    )
+                }
             }, leadingContent = {
                 Icon(
                     painter = painterResource(icon),
                     contentDescription = headlineText,
                     modifier = Modifier.requiredSize(iconDefaultSize)
                 )
-
             }, colors = ListItemDefaults.colors(
                 containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
                 headlineColor = MaterialTheme.colorScheme.onSurface,
@@ -357,8 +442,11 @@ fun SettingsItem(
                 Text(headlineText)
             }, supportingContent = {
                 Text(supportingText)
-            }, modifier = modifier.clip(shape)
-        )
+            }, modifier = modifier
+                .clickable {
+                    onItemClicked()
+                }
+                .clip(shape))
     }
 }
 
@@ -430,6 +518,7 @@ private fun ThemeDialog(
     }
 }
 
+
 @Composable
 fun getThemeName(option: String): String {
     return when (option) {
@@ -457,7 +546,8 @@ fun SettingsScreenPreview() {
     MBCompassTheme(darkTheme = true, uiState = SettingsViewModel.SettingsUiState()) {
         SettingsScreen(
             uiState = SettingsViewModel.SettingsUiState(),
-            onBackClicked = {},
+            onMapSourceStateChange = {},
+            onOfflineMapFolderClicked = {},
             onTrueDarkStateChange = {},
             onTrueNorthStateChange = {},
             onThemeOptionClicked = {},
@@ -465,6 +555,7 @@ fun SettingsScreenPreview() {
             onSupportClicked = {},
             onAuthorPageClicked = {},
             onSourceClicked = {})
+
     }
 }
 

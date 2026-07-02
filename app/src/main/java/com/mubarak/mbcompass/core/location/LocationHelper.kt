@@ -61,7 +61,7 @@ object LocationHelper {
 
     // return lastKnowLocation from system + app preference
     fun getLastKnownLocation(context: Context): Location {
-        // This is our fallback - always available even if GPS is off
+        // fallback from pref stored gps lat/long
         var lastKnownLocation: Location = AppPreferences.loadCurrentLocation()
 
         Log.d(TAG, "getLastKnownLocation: $lastKnownLocation")

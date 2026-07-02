@@ -108,6 +108,15 @@ dependencies {
     // OSMDroid
     implementation (libs.osmdroid.android)
 
+    // MapsForge (for offline maps)
+    implementation(libs.osmdroid.mapsforge)
+    implementation(libs.mapsforge.map.android)
+    implementation(libs.mapsforge.map)
+    implementation(libs.mapsforge.themes)
+
+    // Android SAF tree
+    implementation(libs.androidx.documentfile)
+
     // Preference Datastore
     implementation(libs.androidx.datastore.preferences)
 

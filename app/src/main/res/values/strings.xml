@@ -127,6 +127,12 @@
     <string name="descent">Descent</string>
     <string name="track_no_data">Track has no data</string>
     <string name="install_file_manager">Please install a file manager app</string>
+    <string name="folder_not_contain_maps">The selected folder contains no .map files</string>
+    <string name="map_source">Map Source</string>
+    <string name="source_offline_map">Currently using: Offline maps - configure source folder below</string>
+    <string name="source_online_map">Currently using: Online maps (default)</string>
+    <string name="offline_folder_path">Mapsforge .map Folder: /"%1$s"/ - tap to configure</string>
+    <string name="offline_maps_folder">Offline Maps Folder</string>
 
 
 </resources>
