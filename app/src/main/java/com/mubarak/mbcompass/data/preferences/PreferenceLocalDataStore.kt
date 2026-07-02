@@ -40,6 +40,18 @@ class PreferenceLocalDataStore @Inject constructor(
                 mapUserPreferences(preferences)
             }
 
+    override suspend fun setOfflineMapFolder(key: String, value: String) {
+        dataStore.edit { preferences ->
+            preferences[stringPreferencesKey(key)] = value
+        }
+    }
+
+    override suspend fun setMapSource(key: String, value: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[booleanPreferencesKey(key)] = value
+        }
+    }
+
     override suspend fun setTheme(key: String, value: String) {
         dataStore.edit { preferences ->
             preferences[stringPreferencesKey(key)] = value
@@ -79,6 +91,8 @@ class PreferenceLocalDataStore @Inject constructor(
     private fun mapUserPreferences(preferences: Preferences): UserPreferences {
         return UserPreferences(
             theme = preferences[PreferencesKeys.THEME] ?: ThemeConfig.FOLLOW_SYSTEM.prefName,
+            offlineMapFolderPath = preferences[PreferencesKeys.OFFLINE_FOLDER_PATH] ?: String(),
+            isOfflineMapSource = preferences[PreferencesKeys.MAP_SOURCE] ?: false,
             isTrueDarkThemeEnabled = preferences[PreferencesKeys.TRUE_DARK] ?: false,
             isTrueNorthEnabled = preferences[PreferencesKeys.TRUE_NORTH] ?: false,
             highAccuracy = preferences[PreferencesKeys.HIGH_ACCURACY] ?: false,
@@ -90,6 +104,9 @@ class PreferenceLocalDataStore @Inject constructor(
 
     private object PreferencesKeys {
         val THEME = stringPreferencesKey(UserPreferences.KEY_THEME)
+
+        val OFFLINE_FOLDER_PATH = stringPreferencesKey(UserPreferences.OFFLINE_FOLDER_PATH)
+        val MAP_SOURCE = booleanPreferencesKey(UserPreferences.MAP_SOURCE)
         val TRUE_DARK = booleanPreferencesKey(UserPreferences.TRUE_DARK)
         val TRUE_NORTH = booleanPreferencesKey(UserPreferences.TRUE_NORTH)
         val HIGH_ACCURACY = booleanPreferencesKey(UserPreferences.HIGH_ACCURACY)

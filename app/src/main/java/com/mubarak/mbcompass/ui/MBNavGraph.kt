@@ -97,7 +97,7 @@ fun MBNavGraph(
             }, popExitTransition = {
                 fadeThroughExit()
             }) {
-            SettingsScreen(onBack = { navController.navigateUp() })
+            SettingsScreen()
         }
     }
 }

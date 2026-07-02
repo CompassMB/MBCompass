@@ -3,6 +3,7 @@
 [versions]
 agp = "9.2.1"
 datastorePreferences = "1.2.1"
+documentfile = "1.1.0"
 fragmentKtx = "1.8.9"
 hiltAndroid = "2.59.2"
 kotlin = "2.3.0"
@@ -15,15 +16,20 @@ kotlinxCoroutinesTest = "1.11.0"
 lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.13.0"
 composeBom = "2026.05.01"
+mapsforgeMap = "0.21.0"
+mapsforgeMapAndroid = "0.21.0"
+mapsforgeThemes = "0.21.0"
 navigationCompose = "2.9.8"
 kspVersion = "2.3.6"
 kotlinxSerializationJson = "1.9.0"
 osmdroidAndroid = "6.1.20"
+osmdroidMapsforge = "6.1.20"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
+androidx-documentfile = { module = "androidx.documentfile:documentfile", version.ref = "documentfile" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
@@ -46,7 +52,11 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+mapsforge-map = { module = "org.mapsforge:mapsforge-map", version.ref = "mapsforgeMap" }
+mapsforge-map-android = { module = "org.mapsforge:mapsforge-map-android", version.ref = "mapsforgeMapAndroid" }
+mapsforge-themes = { module = "org.mapsforge:mapsforge-themes", version.ref = "mapsforgeThemes" }
 osmdroid-android = { module = "org.osmdroid:osmdroid-android", version.ref = "osmdroidAndroid" }
+osmdroid-mapsforge = { module = "org.osmdroid:osmdroid-mapsforge", version.ref = "osmdroidMapsforge" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

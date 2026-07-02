@@ -32,6 +32,8 @@ class SettingsViewModel @Inject constructor(
         .map { userPreferences ->
             SettingsUiState(
                 theme = userPreferences.theme,
+                useOfflineMaps = userPreferences.isOfflineMapSource,
+                offlineMapFolder = userPreferences.offlineMapFolderPath,
                 isTrueDarkThemeEnabled = userPreferences.isTrueDarkThemeEnabled,
                 isTrueNorthEnabled = userPreferences.isTrueNorthEnabled
             )
@@ -46,6 +48,17 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun setMapSourceState(isOfflineMapSource: Boolean){
+        viewModelScope.launch {
+            userPreferencesRepository.setMapSourceState(isOfflineMapSource)
+        }
+    }
+
+    fun saveOfflineMapFolder(path: String){
+        viewModelScope.launch {
+            userPreferencesRepository.setOfflineMapFolder(path)
+        }
+    }
     fun setTrueDarkState(isTrueDarkThemeEnabled: Boolean) {
         viewModelScope.launch {
             userPreferencesRepository.setTrueDarkState(isTrueDarkThemeEnabled)
@@ -60,6 +73,8 @@ class SettingsViewModel @Inject constructor(
 
     data class SettingsUiState(
         val theme: String = ThemeConfig.FOLLOW_SYSTEM.prefName,
+        val offlineMapFolder: String = "",
+        val useOfflineMaps: Boolean = false,
         val isTrueNorthEnabled: Boolean = false,
         val isTrueDarkThemeEnabled: Boolean = false,
         val themeDialogOptions: List<String> = listOf(

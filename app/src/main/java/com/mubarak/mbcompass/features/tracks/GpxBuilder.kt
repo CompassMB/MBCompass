@@ -116,7 +116,7 @@ object GpxBuilder {
 
         // Track segment
         sb.append("\t<trk>\n")
-        sb.append("\t\t<name>Track</name>\n")
+        sb.append("\t\t<name>Track: ${track.name}</name>\n")
         sb.append("\t\t<trkseg>\n")
 
         track.wayPoints.forEach { waypoint ->

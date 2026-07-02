@@ -51,10 +51,14 @@ import com.mubarak.mbcompass.core.location.LocationHelper
 import androidx.activity.ComponentActivity
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.runtime.LaunchedEffect
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mubarak.mbcompass.MapProvider
 import com.mubarak.mbcompass.core.permission.PermissionHandler
 import com.mubarak.mbcompass.data.AppPreferences
 import com.mubarak.mbcompass.data.TrackRepository
+import com.mubarak.mbcompass.data.preferences.UserPreferenceRepository
 import com.mubarak.mbcompass.features.tracks.MapOverlayHelper
 import com.mubarak.mbcompass.features.tracks.TrackerService
 import com.mubarak.mbcompass.features.tracks.TrackingConstants
@@ -65,9 +69,11 @@ import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.osmdroid.config.Configuration
+import org.osmdroid.mapsforge.MapsForgeTileSource
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
@@ -78,7 +84,9 @@ import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.compass.CompassOverlay
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
+import kotlin.collections.isNotEmpty
 import kotlin.coroutines.cancellation.CancellationException
+import androidx.core.net.toUri
 
 private const val TAG = "MapScreen"
 
@@ -96,6 +104,7 @@ class MapOverlayState {
 @EntryPoint
 interface MapScreenEntryPoint {
     fun trackRepository(): TrackRepository
+    fun userPreferencesRepository(): UserPreferenceRepository
 }
 
 
@@ -116,6 +125,20 @@ fun MapScreen(
             MapScreenEntryPoint::class.java
         ).trackRepository()
     }
+
+    val userPreferencesRepository = remember {
+        EntryPointAccessors.fromApplication(
+            context.applicationContext, MapScreenEntryPoint::class.java
+        ).userPreferencesRepository()
+    }
+
+    val offlineMapPrefs by remember {
+        userPreferencesRepository
+            .getUserPreferenceStream
+            .map { prefs -> prefs.isOfflineMapSource to prefs.offlineMapFolderPath }
+    }.collectAsStateWithLifecycle(initialValue = false to "")
+
+    val (useOfflineMaps, offlineMapFolder) = offlineMapPrefs
 
     val activity = context as ComponentActivity
     val permissionHandler = remember {
@@ -183,6 +206,10 @@ fun MapScreen(
             context,
             context.getSharedPreferences("osmdroid", 0)
         )
+
+        // mapsforge settings for offline maps
+        MapsForgeTileSource.createInstance(context.application)
+
         MapView(context).apply {
             overlays.add(CopyrightOverlay(context))
             val compassOverlay = CompassOverlay(
@@ -193,7 +220,13 @@ fun MapScreen(
             compassOverlay.enableCompass()
             overlays.add(compassOverlay)
 
-            setTileSource(TileSourceFactory.MAPNIK)
+            MapProvider.applyMapSource(
+                context = context,
+                mapView = this,
+                useOfflineMaps = useOfflineMaps,
+                offlineMapFolder = offlineMapFolder,
+            )
+
             setMultiTouchControls(true)
             zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
             setTilesScaledToDpi(true)
@@ -205,6 +238,15 @@ fun MapScreen(
                 false
             }
         }
+    }
+
+    LaunchedEffect(useOfflineMaps, offlineMapFolder) {
+        MapProvider.applyMapSource(
+            context = context,
+            mapView = mapView,
+            useOfflineMaps = useOfflineMaps,
+            offlineMapFolder = offlineMapFolder,
+        )
     }
 
     val uiHandler = remember { Handler(Looper.getMainLooper()) }
@@ -227,7 +269,7 @@ fun MapScreen(
                     }
 
                     if (!userInteraction) {
-                        centerMap(mapView, currentBestLocation, animated = true)
+                        centerMap(mapView, currentBestLocation)
                     }
                 }
                 uiHandler.postDelayed(this, TrackingConstants.UI_UPDATE_INTERVAL)
@@ -282,7 +324,7 @@ fun MapScreen(
             return
         }
         if (trackUri == null) bindTrackerService()
-        centerMap(mapView, currentBestLocation, animated = true)
+        centerMap(mapView, currentBestLocation)
     }
 
     fun startTrackerServiceActual(resume: Boolean) {
@@ -367,7 +409,7 @@ fun MapScreen(
             if (!LocationHelper.isLocationEnabled(context)) {
                 checkLocationServices()
             } else {
-                centerMap(mapView, currentBestLocation, animated = true)
+                centerMap(mapView, currentBestLocation)
             }
         } else {
             permissionHandler.requestLocationPermission(
@@ -389,7 +431,7 @@ fun MapScreen(
                 try {
                     val track = withContext(Dispatchers.IO) {
                         trackRepository.readTrackFromUri(
-                            android.net.Uri.parse(trackUri)
+                            trackUri.toUri()
                         )
                     }
                     if (track.wayPoints.isEmpty()) {
@@ -654,9 +696,9 @@ private fun clearCurrentTrackOverlays(mapView: MapView, state: MapOverlayState) 
     mapView.invalidate()
 }
 
-private fun centerMap(mapView: MapView, location: Location, animated: Boolean = false) {
+private fun centerMap(mapView: MapView, location: Location) {
     val position = GeoPoint(location.latitude, location.longitude)
-    if (animated) mapView.controller.animateTo(position) else mapView.controller.setCenter(position)
+    mapView.controller.animateTo(position)
 }
 
 private fun centerOnTrack(mapView: MapView, track: Track) {
