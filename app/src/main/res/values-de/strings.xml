@@ -102,4 +102,23 @@
     <string name="try_again">Nochmal versuchen</string>
     <string name="open_settings">Einstellungen öffnen</string>
     <string name="track_deleted">Track gelöscht</string>
+    <string name="delete_track_confirmation">Möchtest du diesen Track wirklich löschen?\n\n- %1$s</string>
+    <string name="save_gpx_to_file">Speichere GPX in Datei</string>
+    <string name="share_gpx_via_apps">Teile GPX über Apps</string>
+    <string name="waypoints">Punkte</string>
+    <string name="avg_speed">Durchschnittsgeschwindigkeit</string>
+    <string name="alt_highest">Höchste</string>
+    <string name="alt_lowest">Niedrigste</string>
+    <string name="share">Teilen</string>
+    <string name="recording">Aufzeichnen</string>
+    <string name="ascent">Anstieg</string>
+    <string name="descent">Abstieg</string>
+    <string name="track_no_data">Track hat keine Daten</string>
+    <string name="install_file_manager">Bitte installiere eine Dateimanager App</string>
+    <string name="folder_not_contain_maps">Der ausgewählte Ordner enthält keine .map Dateien</string>
+    <string name="map_source">Map Quelle</string>
+    <string name="source_offline_map">Aktuell genutzt: Offline Karten - Konfiguriere unten den Quellordner</string>
+    <string name="source_online_map">Aktuell genutzt: Online Karten (Standard)</string>
+    <string name="offline_folder_path">Mapsforge .map Ordner: /%1$s/ - Zur Konfiguration hier drücken</string>
+    <string name="offline_maps_folder">Offline Maps Ordner</string>
 </resources>
