@@ -141,7 +141,7 @@ Contributions are welcome! If you encounter bugs or have feature suggestions, pl
 
 MBCompass is independent, ad-free, and self-funded. If it's useful to you, consider supporting development, it directly funds app maintenance on publishing platforms, vector map hosting (upcoming), navigation improvements, and long-term maintenance.
 
-[Support MBCompass](https://compassmb.github.io/MBCompass-site/donate.html)
+[Support MBCompass](https://compassmb.github.io/donate.html)
 
 ## License
 

@@ -18,10 +18,6 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -102,7 +98,7 @@ class TrackerService : Service() {
     private var isGpsListenerRegistered = false
     private var isNetworkListenerRegistered = false
 
-    private val altitudeSmoothingQueue = AltitudeSmoother(13,6)
+    private val altitudeSmoothingQueue = AltitudeSmoother(13, 6)
 
     inner class LocalBinder : Binder() {
         fun getService(): TrackerService = this@TrackerService
@@ -140,12 +136,15 @@ class TrackerService : Service() {
             when (trackingState) {
                 TrackingConstants.STATE_TRACKING_ACTIVE -> {
                     Log.w(TAG, "Service killed by OS. Restoring active tracking.")
-                    currentTrack = trackRepository.readTrackFromUri(trackRepository.getTempFileUri())
+                    currentTrack =
+                        trackRepository.readTrackFromUri(trackRepository.getTempFileUri())
                     resumeTracking()
                 }
+
                 TrackingConstants.STATE_TRACKING_PAUSED -> {
                     Log.w(TAG, "Service restarted in paused state.")
-                    currentTrack = trackRepository.readTrackFromUri(trackRepository.getTempFileUri())
+                    currentTrack =
+                        trackRepository.readTrackFromUri(trackRepository.getTempFileUri())
                 }
             }
             return START_STICKY
@@ -302,12 +301,9 @@ class TrackerService : Service() {
     @Suppress("DEPRECATION")
     private fun stopForegroundCompat(removeNotification: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val flags = if (removeNotification) {
-                STOP_FOREGROUND_REMOVE
-            } else {
-                STOP_FOREGROUND_DETACH
-            }
-            stopForeground(flags)
+            stopForeground(
+                if (removeNotification) STOP_FOREGROUND_REMOVE else STOP_FOREGROUND_DETACH
+            )
         } else {
             stopForeground(removeNotification)
         }
@@ -367,49 +363,54 @@ class TrackerService : Service() {
             override fun onLocationChanged(location: Location) {
                 if (LocationHelper.isBestLocation(location, currentBestLocation)) {
                     currentBestLocation = location
-                    Log.v(TAG, "Location updated: ${location.latitude}, ${location.longitude}, " +
-                            "accuracy: ${location.accuracy}m, provider: ${location.provider}")
+                    Log.v(
+                        TAG, "Location updated: ${location.latitude}, ${location.longitude}, " +
+                                "accuracy: ${location.accuracy}m, provider: ${location.provider}"
+                    )
                 }
             }
 
             override fun onProviderEnabled(provider: String) {
                 when (provider) {
-                    LocationManager.GPS_PROVIDER -> {
+                    LocationManager.GPS_PROVIDER ->
                         isGpsProviderActive = LocationHelper.isGpsEnabled(locationManager)
-                    }
-                    LocationManager.NETWORK_PROVIDER -> {
+
+                    LocationManager.NETWORK_PROVIDER ->
                         isNetworkProviderActive = LocationHelper.isNetworkEnabled(locationManager)
-                    }
                 }
             }
 
             override fun onProviderDisabled(provider: String) {
                 when (provider) {
-                    LocationManager.GPS_PROVIDER -> {
+                    LocationManager.GPS_PROVIDER ->
                         isGpsProviderActive = LocationHelper.isGpsEnabled(locationManager)
-                    }
-                    LocationManager.NETWORK_PROVIDER -> {
+
+                    LocationManager.NETWORK_PROVIDER ->
                         isNetworkProviderActive = LocationHelper.isNetworkEnabled(locationManager)
-                    }
                 }
             }
 
             @Deprecated("Deprecated in API 29")
-            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+            }
         }
     }
 
     fun addGpsLocationListener() {
         if (isGpsListenerRegistered) return
-
         isGpsProviderActive = LocationHelper.isGpsEnabled(locationManager)
         if (!isGpsProviderActive) return
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED) return
+            != PackageManager.PERMISSION_GRANTED
+        ) return
 
         gpsLocationListener?.let {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0L, 0f, it)
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                TrackingConstants.LOCATION_MIN_TIME_MS,
+                TrackingConstants.LOCATION_MIN_DISTANCE_M,
+                it
+            )
             isGpsListenerRegistered = true
             Log.v(TAG, "Added GPS location listener")
         }
@@ -417,15 +418,19 @@ class TrackerService : Service() {
 
     fun addNetworkLocationListener() {
         if (isNetworkListenerRegistered) return
-
         isNetworkProviderActive = LocationHelper.isNetworkEnabled(locationManager)
         if (!isNetworkProviderActive || useGpsOnly) return
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED) return
+            != PackageManager.PERMISSION_GRANTED
+        ) return
 
         networkLocationListener?.let {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, it)
+            locationManager.requestLocationUpdates(
+                LocationManager.NETWORK_PROVIDER,
+                TrackingConstants.LOCATION_MIN_TIME_MS,
+                TrackingConstants.LOCATION_MIN_DISTANCE_M,
+                it
+            )
             isNetworkListenerRegistered = true
             Log.v(TAG, "Added Network location listener")
         }
@@ -433,7 +438,8 @@ class TrackerService : Service() {
 
     fun removeGpsLocationListener() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED) {
+            == PackageManager.PERMISSION_GRANTED
+        ) {
             gpsLocationListener?.let { locationManager.removeUpdates(it) }
             isGpsListenerRegistered = false
             Log.v(TAG, "Removed GPS location listener")
@@ -442,7 +448,8 @@ class TrackerService : Service() {
 
     fun removeNetworkLocationListener() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED) {
+            == PackageManager.PERMISSION_GRANTED
+        ) {
             networkLocationListener?.let { locationManager.removeUpdates(it) }
             isNetworkListenerRegistered = false
             Log.v(TAG, "Removed Network location listener")
@@ -508,14 +515,12 @@ class TrackerService : Service() {
         return builder.build()
     }
 
-
     private fun updateNotification() {
         val notificationsEnabled = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             notificationManager.areNotificationsEnabled()
         } else {
             true  // Assuming enabled on API 23
         }
-
         if (notificationsEnabled) {
             notificationManager.notify(NOTIFICATION_ID, createNotification())
         }
@@ -524,10 +529,9 @@ class TrackerService : Service() {
     private fun getNotificationText(): String {
         val distance = LengthUnitHelper.convertDistanceToString(currentTrack.length)
         val duration = DateTimeFormatter.formatDurationTime(currentTrack.duration)
-        return "$distance • $duration"
+        return "Distance: $distance \nDuration: $duration"
     }
 
-    // altitude smoother for GPS, raw values are too noisy
     class AltitudeSmoother(
         private val capacity: Int,
         private val minSamples: Int
@@ -546,14 +550,11 @@ class TrackerService : Service() {
             if (values.size == capacity) {
                 sum -= values.removeFirst()
             }
-
             values.addLast(value)
             sum += value
         }
 
-        fun getAverage(): Double {
-            return if (values.isEmpty()) 0.0 else sum / values.size
-        }
+        fun getAverage(): Double = if (values.isEmpty()) 0.0 else sum / values.size
 
         fun reset() {
             values.clear()

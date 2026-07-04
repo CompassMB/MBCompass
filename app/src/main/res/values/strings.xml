@@ -133,6 +133,7 @@
     <string name="source_online_map">Currently using: Online maps (default)</string>
     <string name="offline_folder_path">Mapsforge .map Folder: /"%1$s"/ - tap to configure</string>
     <string name="offline_maps_folder">Offline Maps Folder</string>
+    <string name="location_off_message">Location is turned off</string>
 
 
 </resources>

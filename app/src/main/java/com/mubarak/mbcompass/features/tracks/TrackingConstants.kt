@@ -31,6 +31,11 @@ object TrackingConstants {
 
     const val IMPLAUSIBLE_TRACK_START_SPEED = 250.0 // km/h
 
+    const val MIN_WAYPOINT_DISTANCE_M = 10f
+
+    const val LOCATION_MIN_TIME_MS = 2_000L
+    const val LOCATION_MIN_DISTANCE_M = 5f
+
     const val STATE_TRACKING_NOT = 0
     const val STATE_TRACKING_ACTIVE = 1
     const val STATE_TRACKING_PAUSED = 2

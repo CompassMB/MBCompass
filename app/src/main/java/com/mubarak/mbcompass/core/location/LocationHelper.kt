@@ -90,7 +90,7 @@ object LocationHelper {
     }
 
     fun isStaleLocation(location: Location): Boolean {
-        return GregorianCalendar.getInstance().time.time - location.time > TrackingConstants.SIGNIFICANT_TIME_DIFFERENCE
+        return System.currentTimeMillis() - location.time > TrackingConstants.SIGNIFICANT_TIME_DIFFERENCE
     }
 
     fun isBestLocation(location: Location, currentBestLocation: Location?): Boolean {
@@ -156,7 +156,7 @@ object LocationHelper {
             firstLocation = track.wayPoints[0].toLocation(),
             secondLocation = secondLocation,
             firstTimestamp = track.recordingStart,
-            secondTimestamp = GregorianCalendar.getInstance().time.time
+            secondTimestamp = System.currentTimeMillis()
         )
         return speed < TrackingConstants.IMPLAUSIBLE_TRACK_START_SPEED
     }
