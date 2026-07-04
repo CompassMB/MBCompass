@@ -19,6 +19,8 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
@@ -28,10 +30,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -40,21 +43,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.app.ActivityCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.mubarak.mbcompass.R
-import com.mubarak.mbcompass.core.location.LocationHelper
-import androidx.activity.ComponentActivity
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarResult
-import androidx.compose.runtime.LaunchedEffect
-import androidx.core.app.ActivityCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mubarak.mbcompass.MapProvider
+import com.mubarak.mbcompass.R
+import com.mubarak.mbcompass.core.location.LocationHelper
 import com.mubarak.mbcompass.core.permission.PermissionHandler
 import com.mubarak.mbcompass.data.AppPreferences
 import com.mubarak.mbcompass.data.TrackRepository
@@ -84,9 +86,7 @@ import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.compass.CompassOverlay
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
-import kotlin.collections.isNotEmpty
 import kotlin.coroutines.cancellation.CancellationException
-import androidx.core.net.toUri
 
 private const val TAG = "MapScreen"
 
@@ -99,14 +99,12 @@ class MapOverlayState {
     var savedTrackMarkersOverlay: ItemizedIconOverlay<OverlayItem>? = null
 }
 
-// todo move it to viewmodel as a screen ui states
 @InstallIn(SingletonComponent::class)
 @EntryPoint
 interface MapScreenEntryPoint {
     fun trackRepository(): TrackRepository
     fun userPreferencesRepository(): UserPreferenceRepository
 }
-
 
 @SuppressLint("LocalContextGetResourceValueCall")
 @Composable
@@ -118,8 +116,7 @@ fun MapScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     val scope = rememberCoroutineScope()
 
-    // currently injecting as an entrypoint
-   val trackRepository = remember {
+    val trackRepository = remember {
         EntryPointAccessors.fromApplication(
             context.applicationContext,
             MapScreenEntryPoint::class.java
@@ -140,10 +137,11 @@ fun MapScreen(
 
     val (useOfflineMaps, offlineMapFolder) = offlineMapPrefs
 
-    val activity = context as ComponentActivity
+
+    val activity = LocalActivity.current as ComponentActivity
     val permissionHandler = remember {
         PermissionHandler(
-            context = context,
+            context = activity,
             shouldShowRationale = { permission ->
                 ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)
             }
@@ -155,7 +153,7 @@ fun MapScreen(
     val locationPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
-        if (isGranted) {} else {
+        if (!isGranted) {
             scope.launch {
                 snackbarHostState.showSnackbar(
                     context.getString(R.string.location_permission_denied_message)
@@ -176,10 +174,7 @@ fun MapScreen(
         }
     }
 
-
-    var trackingState by remember {
-        mutableIntStateOf(AppPreferences.loadTrackingState())
-    }
+    var trackingState by remember { mutableIntStateOf(AppPreferences.loadTrackingState()) }
     var userInteraction by remember { mutableStateOf(false) }
     var currentBestLocation by remember {
         mutableStateOf(LocationHelper.getLastKnownLocation(context))
@@ -189,14 +184,11 @@ fun MapScreen(
     var trackerService by remember { mutableStateOf<TrackerService?>(null) }
     var bound by remember { mutableStateOf(false) }
 
-    // dialog state
     var showEmptyTrackDialog by remember { mutableStateOf(false) }
     var showSaveTrackDialog by remember { mutableStateOf(false) }
-
     var pendingSaveService by remember { mutableStateOf<TrackerService?>(null) }
     var showDiscardDialog by remember { mutableStateOf(false) }
 
-    // osmdroid overlay state
     val overlayState = remember { MapOverlayState() }
     val mapOverlayHelper = remember { MapOverlayHelper() }
 
@@ -207,8 +199,7 @@ fun MapScreen(
             context.getSharedPreferences("osmdroid", 0)
         )
 
-        // mapsforge settings for offline maps
-        MapsForgeTileSource.createInstance(context.application)
+        MapsForgeTileSource.createInstance(activity.application)
 
         MapView(context).apply {
             overlays.add(CopyrightOverlay(context))
@@ -219,13 +210,6 @@ fun MapScreen(
             )
             compassOverlay.enableCompass()
             overlays.add(compassOverlay)
-
-            MapProvider.applyMapSource(
-                context = context,
-                mapView = this,
-                useOfflineMaps = useOfflineMaps,
-                offlineMapFolder = offlineMapFolder,
-            )
 
             setMultiTouchControls(true)
             zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
@@ -260,12 +244,16 @@ fun MapScreen(
                     currentTrack = service.currentTrack
                     trackingState = service.trackingState
 
-                    markCurrentPosition(mapView, mapOverlayHelper, overlayState,
-                        currentBestLocation, trackingState, context)
+                    markCurrentPosition(
+                        mapView, mapOverlayHelper, overlayState,
+                        currentBestLocation, trackingState, context
+                    )
 
                     if (trackingState != TrackingConstants.STATE_TRACKING_NOT) {
-                        overlayCurrentTrack(mapView, mapOverlayHelper, overlayState,
-                            currentTrack, trackingState, context)
+                        overlayCurrentTrack(
+                            mapView, mapOverlayHelper, overlayState,
+                            currentTrack, trackingState, context
+                        )
                     }
 
                     if (!userInteraction) {
@@ -305,20 +293,20 @@ fun MapScreen(
         )
     }
 
+    @SuppressLint("LocalContextGetResourceValueCall")
     fun checkLocationServices() {
         if (!LocationHelper.isLocationEnabled(context)) {
             MapNotifications.showLocationOff(
                 snackbarHostState = snackbarHostState,
                 scope = scope,
-                message = "Location is turned off",
-                actionLabel = "Enable",
+                message = context.getString(R.string.location_off_message),
+                actionLabel = context.getString(R.string.enable),
                 onOpenSettings = { permissionHandler.openLocationSettings() }
             )
         }
     }
 
     fun onLocationPermissionGranted() {
-        Log.d(TAG, "Location permission granted")
         if (!LocationHelper.isLocationEnabled(context)) {
             checkLocationServices()
             return
@@ -329,13 +317,8 @@ fun MapScreen(
 
     fun startTrackerServiceActual(resume: Boolean) {
         val intent = Intent(context, TrackerService::class.java).apply {
-            action = if (resume) {
-                TrackerService.ACTION_RESUME
-            } else {
-                TrackerService.ACTION_START
-            }
+            action = if (resume) TrackerService.ACTION_RESUME else TrackerService.ACTION_START
         }
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intent)
         } else {
@@ -430,9 +413,7 @@ fun MapScreen(
             scope.launch {
                 try {
                     val track = withContext(Dispatchers.IO) {
-                        trackRepository.readTrackFromUri(
-                            trackUri.toUri()
-                        )
+                        trackRepository.readTrackFromUri(trackUri.toUri())
                     }
                     if (track.wayPoints.isEmpty()) {
                         Toast.makeText(context, R.string.track_no_data, Toast.LENGTH_SHORT).show()
@@ -451,8 +432,10 @@ fun MapScreen(
             mapView.controller.setCenter(
                 GeoPoint(currentBestLocation.latitude, currentBestLocation.longitude)
             )
-            markCurrentPosition(mapView, mapOverlayHelper, overlayState,
-                currentBestLocation, trackingState, context)
+            markCurrentPosition(
+                mapView, mapOverlayHelper, overlayState,
+                currentBestLocation, trackingState, context
+            )
         }
     }
 
@@ -470,7 +453,7 @@ fun MapScreen(
                     mapView.onResume()
                     checkLocationServices()
                     if (bound) {
-                        if (trackingState != TrackingConstants.STATE_TRACKING_ACTIVE) {
+                        if (trackingState == TrackingConstants.STATE_TRACKING_ACTIVE) {
                             trackerService?.addGpsLocationListener()
                             trackerService?.addNetworkLocationListener()
                         }
@@ -511,7 +494,6 @@ fun MapScreen(
             mapView.onDetach()
         }
     }
-
 
     val isViewOnlyMode = trackUri != null
 
@@ -697,8 +679,7 @@ private fun clearCurrentTrackOverlays(mapView: MapView, state: MapOverlayState) 
 }
 
 private fun centerMap(mapView: MapView, location: Location) {
-    val position = GeoPoint(location.latitude, location.longitude)
-    mapView.controller.animateTo(position)
+    mapView.controller.animateTo(GeoPoint(location.latitude, location.longitude))
 }
 
 private fun centerOnTrack(mapView: MapView, track: Track) {

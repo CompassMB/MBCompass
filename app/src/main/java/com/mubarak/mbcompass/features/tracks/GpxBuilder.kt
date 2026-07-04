@@ -16,12 +16,10 @@ import com.mubarak.mbcompass.features.tracks.model.Track
 import com.mubarak.mbcompass.features.tracks.model.WayPoint
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.GregorianCalendar
 import java.util.Locale
 import java.util.TimeZone
 
 object GpxBuilder {
-
 
     fun addWayPointToTrack(
         track: Track,
@@ -48,10 +46,24 @@ object GpxBuilder {
         }
 
         // update duration on every call continuous accumulation
-        val now: Long = GregorianCalendar.getInstance().time.time
+        val now: Long = System.currentTimeMillis()
         val difference: Long = now - track.recordingStop
-        track.duration = track.duration + difference
+        track.duration += difference
         track.recordingStop = now
+
+
+        // min distance check
+       if (!resumed && previousLocation != null) {
+            val distResult = FloatArray(1)
+            Location.distanceBetween(
+                previousLocation.latitude, previousLocation.longitude,
+                location.latitude, location.longitude,
+                distResult
+            )
+            if (distResult[0] < TrackingConstants.MIN_WAYPOINT_DISTANCE_M) {
+                return Pair(false, track)
+            }
+        }
 
         val shouldBeAdded: Boolean = (
                 LocationHelper.isRecent(location) &&
@@ -96,7 +108,7 @@ object GpxBuilder {
 
     // Calculates how long the recording has been paused since last stop.
     fun calculateDurationOfPause(recordingStop: Long): Long {
-        return GregorianCalendar.getInstance().time.time - recordingStop
+        return System.currentTimeMillis() - recordingStop
     }
 
 
