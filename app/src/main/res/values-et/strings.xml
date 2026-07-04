@@ -121,4 +121,5 @@
     <string name="source_online_map">Hetkel kasutusel: võrguühendusega kaardid (vaikimisi eelistus)</string>
     <string name="offline_folder_path">Mapsforge\'i .map kaust: /%1$s/ - klõpsa seadistamiseks</string>
     <string name="offline_maps_folder">Võrguühenduseta kaartide kaust</string>
+    <string name="location_off_message">Asukohatuvastus on lülitatud välja</string>
 </resources>
