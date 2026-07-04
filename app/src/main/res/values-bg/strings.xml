@@ -115,4 +115,11 @@
     <string name="descent">Спускане</string>
     <string name="track_no_data">Няма данни за маршрута</string>
     <string name="install_file_manager">Моля, инсталирайте приложение за файлов мениджър</string>
+    <string name="folder_not_contain_maps">Избраната папка не съдържа .map файлове</string>
+    <string name="map_source">Източник на карта</string>
+    <string name="source_offline_map">В момента се използва: Офлайн карти - конфигурирайте папката източник по-долу</string>
+    <string name="source_online_map">В момента се използва: Онлайн карти (по подразбиране)</string>
+    <string name="offline_folder_path">Папка .map на Mapsforge: /%1$s/ - докоснете, за да конфигурирате</string>
+    <string name="offline_maps_folder">Папка с офлайн карти</string>
+    <string name="location_off_message">Местоположението е изключено</string>
 </resources>
