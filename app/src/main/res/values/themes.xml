@@ -3,5 +3,6 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later-->
 
 <resources>
-    <style name="Theme.MBCompass" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.App.Starting" parent="android:Theme.Material.Light.NoActionBar"/>
 </resources>

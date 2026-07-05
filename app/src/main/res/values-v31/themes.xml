@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.App.Starting" parent="android:Theme.Material.Light.NoActionBar">
+<!--  changes the default window splash background to black on api level 31+      -->
+        <item name="android:windowSplashScreenBackground">@color/black</item>
+    </style>
+</resources>

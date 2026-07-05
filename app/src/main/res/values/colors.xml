@@ -5,6 +5,7 @@
 <resources>
 
     <color name="brand_color">#45CCDE</color>
+    <color name="black">#000000</color>
     <color name="attr_color">#9AB71C1C</color>
     <color name="white">#FFFFFFFF</color>
 
