@@ -102,4 +102,24 @@
     <string name="no_tracks_message">开始录制以创建您的第一个轨迹</string>
     <string name="track_deleted">轨迹已删除</string>
     <string name="accuracy_medium">中等</string>
+    <string name="delete_track_confirmation">您确定要删除此轨迹吗？\n\n- %1$s</string>
+    <string name="save_gpx_to_file">将 GPX 保存到文件</string>
+    <string name="share_gpx_via_apps">分享 GPX</string>
+    <string name="waypoints">标记点</string>
+    <string name="avg_speed">平均速度</string>
+    <string name="alt_highest">最高速度</string>
+    <string name="alt_lowest">最低速度</string>
+    <string name="share">分享</string>
+    <string name="recording">记录</string>
+    <string name="ascent">累计爬升</string>
+    <string name="descent">累计下降</string>
+    <string name="track_no_data">无轨迹数据</string>
+    <string name="install_file_manager">请安装文件管理器</string>
+    <string name="folder_not_contain_maps">所选文件夹中没有 .map 文件</string>
+    <string name="map_source">地图源</string>
+    <string name="source_offline_map">当前使用：离线地图 - 在下方配置源文件夹</string>
+    <string name="source_online_map">当前使用：在线地图（默认）</string>
+    <string name="offline_folder_path">Mapsforge .map 文件夹: /%1$s/ - 点击配置</string>
+    <string name="offline_maps_folder">离线地图文件夹</string>
+    <string name="location_off_message">定位已关闭</string>
 </resources>
