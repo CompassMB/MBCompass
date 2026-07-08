@@ -102,4 +102,24 @@
     <string name="cancel">Katkesta</string>
     <string name="no_tracks_message">Oma esimese raja loomiseks alusta salvestamist</string>
     <string name="track_deleted">Rada on kustutatud</string>
+    <string name="delete_track_confirmation">Kas oled kindel, et soovid selle raja kustutada?\n\n- %1$s</string>
+    <string name="save_gpx_to_file">Salvesta GPX-failina</string>
+    <string name="share_gpx_via_apps">Jaga GPX-andmeid rakendusega</string>
+    <string name="waypoints">Teekonnapunktid</string>
+    <string name="avg_speed">Keskmine kiirus</string>
+    <string name="alt_highest">Kõrgeim</string>
+    <string name="alt_lowest">Madalaim</string>
+    <string name="share">Jaga</string>
+    <string name="recording">Salvestamisel</string>
+    <string name="ascent">Tõus</string>
+    <string name="descent">Laskumine</string>
+    <string name="track_no_data">Rajafail on andmeteta</string>
+    <string name="install_file_manager">Palun paigalda failihalduri rakendus</string>
+    <string name="folder_not_contain_maps">Valitud kaustas ei leidu .map faile</string>
+    <string name="map_source">Kaardiallikas</string>
+    <string name="source_offline_map">Hetkel kasutusel: võrguühenduseta kaardid - seadista lähtekausta alljärgnevas</string>
+    <string name="source_online_map">Hetkel kasutusel: võrguühendusega kaardid (vaikimisi eelistus)</string>
+    <string name="offline_folder_path">Mapsforge\'i .map kaust: /%1$s/ - klõpsa seadistamiseks</string>
+    <string name="offline_maps_folder">Võrguühenduseta kaartide kaust</string>
+    <string name="location_off_message">Asukohatuvastus on lülitatud välja</string>
 </resources>
