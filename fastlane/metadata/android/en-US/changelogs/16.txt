@@ -1,0 +1,8 @@
+- Added offline map support: load any Mapsforge .map file directly from a folder on your device
+- Added a toggle in Settings to switch between online osm tiles
+  and offline maps
+- Added per-app language support for Android 13+ users can now change MBCompass's language independently of system settings
+- Migrated map screens from legacy XML layouts to full Jetpack Compose, significant performance and rendering improvements
+- Fixed GPS waypoint density: added minimum time and distance
+  filters to prevent excessive points being recorded when the
+  device location updates too frequently

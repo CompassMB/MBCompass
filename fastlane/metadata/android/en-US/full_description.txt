@@ -1,31 +1,42 @@
-<b>MBCompass</b> is a modern, free, and open-source compass and navigation app without <b>ads</b>, <b>in-app purchases</b>, or <b>tracking</b>. It supports both <b>compass and navigation features</b> while remaining lightweight and simple!
+<b>MBCompass</b> is a free and open-source compass and navigation app
+without ads, in-app purchases, or tracking. Lightweight, focused,
+and built for real use.
 
-<b>Main Features:</b>
-<ul>
-  <li>Shows clear cardinal direction and magnetic azimuths.</li>
-  <li>Displays magnetic strength in µT.</li>
-  <li>Full GPX track recording with waypoints and path drawing.</li>
-  <li>Track stats: duration, distance, speed, and elevation.</li>
-  <li>View, manage, and share recorded tracks.</li>
-  <li>Sensor fusion for improved accuracy (accelerometer, magnetometer, gyroscope).</li>
-  <li>Light and dark theme support controlled via Settings.</li>
-  <li>Keeps screen on during navigation.</li>
-  <li>Landscape orientation support.</li>
-  <li>Built with Jetpack Compose and Material Design.</li>
-  <li>Runs on Android 6.0+</li>
-  <li>No ads, no in-app purchases, no tracking.</li>
-  <li>Find more on the <b><i>website</i></b>: https://compassmb.github.io/MBCompass-site/</li>
-</ul>
+<b>Compass</b>
+- Accurate compass with true north and magnetic north
+- Sensor fusion (accelerometer, gyroscope, magnetometer) for stable readings
+- Real-time magnetic field strength (µT)
+- Auto-alert when accuracy drops low enough to matter
 
-<b>Why choose MBCompass?</b>
+<b>GPS & Maps</b>
+- Live location on OpenStreetMap
+- Offline maps via Mapsforge point MBCompass to a folder
+  containing any .map file and toggle between online and offline
+- Toggle between OSM tiles and offline maps in Settings
 
-<blockquote>
+<b>Track Recording</b>
+- Record routes with start, pause, resume, and background support
+- Smooth polyline rendering on the map
+- Track stats: distance, duration, average speed, elevation gain/loss,
+  min/max altitude, elevation profile
+- Star and sort saved tracks
+- Export as GPX : compatible with OsmAnd, Garmin, and any
+  standard mapping tool
+
+<b>App</b>
+- Light, Dark, and AMOLED themes
+- Custom bottom navigation bar
+- Landscape orientation supported
+- Screen stays on during navigation
+- Runs on Android 6.0+
+- Under 2 MB including offline map support
+
+<b>Privacy</b>
+- No analytics, no crash reporter, no ad network
+- No Google Play Services dependency
+- Location processed on-device only
+- Source: https://github.com/CompassMB/MBCompass
 
 <b>Not just a compass. Not a full navigation app.</b>
-
-MBCompass sits in between, a focused **navigation utility** for hiking, trekking and everyday use, combining direction, live location, and track recording without unnecessary complexity.
-
-</blockquote>
-
-<b>The navigation starts from here</b>
-Lightweight, privacy-first compass and navigation - because navigation starts here.
+MBCompass sits in between, direction, live map, track recording,
+and offline maps without unnecessary complexity.

@@ -22,6 +22,10 @@
 </h4>
 
 <div align="center" style="display: flex; justify-content: center; align-items: flex-start; flex-wrap: wrap;">
+
+  <a href="https://github.com/CompassMB/MBCompass/issues/48">
+    <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width="170" alt="Get it on F-Droid"/>
+  </a>
   <a href="https://f-droid.org/app/com.mubarak.mbcompass">
     <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" width="170" alt="Get it on F-Droid"/>
   </a>
@@ -47,11 +51,13 @@
   <img width="31%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" />
   <img width="31%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" />
   <img width="31%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" />
+  <img width="31%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" />
 </p>
 <p align="center">
-  <img width="31%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" />
   <img width="31%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" />
   <img width="31%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" />
+  <img width="31%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" />
+  <img width="31%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/8.png" />
 </p>
 
 ## Features
@@ -63,17 +69,19 @@
 - Live GPS location tracking on OpenStreetMap
 - Keeps screen on during navigation
 
-### Track Recording
+### Track Recording & Maps
 - Real-time track recording with start, pause, and resume
 - Smooth polyline rendering for clear path visualization
-- Track statistics: distance, duration, average speed, elevation gain/loss, min/max altitude
+- Track statistics: distance, duration, average speed, elevation gain/loss (if available), min/max altitude
 - Export tracks as **GPX files** via the system file picker
-- Share tracks via Android share sheet
 - View, star, and sort all saved tracks in one place
+- Offline Mapsforge vector maps loaded from your device
+- Optional online OpenStreetMap tiles
+- Switch between offline and online maps in Settings
 
 ### App
 - Light, Dark, and **AMOLED** themes
-- Extremely lightweight (<2 MB) and battery efficient
+- Extremely lightweight (**~2 MB**) and battery efficient
 - Landscape orientation support
 - Clean Jetpack Compose UI with Material Design
 - No ads, no tracking, no in-app purchases
@@ -87,13 +95,10 @@
 <details>
   <summary><strong>Q2 planned features</strong></summary>
   <br/>
-  <p align="center">
-    <img width="600" src="/MBCompass_Q2.png" alt="MBCompass Q2 design preview"/>
-  </p>
 
-- Offline vector maps (lightweight, under evaluation)
-- Topographic map support
-- Navigation UX refinements
+- Topographic map support (contours)
+- Bearing to waypoint
+- Gpx import
 </details>
 
 ---
@@ -139,7 +144,9 @@ Contributions are welcome! If you encounter bugs or have feature suggestions, pl
 
 ## Support
 
-MBCompass is independent, ad-free, and self-funded. If it's useful to you, consider supporting development, it directly funds app maintenance on publishing platforms, vector map hosting (upcoming), navigation improvements, and long-term maintenance.
+MBCompass is developed independently and will always remain free, open source, and ad-free.
+
+If you find it useful, consider supporting its continued development.
 
 [Support MBCompass](https://compassmb.github.io/donate.html)
 
@@ -164,4 +171,4 @@ MBCompass is Free Software: you can use, study, share, and improve it at your wi
 See more information [here](https://github.com/MubarakNative/MBCompass/blob/main/LICENSE).
 
 ###  Artwork License:
-Compass rose : [MBCompass rose](https://github.com/MubarakNative/MBCompass/blob/main/app/src/main/res/drawable/mbcompass_rose.xml) © 2025 by Mubarak Basha is licensed under **CC BY-SA 4.0**
+Compass rose : [MBCompass rose](https://github.com/MubarakNative/MBCompass/blob/main/app/src/main/res/drawable/mbcompass_rose.xml) (c) 2025 by Mubarak Basha is licensed under **CC BY-SA 4.0**
