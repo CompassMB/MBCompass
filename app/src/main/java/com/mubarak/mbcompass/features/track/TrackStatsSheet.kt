@@ -103,7 +103,7 @@ fun TrackStatsBottomSheet(
                                 track.duration
                             )
                         }",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -131,6 +131,7 @@ fun TrackStatsBottomSheet(
                 item {
                     RecordingInfoCard(
                         startTime = track.recordingStart,
+                        pauseDuration = track.durationOfPause,
                         endTime = track.recordingStop
                     )
                 }
@@ -377,7 +378,7 @@ private fun AltitudeTile(
 }
 
 @Composable
-private fun RecordingInfoCard(startTime: Long, endTime: Long) {
+private fun RecordingInfoCard(startTime: Long, pauseDuration: Long, endTime: Long) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -392,11 +393,13 @@ private fun RecordingInfoCard(startTime: Long, endTime: Long) {
             )
             Spacer(Modifier.height(12.dp))
             RecordingRow(
-                label = "Started",
+                label = stringResource(R.string.rec_started_time),
                 value = DateTimeFormatter.formatDateTimeString(startTime)
             )
             Spacer(Modifier.height(6.dp))
-            RecordingRow(label = "Ended", value = DateTimeFormatter.formatDateTimeString(endTime))
+            RecordingRow(label = stringResource(R.string.pause_duration), value = DateTimeFormatter.formatDurationTime(pauseDuration))
+            Spacer(Modifier.height(6.dp))
+            RecordingRow(label = stringResource(R.string.rec_ended_time), value = DateTimeFormatter.formatDateTimeString(endTime))
         }
     }
 }

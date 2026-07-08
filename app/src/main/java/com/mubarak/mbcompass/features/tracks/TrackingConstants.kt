@@ -33,7 +33,7 @@ object TrackingConstants {
 
     const val MIN_WAYPOINT_DISTANCE_M = 10f
 
-    const val LOCATION_MIN_TIME_MS = 2_000L
+    const val LOCATION_MIN_TIME_MS = 1000L
     const val LOCATION_MIN_DISTANCE_M = 5f
 
     const val STATE_TRACKING_NOT = 0
