@@ -23,7 +23,7 @@
 
 <div align="center" style="display: flex; justify-content: center; align-items: flex-start; flex-wrap: wrap;">
 
-  <a href="https://github.com/CompassMB/MBCompass/issues/48">
+  <a href="https://groups.google.com/g/mbcompass-beta">
     <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width="170" alt="Get it on F-Droid"/>
   </a>
   <a href="https://f-droid.org/app/com.mubarak.mbcompass">
@@ -48,18 +48,25 @@
 ---
 
 <p align="center">
-  <img width="23%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" />
-  <img width="23%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" />
-  <img width="23%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" />
-  <img width="23%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" />
+  <img width="40%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" />
+  <img width="40%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" />
 </p>
 
 <p align="center">
-  <img width="23%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" />
-  <img width="23%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" />
-  <img width="23%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" />
-  <img width="23%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/8.png" />
+  <img width="40%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" />
+  <img width="40%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" />
 </p>
+
+<p align="center">
+  <img width="40%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" />
+  <img width="40%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" />
+</p>
+
+<p align="center">
+  <img width="40%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" />
+  <img width="40%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/8.png" />
+</p>
+
 
 ## Features
 
@@ -88,6 +95,22 @@
 - No ads, no tracking, no in-app purchases
 - No Google Play Services dependency (Works on Custom ROM's too)
 - Supports Android 6.0+
+
+---
+
+> [!NOTE]
+> **v1.1.16 is currently in closed beta on Google Play.**
+> This version includes offline Mapsforge map support, per-app language
+> settings, full Compose map migration, and a GPS waypoint density fix.
+>
+> Once testing is complete, the same build will be released on both
+> Google Play and F-Droid simultaneously.
+>
+> **Join MBCompass Google Group**: https://groups.google.com/g/mbcompass-beta
+>
+> **Opt-in for tester:** https://play.google.com/apps/testing/com.mubarak.mbcompass
+>
+> **Install:** https://play.google.com/store/apps/details?id=com.mubarak.mbcompass
 
 ---
 
