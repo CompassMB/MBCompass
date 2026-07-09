@@ -50,6 +50,10 @@ android {
 
     buildTypes {
         release {
+            // To include native symbol on play release
+            ndk {
+                debugSymbolLevel = "FULL"
+            }
             isDebuggable = false
             // Enables code-related app optimization.
             isMinifyEnabled = true
@@ -77,6 +81,7 @@ android {
     lint {
         disable += "MissingTranslation"
     }
+    ndkVersion = "28.2.13676358"
 }
 
 dependencies {
