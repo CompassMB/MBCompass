@@ -30,17 +30,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowColumn
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -61,15 +60,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat
@@ -143,17 +138,7 @@ fun NavScreen(
     Scaffold(contentWindowInsets = WindowInsets(0, 0, 0, 0), topBar = {
         TopAppBar(title = {
             Text(
-                text = stringResource(R.string.app_name),
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontFamily = FontFamily.Cursive,
-                    fontWeight = FontWeight.W700,
-                    brush = Brush.linearGradient(
-                        colors = listOf(
-                            Color(0xFF45DEA4),
-                            Color(0xFF45CCDE)
-                        )
-                    )
-                )
+                text = stringResource(R.string.app_name)
             )
         }, actions = {
             IconButton(onClick = { sensorViewModel.sensorStatusIconClicked() }) {
@@ -189,7 +174,6 @@ fun NavScreen(
         )
     }
 }
-
 @Composable
 fun MBCompass(
     modifier: Modifier = Modifier,
@@ -207,7 +191,7 @@ fun MBCompass(
 
     LaunchedEffect(
         degreeIn, magneticStrength
-    ) { // if something changes in this case degreeIn, magneticStrength -> Notify to the VM
+    ) {
         viewModel.updateAzimuth(degreeIn)
         viewModel.updateMagneticStrength(magneticStrength)
     }
@@ -225,6 +209,22 @@ fun MBCompass(
     }
 
     val context = LocalContext.current
+
+    var isLoadingLocation by remember { mutableStateOf(false) }
+    LaunchedEffect(location) {
+        if (location != null) isLoadingLocation = false
+    }
+    LaunchedEffect(trueNorthEnabled) {
+        if (!trueNorthEnabled) isLoadingLocation = false
+    }
+
+    val needsReload = trueNorthEnabled && location == null
+
+    val chipLabel = when {
+        trueNorthEnabled && location != null -> stringResource(R.string.true_north)
+        needsReload -> stringResource(R.string.reload_location)
+        else -> stringResource(R.string.magnetic_north)
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
         FlowColumn(
@@ -248,48 +248,39 @@ fun MBCompass(
                     style = MaterialTheme.typography.headlineSmall
                 )
 
-                Text(
-                    text = if (trueNorthEnabled) stringResource(R.string.true_north) else stringResource(
-                        R.string.magnetic_north
-                    ),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(top = 4.dp)
+                AssistChip(
+                    enabled = needsReload,
+                    onClick = {
+                        if (needsReload) {
+                            isLoadingLocation = true
+                            handleLocationRequest(context, androidLocationManager)
+                        }
+                    },
+                    leadingIcon = {
+                        when {
+                            isLoadingLocation -> CircularProgressIndicator(
+                                modifier = Modifier.size(AssistChipDefaults.IconSize),
+                                strokeWidth = 2.dp
+                            )
+                            needsReload -> Icon(
+                                painterResource(R.drawable.info_24px),
+                                contentDescription = null,
+                                modifier = Modifier.size(AssistChipDefaults.IconSize)
+                            )
+                            else -> {}
+                        }
+                    },
+                    label = { Text(chipLabel) }
                 )
 
                 Text(
-                    text = stringResource(R.string.magnetic_strength,strengthRounded),
+                    text = stringResource(R.string.magnetic_strength, strengthRounded),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(top = 8.dp)
                 )
             }
-
-            if (trueNorthEnabled && location == null) {
-                Button(
-                    onClick = {
-                        handleLocationRequest(context, androidLocationManager)
-                    },
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(16.dp)
-                ) {
-                    LocationRequestProgress()
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(stringResource(R.string.reload_location))
-                }
-            }
         }
     }
-}
-
-@Composable
-fun LocationRequestProgress(modifier: Modifier = Modifier) {
-
-    CircularProgressIndicator(
-        modifier = modifier.size(24.dp),
-        color = MaterialTheme.colorScheme.secondary,
-        trackColor = MaterialTheme.colorScheme.surfaceVariant,
-    )
 }
 
 private fun handleLocationRequest(
@@ -449,12 +440,13 @@ private fun locationRequestDialog(
         .setMessage(context.getString(message))
         .setPositiveButton(R.string.settings) { _, _ ->
             val intent = if (actionIntent == Settings.ACTION_APPLICATION_DETAILS_SETTINGS) {
-            Intent(actionIntent, Uri.fromParts("package", context.packageName, null))
-        } else {
-            Intent(actionIntent)
-        }
+                Intent(actionIntent, Uri.fromParts("package", context.packageName, null))
+            } else {
+                Intent(actionIntent)
+            }
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(intent) }
+            context.startActivity(intent)
+        }
         .setNegativeButton(R.string.ok_button) { dialog, _ ->
             dialog.dismiss()
         }

@@ -268,6 +268,10 @@ private fun SettingsList(
                     else
                         stringResource(R.string.source_online_map),
                 )
+                if (!uiState.useOfflineMaps){
+                    Spacer(modifier = Modifier.requiredSize(spacingMedium))
+                }
+
             }
 
             if (uiState.useOfflineMaps) {
@@ -396,7 +400,6 @@ fun SettingsItem(
 @Composable
 fun SettingsItem(
     modifier: Modifier = Modifier,
-    isCheckBoxVisible: Boolean = true,
     onItemClicked: () -> Unit = {},
     isChecked: Boolean = false,
     isEnabled: Boolean = true,
@@ -411,7 +414,6 @@ fun SettingsItem(
         var checked by remember { mutableStateOf(false) }
         ListItem(
             trailingContent = {
-                if (isCheckBoxVisible) {
                     Switch(
                         checked = isChecked,
                         onCheckedChange = { onCheckedStateChange(it) },
@@ -427,7 +429,6 @@ fun SettingsItem(
                             null
                         }
                     )
-                }
             }, leadingContent = {
                 Icon(
                     painter = painterResource(icon),
