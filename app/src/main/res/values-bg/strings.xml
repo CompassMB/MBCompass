@@ -122,4 +122,7 @@
     <string name="offline_folder_path">Папка .map на Mapsforge: /%1$s/ - докоснете, за да конфигурирате</string>
     <string name="offline_maps_folder">Папка с офлайн карти</string>
     <string name="location_off_message">Местоположението е изключено</string>
+    <string name="rec_started_time">Започнато в</string>
+    <string name="rec_ended_time">Приключи в</string>
+    <string name="pause_duration">Продължителност на паузата</string>
 </resources>
