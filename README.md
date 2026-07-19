@@ -54,65 +54,41 @@
 
 <p align="center">
   <img width="40%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" />
-  <img width="40%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" />
-</p>
-
-<p align="center">
-  <img width="40%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" />
   <img width="40%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" />
 </p>
 
 <p align="center">
-  <img width="40%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" />
+  <img width="40%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" />
   <img width="40%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/8.png" />
 </p>
 
-
 ## Features
 
-### Compass & Navigation
-- Accurate compass with **magnetic north** and **true north**
-- Sensor fusion for improved accuracy (accelerometer, magnetometer, gyroscope)
-- Real-time magnetic field strength display (**µT**)
-- Live GPS location tracking on OpenStreetMap
-- Keeps screen on during navigation
+### Navigation
 
-### Track Recording & Maps
-- Real-time track recording with start, pause, and resume
-- Smooth polyline rendering for clear path visualization
-- Track statistics: distance, duration, average speed, elevation gain/loss (if available), min/max altitude
-- Export tracks as **GPX files** via the system file picker
-- View, star, and sort all saved tracks in one place
-- Offline Mapsforge vector maps loaded from your device
+- Compass with true and magnetic north
+- Live GPS location
+- Sensor fusion
+- Magnetic field indicator
+
+### Maps & Tracks
+
+- Live track recording with start, pause, and resume
+- Real-time path visualization
+- GPX export
+- Offline Mapsforge maps (toggled in settings)
 - Optional online OpenStreetMap tiles
-- Switch between offline and online maps in Settings
+- Track statistics (distance, duration, speed, elevation, altitude)
 
 ### App
-- Light, Dark, and **AMOLED** themes
-- Extremely lightweight (**~2 MB**) and battery efficient
-- Landscape orientation support
-- Clean Jetpack Compose UI with Material Design
-- No ads, no tracking, no in-app purchases
-- No Google Play Services dependency (Works on Custom ROM's too)
-- Supports Android 6.0+
 
----
+- Material Design 3
+- Light, Dark, and AMOLED themes
+- Landscape support
+- No ads, tracking, or in-app purchases
+- Lightweight (~2 MB)
+- Android 6 and above
 
-> [!NOTE]
-> **v1.1.16 is currently in closed beta on Google Play.**
-> This version includes offline Mapsforge map support, per-app language
-> settings, full Compose map migration, and a GPS waypoint density fix.
->
-> Once testing is complete, the same build will be released on both
-> Google Play and F-Droid simultaneously.
->
-> **Join MBCompass Google Group**: https://groups.google.com/g/mbcompass-beta
->
-> **Opt-in for tester:** https://play.google.com/apps/testing/com.mubarak.mbcompass
->
-> **Install:** https://play.google.com/store/apps/details?id=com.mubarak.mbcompass
-
----
 
 ## Roadmap
 
@@ -140,18 +116,10 @@ MBCompass has gained recognition from the global developer community:
 
 ## Permissions
 
-MBCompass only requests the minimum permissions required for navigation and tracking features:
+- **Location** : Navigation and track recording
+- **Notifications (Android 13+)** : Foreground tracking service
 
-- **Location**
-  - Used to detect and display your current location on the map
-  - Required for real-time track recording and navigation features
-
-- **Notification (Android 13+)**
-  - Used to show foreground service notifications during active tracking
-  - Enables track progress visibility and quick controls (pause/resume)
-
-MBCompass does **not** collect, store, or share any personal data.
-All location and tracking data stays on your device unless you explicitly export it (e.g., GPX files).
+MBCompass never collects or shares your data.
 
 ## Translations
 

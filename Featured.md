@@ -1,7 +1,5 @@
 ##  Featured
 
-Trusted by developers worldwide, **MBCompass** has received significant recognition across the Android and open-source communities:
-
 <p align="center">
   <a href="https://www.producthunt.com/products/mbcompass/launches/mbcompass">
   <img src="https://github.com/CompassMB/MBCompass-site/blob/main/assets/img/ph_400_140.png?raw=true" alt="Product Hunt" style="margin-right: 10px;" />
