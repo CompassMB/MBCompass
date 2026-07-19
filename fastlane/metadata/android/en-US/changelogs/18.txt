@@ -1,0 +1,6 @@
+- Added support for offline Mapsforge maps
+- Simplified the compass direction heading indicator (True North or Magnetic North)
+- Added pause duration to track statistics
+- Fixed GPS location requests and waypoint timing issues
+- Fix the initial cold white background splash screen on Android 12 and newer
+- Improved performance by replacing mapview xml implementation to full compose
