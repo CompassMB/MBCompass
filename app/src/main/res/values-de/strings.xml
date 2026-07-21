@@ -42,7 +42,7 @@
     <string name="donate">Spende, um diese App unabhängig und frei von Werbung zu halten</string>
     <string name="location_disabled">Standort aktivieren</string>
     <string name="location_disabled_rationale">Der Gerätestandort ist abgeschaltet. Aktiviere ihn unter Einstellungen.</string>
-    <string name="true_north">Geografisch Nord</string>
+    <string name="true_north">Geographisch Nord</string>
     <string name="tn_desc">Korrekte magnetische Deklination</string>
     <string name="true_black_theme">Benutze Reines Schwarz Thema</string>
     <string name="permission_required">Erlaubnis notwendig</string>
