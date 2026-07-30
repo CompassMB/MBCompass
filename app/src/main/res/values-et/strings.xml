@@ -122,4 +122,7 @@
     <string name="offline_folder_path">Mapsforge\'i .map kaust: /%1$s/ - klõpsa seadistamiseks</string>
     <string name="offline_maps_folder">Võrguühenduseta kaartide kaust</string>
     <string name="location_off_message">Asukohatuvastus on lülitatud välja</string>
+    <string name="rec_started_time">Käivitamise aeg</string>
+    <string name="rec_ended_time">Lõppemise aeg</string>
+    <string name="pause_duration">Pausi kestus</string>
 </resources>
