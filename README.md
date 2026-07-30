@@ -23,7 +23,7 @@
 
 <div align="center" style="display: flex; justify-content: center; align-items: flex-start; flex-wrap: wrap;">
 
-  <a href="https://groups.google.com/g/mbcompass-beta">
+  <a href="https://play.google.com/store/apps/details?id=com.mubarak.mbcompass">
     <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width="170" alt="Get it on F-Droid"/>
   </a>
   <a href="https://f-droid.org/app/com.mubarak.mbcompass">
@@ -68,7 +68,7 @@
 
 - Compass with true and magnetic north
 - Live GPS location
-- Sensor fusion
+- Sensor fusion for accuracy, combining (Magnetometer,Accelerometer & Gyroscope)
 - Magnetic field indicator
 
 ### Maps & Tracks
