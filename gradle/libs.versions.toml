@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 [versions]
-agp = "9.2.1"
+agp = "9.3.1"
 datastorePreferences = "1.2.1"
 documentfile = "1.1.0"
 fragmentKtx = "1.8.9"
@@ -15,7 +15,7 @@ espressoCore = "3.7.0"
 kotlinxCoroutinesTest = "1.11.0"
 lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.13.0"
-composeBom = "2026.05.01"
+composeBom = "2026.08.00"
 mapsforgeMap = "0.21.0"
 mapsforgeMapAndroid = "0.21.0"
 mapsforgeThemes = "0.21.0"
