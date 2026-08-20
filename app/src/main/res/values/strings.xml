@@ -137,6 +137,8 @@
     <string name="rec_started_time">Started at</string>
     <string name="rec_ended_time">Ended at</string>
     <string name="pause_duration">Pause duration</string>
+    <string name="duration">Duration</string>
+    <string name="distance">Distance</string>
 
 
 </resources>

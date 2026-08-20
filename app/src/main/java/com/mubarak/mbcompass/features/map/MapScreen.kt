@@ -39,14 +39,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
@@ -238,6 +242,10 @@ fun MapScreen(
 
     val uiHandler = remember { Handler(Looper.getMainLooper()) }
 
+    var liveDistance by remember { mutableFloatStateOf(0f) }
+    var liveDuration by remember { mutableLongStateOf(0L) }
+
+
     val periodicRunnable = remember {
         object : Runnable {
             override fun run() {
@@ -246,6 +254,9 @@ fun MapScreen(
                     currentBestLocation = service.currentBestLocation
                     currentTrack = service.currentTrack
                     trackingState = service.trackingState
+
+                    liveDistance = service.currentTrack.length
+                    liveDuration = service.currentTrack.duration
 
                     markCurrentPosition(
                         mapView, mapOverlayHelper, overlayState,
@@ -514,6 +525,17 @@ fun MapScreen(
                 modifier = Modifier.fillMaxSize(),
                 update = {}
             )
+
+            if (!isViewOnlyMode) {
+                LiveTrackingStats(
+                    liveDistance = liveDistance,
+                    liveDuration = liveDuration,
+                    trackingState = trackingState,
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(top = 16.dp)
+                )
+            }
 
             // only showing ui control on map screen
             if (!isViewOnlyMode) {
