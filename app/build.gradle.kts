@@ -108,7 +108,7 @@ dependencies {
 
     // Fragment KTX
     implementation(libs.androidx.activity.ktx)
-    implementation(libs.androidx.fragment.ktx)
+    //implementation(libs.androidx.fragment.ktx)
 
     // OSMDroid
     implementation (libs.osmdroid.android)
