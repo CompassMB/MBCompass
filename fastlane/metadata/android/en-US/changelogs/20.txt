@@ -1,0 +1,3 @@
+- Maintenance release:
+- Removed unused dependency
+- Translation updates and new languages added polish
