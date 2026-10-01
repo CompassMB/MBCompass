@@ -148,18 +148,6 @@ If you find it useful, consider supporting its continued development.
 
 MBCompass is Free Software: you can use, study, share, and improve it at your will. You may use, modify, and redistribute this project only if your modifications remain open-source under the same license.
 
-> Proprietary use, commercial redistribution, or publishing modified versions with ads or tracking is strictly prohibited under GPLv3 or later.
-
->[!NOTE]
-> **AI Notice**
-> Due to the increasing use of AI/LLM tools in modifying and redistributing FOSS projects, this notice is provided for clarity.
->
-> Redistributing this project (modified or unmodified) **without proper attribution** is a violation of the GPL-3.0 license.
->
-> This includes cases where modifications are made using AI/LLM tools.
->
-> All redistributions must retain copyright notices, provide attribution, and indicate changes.
-
 See more information [here](https://github.com/MubarakNative/MBCompass/blob/main/LICENSE).
 
 ###  Artwork License:
