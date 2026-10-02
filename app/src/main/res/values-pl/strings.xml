@@ -15,7 +15,7 @@
     <string name="rotation_sensor_not_available">Czujnik wektora rotacji jest niedostępny</string>
     <string name="magnetometer_not_available">Magnetometr jest niedostępny</string>
     <string name="nav_back">Przejdź wyżej</string>
-    <string name="calibration_required_message">Dokładność kompasu wynosi <b>%1$s</b>.\n\nAby poprawić dokładność, poruszaj urządzeniem, kreśląc w powietrzu ósemkę.</string>
+    <string name="calibration_required_message">Dokładność kompasu jest <b>%1$s</b>.\n\nAby poprawić dokładność, poruszaj urządzeniem, kreśląc w powietrzu ósemkę.</string>
     <string name="accuracy_unreliable">NIEPEWNA</string>
     <string name="accuracy_low">NISKA</string>
     <string name="accuracy_unknown">Nieznana</string>
@@ -119,4 +119,12 @@
     <string name="rec_ended_time">Zakończono o</string>
     <string name="distance">Dystans</string>
     <string name="share">Udostępnij</string>
+    <string name="unstar_track">Usuń trasę z ulubionych</string>
+    <string name="star_track">Dodaj trasę do ulubionych</string>
+    <string name="ascent">Podejście</string>
+    <string name="descent">Zejście</string>
+    <string name="pause_duration">Długość przerwy</string>
+    <string name="duration">Czas trwania</string>
+    <string name="alt_highest">Najwyższe</string>
+    <string name="alt_lowest">Najniższe</string>
 </resources>
