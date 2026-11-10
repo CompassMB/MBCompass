@@ -119,4 +119,12 @@
     <string name="rec_ended_time">Zakończono o</string>
     <string name="distance">Dystans</string>
     <string name="share">Udostępnij</string>
+    <string name="unstar_track">Usuń trasę z ulubionych</string>
+    <string name="star_track">Dodaj trasę do ulubionych</string>
+    <string name="alt_highest">Najwyższy</string>
+    <string name="alt_lowest">Najniższy</string>
+    <string name="ascent">Podejście</string>
+    <string name="descent">Zejście</string>
+    <string name="pause_duration">Czas pauzy</string>
+    <string name="duration">Czas trwania</string>
 </resources>
