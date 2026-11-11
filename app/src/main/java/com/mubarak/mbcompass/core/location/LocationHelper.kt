@@ -152,6 +152,7 @@ object LocationHelper {
 
 
     fun isFirstLocationPlausible(secondLocation: Location, track: Track): Boolean {
+        if (track.wayPoints.isEmpty()) return false
         val speed: Double = calculateSpeed(
             firstLocation = track.wayPoints[0].toLocation(),
             secondLocation = secondLocation,
@@ -168,6 +169,7 @@ object LocationHelper {
         secondTimestamp: Long,
     ): Double {
         val timeDifference: Long = (secondTimestamp - firstTimestamp) / 1000L
+        if (timeDifference <= 0L) return 0.0
         val distance = calculateDistance(firstLocation, secondLocation).toDouble()
         return LengthUnitHelper.convertMetersPerSecond(distance / timeDifference)
     }

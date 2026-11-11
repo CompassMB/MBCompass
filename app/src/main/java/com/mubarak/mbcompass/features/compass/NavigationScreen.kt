@@ -373,7 +373,6 @@ fun CompassView(
     }
 }
 
-@SuppressLint("MissingPermission")
 @Composable
 fun RegisterListener(
     lifecycleOwner: LifecycleOwner,
@@ -386,6 +385,7 @@ fun RegisterListener(
 ) {
 
     val trueNorthState = settingsUiState.isTrueNorthEnabled
+    val context = LocalContext.current
 
     LaunchedEffect(trueNorthState) {
         sensorViewModel.setTrueNorthState(trueNorthState)
@@ -393,11 +393,13 @@ fun RegisterListener(
 
     val location by sensorViewModel.location.collectAsStateWithLifecycle()
     LaunchedEffect(trueNorthState, location) {
-
         if (trueNorthState && location == null) {
-            Log.d(TAG, "RegisterListener: Register LM")
-
-            androidLocationManager.registerLocationListener()
+            if (androidLocationManager.hasLocationPermission()) {
+                Log.d(TAG, "RegisterListener: Register LM with permission")
+                androidLocationManager.registerLocationListener()
+            } else {
+                Log.d(TAG, "RegisterListener: True North enabled but location permission not granted")
+            }
         }
     }
 

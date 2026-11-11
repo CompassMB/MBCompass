@@ -20,7 +20,6 @@ import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.CancellationSignal
 import android.util.Log
-import androidx.annotation.RequiresPermission
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat
 import java.util.concurrent.Executor
@@ -34,11 +33,27 @@ class AndroidLocationManager(
     private var locationManager: LocationManager? = null
     private var locationRequestCancellationSignal: CancellationSignal? = null
 
+    fun hasLocationPermission(): Boolean {
+        val hasFine = ContextCompat.checkSelfPermission(
+            context,
+            ACCESS_FINE_LOCATION
+        ) == PERMISSION_GRANTED
+        val hasCoarse = ContextCompat.checkSelfPermission(
+            context,
+            ACCESS_COARSE_LOCATION
+        ) == PERMISSION_GRANTED
+        return hasFine || hasCoarse
+    }
 
-    @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     fun registerLocationListener() {
+        if (!hasLocationPermission()) {
+            Log.w(TAG, "Location permission not granted, skipping registerLocationListener")
+            setLocation(null)
+            return
+        }
+
         locationManager = locationManager
-            ?: context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            ?: context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
 
         if (locationManager == null) {
             Log.w(TAG, "LocationManager not present")
@@ -55,8 +70,6 @@ class AndroidLocationManager(
         requestLocation(locationManager!!)
     }
 
-
-    @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     private fun requestLocation(locationManager: LocationManager) {
         getBestLocationProvider(locationManager)
             ?.also { provider -> requestLocation(locationManager, provider) }
@@ -78,53 +91,61 @@ class AndroidLocationManager(
         return null
     }
 
-
-    @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     private fun requestLocation(locationManager: LocationManager, provider: String) {
         Log.i(TAG, "Requesting location from provider '$provider'")
 
         locationRequestCancellationSignal?.cancel()
         locationRequestCancellationSignal = CancellationSignal()
 
-        LocationManagerCompat.getCurrentLocation(
-            locationManager,
-            provider,
-            locationRequestCancellationSignal,
-            getExecutor(),
-            ::setLocation
-        )
+        try {
+            LocationManagerCompat.getCurrentLocation(
+                locationManager,
+                provider,
+                locationRequestCancellationSignal,
+                getExecutor(),
+                ::setLocation
+            )
+        } catch (e: SecurityException) {
+            Log.e(TAG, "SecurityException while requesting location from provider '$provider'", e)
+            setLocation(null)
+        } catch (e: Exception) {
+            Log.e(TAG, "Exception while requesting location from provider '$provider'", e)
+            setLocation(null)
+        }
     }
-
 
     private fun getExecutor(): Executor = ContextCompat.getMainExecutor(context)
 
-
     private fun getPreferredProviders(): List<String> {
+        val hasFine = ContextCompat.checkSelfPermission(
+            context,
+            ACCESS_FINE_LOCATION
+        ) == PERMISSION_GRANTED
+        val hasCoarse = ContextCompat.checkSelfPermission(
+            context,
+            ACCESS_COARSE_LOCATION
+        ) == PERMISSION_GRANTED
+
+        if (!hasFine && !hasCoarse) {
+            return emptyList()
+        }
+
         val locationProviders = mutableListOf<String>()
 
         if (VERSION.SDK_INT >= VERSION_CODES.S) {
             locationProviders.add(LocationManager.FUSED_PROVIDER)
         }
 
-        if (ContextCompat.checkSelfPermission(
-                context,
-                ACCESS_FINE_LOCATION
-            ) == PERMISSION_GRANTED
-        ) {
+        if (hasFine) {
             locationProviders.add(LocationManager.GPS_PROVIDER)
         }
 
-        if (ContextCompat.checkSelfPermission(
-                context,
-                ACCESS_COARSE_LOCATION
-            ) == PERMISSION_GRANTED
-        ) {
+        if (hasCoarse || hasFine) {
             locationProviders.add(LocationManager.NETWORK_PROVIDER)
         }
 
         return locationProviders
     }
-
 
     private fun setLocation(location: Location?) {
         Log.i(TAG, "Location is null: $location")
@@ -133,5 +154,4 @@ class AndroidLocationManager(
             Log.i(TAG, "Got a Location: $location")
         }
     }
-
 }

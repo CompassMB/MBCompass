@@ -1,14 +1,18 @@
 package com.mubarak.mbcompass.data.preferences
 
+import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
 import com.mubarak.mbcompass.ui.theme.ThemeConfig
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.*
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class PreferenceLocalDataStoreTest {
@@ -17,19 +21,20 @@ class PreferenceLocalDataStoreTest {
     val tempFolder = TemporaryFolder()
 
     private val testDispatcher = UnconfinedTestDispatcher()
-    private val testScope = TestScope(testDispatcher)
+    private lateinit var testScope: TestScope
+    private lateinit var testFile: File
+    private lateinit var dataStore: DataStore<Preferences>
+    private lateinit var dataSource: PreferenceLocalDataStore
 
-    private val dataStore by lazy {
-        PreferenceDataStoreFactory.create(
+    @Before
+    fun setUp() {
+        testFile = File(tempFolder.root, "test.preferences_pb")
+        testScope = TestScope(testDispatcher)
+        dataStore = PreferenceDataStoreFactory.create(
             scope = testScope,
-            produceFile = {
-                tempFolder.newFile("test.preferences_pb")
-            }
+            produceFile = { testFile }
         )
-    }
-
-    private val dataSource by lazy {
-        PreferenceLocalDataStore(dataStore)
+        dataSource = PreferenceLocalDataStore(dataStore)
     }
 
     @Test
@@ -55,16 +60,19 @@ class PreferenceLocalDataStoreTest {
     }
 
     @Test
-    fun trueNorth_roundTrip() = testScope.runTest {
+    fun trueNorth_true_roundTrip() = testScope.runTest {
         dataSource.setTrueNorthValue(UserPreferences.TRUE_NORTH, true)
 
         val prefs = dataSource.preferenceFlow.first()
         assertEquals(true, prefs.isTrueNorthEnabled)
+    }
 
+    @Test
+    fun trueNorth_false_roundTrip() = testScope.runTest {
         dataSource.setTrueNorthValue(UserPreferences.TRUE_NORTH, false)
 
-        val updated = dataSource.preferenceFlow.first()
-        assertEquals(false, updated.isTrueNorthEnabled)
+        val prefs = dataSource.preferenceFlow.first()
+        assertEquals(false, prefs.isTrueNorthEnabled)
     }
 
     @Test
