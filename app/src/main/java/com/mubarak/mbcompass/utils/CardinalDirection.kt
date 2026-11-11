@@ -28,6 +28,8 @@ object CardinalDirection {
         else -> DIRECTION.NORTH
     }
 
+    fun getDirectionFromAzimuth(azimuth: Int) = getDirectionFromAzimuth(azimuth.toFloat())
+
 }
 
 fun getMagneticDeclination(location: Location): Float {

@@ -22,7 +22,7 @@ class Azimuth(rawDegrees: Float) {
 
     val degrees = wrapAzimuth(rawDegrees)
 
-    val roundedDegrees = wrapAzimuth(rawDegrees.roundToInt().toFloat())
+    val roundedDegrees: Int = wrapAzimuth(rawDegrees.roundToInt().toFloat()).toInt()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -40,6 +40,7 @@ class Azimuth(rawDegrees: Float) {
     fun add(degrees: Float) = Azimuth(this.degrees + degrees)
 
     fun wrapAzimuth(angleInDegrees: Float): Float {
-        return (angleInDegrees + 360f) % 360f
+        val wrapped = ((angleInDegrees % 360f) + 360f) % 360f
+        return if (wrapped == 0.0f) 0.0f else wrapped
     }
 }
