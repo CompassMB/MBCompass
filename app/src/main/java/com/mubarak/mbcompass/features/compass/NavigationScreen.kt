@@ -201,7 +201,7 @@ fun MBCompass(
     }
 
     val direction by remember {
-        derivedStateOf { CardinalDirection.getDirectionFromAzimuth(degree) }
+        derivedStateOf { CardinalDirection.getDirectionFromAzimuth(azimuthState.degrees) }
     }
 
     val strengthRounded by remember {
@@ -330,7 +330,7 @@ fun CompassView(
     azimuth: Azimuth,
     modifier: Modifier = Modifier,
 ) {
-    val targetRotation = azimuth.roundedDegrees
+    val targetRotation = azimuth.degrees
 
     // shortest rotation path logic
     var previousRotation by remember { mutableFloatStateOf(targetRotation) }
